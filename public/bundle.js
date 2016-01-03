@@ -22906,9 +22906,9 @@
 
 	var _componentsMain2 = _interopRequireDefault(_componentsMain);
 
-	var _componentsHome = __webpack_require__(448);
+	var _componentsHomeView = __webpack_require__(448);
 
-	var _componentsHome2 = _interopRequireDefault(_componentsHome);
+	var _componentsHomeView2 = _interopRequireDefault(_componentsHomeView);
 
 	var _componentsProfile = __webpack_require__(449);
 
@@ -22916,11 +22916,16 @@
 
 	var _reactRouter = __webpack_require__(158);
 
+	var _componentsListView = __webpack_require__(478);
+
+	var _componentsListView2 = _interopRequireDefault(_componentsListView);
+
 	exports['default'] = _react2['default'].createElement(
 	  _reactRouter.Route,
 	  { name: 'app', path: '/', handler: _componentsMain2['default'] },
+	  _react2['default'].createElement(_reactRouter.Route, { name: 'list', path: 'list', handler: _componentsListView2['default'] }),
 	  _react2['default'].createElement(_reactRouter.Route, { name: 'profile', path: 'profile/:username', handler: _componentsProfile2['default'] }),
-	  _react2['default'].createElement(_reactRouter.DefaultRoute, { handler: _componentsHome2['default'] })
+	  _react2['default'].createElement(_reactRouter.DefaultRoute, { handler: _componentsHomeView2['default'] })
 	);
 	module.exports = exports['default'];
 
@@ -22975,6 +22980,11 @@
 	        { className: 'main-container' },
 	        _react2['default'].createElement(_Header2['default'], null),
 	        _react2['default'].createElement(
+	          'div',
+	          { className: 'container' },
+	          _react2['default'].createElement(_reactRouter.RouteHandler, this.props)
+	        ),
+	        _react2['default'].createElement(
 	          'nav',
 	          { className: 'navbar navbar-default', role: 'navigation' },
 	          _react2['default'].createElement(
@@ -22982,11 +22992,6 @@
 	            { className: 'col-sm-7 col-sm-offset-2', style: { marginTop: 15 } },
 	            _react2['default'].createElement(_SearchGithub2['default'], null)
 	          )
-	        ),
-	        _react2['default'].createElement(
-	          'div',
-	          { className: 'container' },
-	          _react2['default'].createElement(_reactRouter.RouteHandler, this.props)
 	        )
 	      );
 	    }
@@ -23124,7 +23129,7 @@
 	        null,
 	        _react2['default'].createElement(
 	          _reactBootstrap.Navbar,
-	          { staticTop: true },
+	          { inverse: true, staticTop: true },
 	          _react2['default'].createElement(
 	            _reactBootstrap.Navbar.Header,
 	            null,
@@ -23144,20 +23149,24 @@
 	            null,
 	            _react2['default'].createElement(
 	              _reactBootstrap.Nav,
-	              null,
+	              { onSelect: handleSelect.bind(this) },
 	              _react2['default'].createElement(
 	                _reactBootstrap.NavItem,
-	                { href: '#' },
+	                { href: '#', eventKey: 1 },
 	                _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'home' })
 	              ),
 	              _react2['default'].createElement(
 	                _reactBootstrap.NavItem,
-	                { href: '#' },
+	                { href: '#', eventKey: 2 },
 	                _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'th-list' })
-	              ),
+	              )
+	            ),
+	            _react2['default'].createElement(
+	              _reactBootstrap.Nav,
+	              { onSelect: handleModal.bind(this) },
 	              _react2['default'].createElement(
 	                _reactBootstrap.NavItem,
-	                { href: '#' },
+	                { href: '#', eventKey: 3 },
 	                _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'plus' })
 	              )
 	            ),
@@ -23172,16 +23181,20 @@
 	            ),
 	            _react2['default'].createElement(
 	              _reactBootstrap.Nav,
-	              { pullRight: true },
+	              { onSelect: handleModal.bind(this), pullRight: true },
 	              _react2['default'].createElement(
 	                _reactBootstrap.NavItem,
-	                { href: '#' },
-	                _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'user' })
-	              ),
-	              _react2['default'].createElement(
-	                _reactBootstrap.NavItem,
-	                { href: '#' },
+	                { href: '#', eventKey: 5 },
 	                _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'log-out' })
+	              )
+	            ),
+	            _react2['default'].createElement(
+	              _reactBootstrap.Nav,
+	              { onSelect: handleSelect.bind(this), pullRight: true },
+	              _react2['default'].createElement(
+	                _reactBootstrap.NavItem,
+	                { href: '#', eventKey: 4 },
+	                _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'user' })
 	              )
 	            )
 	          )
@@ -23194,6 +23207,31 @@
 	})(_react2['default'].Component);
 
 	;
+
+	function handleSelect(selectedKey) {
+	  var router = this.context.router;
+	  if (selectedKey == 1) {
+	    router.transitionTo('/', {});
+	  } else if (selectedKey == 2) {
+	    router.transitionTo('list', {});
+	  } else if (selectedKey == 4) {
+	    router.transitionTo('profile', { username: "ziruixiao" });
+	  }
+	}
+
+	function handleModal(selectedKey) {
+	  var router = this.context.router;
+	  if (selectedKey == 3) {
+	    alert('Modal to add new will be here');
+	    // router.transitionTo('profile', {username: "ziruixiao"});
+	  } else if (selectedKey == 5) {
+	      alert('Log out later');
+	    }
+	}
+
+	Header.contextTypes = {
+	  router: _react2['default'].PropTypes.func.isRequired
+	};
 
 	exports['default'] = Header;
 	module.exports = exports['default'];
@@ -40119,32 +40157,32 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var Home = (function (_React$Component) {
-	  _inherits(Home, _React$Component);
+	var HomeView = (function (_React$Component) {
+	  _inherits(HomeView, _React$Component);
 
-	  function Home() {
-	    _classCallCheck(this, Home);
+	  function HomeView() {
+	    _classCallCheck(this, HomeView);
 
-	    _get(Object.getPrototypeOf(Home.prototype), "constructor", this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(HomeView.prototype), "constructor", this).apply(this, arguments);
 	  }
 
-	  _createClass(Home, [{
+	  _createClass(HomeView, [{
 	    key: "render",
 	    value: function render() {
 	      return _react2["default"].createElement(
 	        "h2",
 	        { className: "text-center" },
-	        "Search by Github Username Above"
+	        "Home View"
 	      );
 	    }
 	  }]);
 
-	  return Home;
+	  return HomeView;
 	})(_react2["default"].Component);
 
 	;
 
-	exports["default"] = Home;
+	exports["default"] = HomeView;
 	module.exports = exports["default"];
 
 /***/ },
@@ -43368,6 +43406,58 @@
 
 	module.exports = Firebase;
 
+
+/***/ },
+/* 478 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var ListView = (function (_React$Component) {
+	  _inherits(ListView, _React$Component);
+
+	  function ListView() {
+	    _classCallCheck(this, ListView);
+
+	    _get(Object.getPrototypeOf(ListView.prototype), "constructor", this).apply(this, arguments);
+	  }
+
+	  _createClass(ListView, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2["default"].createElement(
+	        "h2",
+	        { className: "text-center" },
+	        "List View"
+	      );
+	    }
+	  }]);
+
+	  return ListView;
+	})(_react2["default"].Component);
+
+	;
+
+	exports["default"] = ListView;
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ]);
