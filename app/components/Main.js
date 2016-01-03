@@ -8,24 +8,30 @@ class Main extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      loggedIn : false,
-      googleUser: {}
+      loggedIn: this.props.loggedIn,
+      googleUser: this.props.googleUser,
+      email: this.props.email
     };
   }
   init(){
     console.log('Init called');
+    var controller = this;
 
     this.ref = new Firebase('https://rushchad.firebaseio.com/');
     var currentAuthData = this.ref.getAuth();
     if (currentAuthData) {
-      console.log('User is already logged in.);
+      console.log('User is already logged in.');
+      console.log(currentAuthData["google"]);
       this.setState({
         loggedIn: true,
-        googleUser: currentAuthData["google"]
+        googleUser: currentAuthData["google"],
+        email: currentAuthData["google"]["email"]
       });
+      console.log(this.state.loggedIn);
       console.log(this.state.googleUser);
+      console.log(this.state.email);
     } else {
-      var controller = this;
+
       this.setState({
         loggedIn: false
       });
