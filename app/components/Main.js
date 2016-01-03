@@ -23,6 +23,8 @@ class Main extends React.Component{
         loggedIn: true
       });
     } else {
+
+      var controller = this;
       // TODO: Page needs to be killed until state set
       this.setState({
         loggedIn: false
@@ -33,14 +35,13 @@ class Main extends React.Component{
           console.log('Login Failed!', error)
         } else {
           console.log('Authenticated successfully with payload:', authData)
-          this.setState({
-            loggedIn: true
-          });
+          controller.init();
         }
       });
     }
 
   }
+
   componentWillMount(){
     this.router = this.context.router;
   }
@@ -56,17 +57,9 @@ class Main extends React.Component{
     if (!this.state.loggedIn) {
       return (
         <div className="main-container">
-          <Header />
-
           <div className="container">
-
-            <h1>You are not authenticated.</h1>
+            <h3>You are not authenticated. <a href="">Login</a></h3>
           </div>
-          <nav className="navbar navbar-default" role="navigation">
-            <div className="col-sm-7 col-sm-offset-2" style={{marginTop: 15}}>
-              <SearchGithub />
-            </div>
-          </nav>
         </div>
       )
     } else {

@@ -22993,6 +22993,8 @@
 	          loggedIn: true
 	        });
 	      } else {
+
+	        var controller = this;
 	        // TODO: Page needs to be killed until state set
 	        this.setState({
 	          loggedIn: false
@@ -23003,9 +23005,7 @@
 	            console.log('Login Failed!', error);
 	          } else {
 	            console.log('Authenticated successfully with payload:', authData);
-	            this.setState({
-	              loggedIn: true
-	            });
+	            controller.init();
 	          }
 	        });
 	      }
@@ -23035,23 +23035,18 @@
 	        return _react2['default'].createElement(
 	          'div',
 	          { className: 'main-container' },
-	          _react2['default'].createElement(_Header2['default'], null),
 	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
 	            _react2['default'].createElement(
-	              'h1',
+	              'h3',
 	              null,
-	              'You are not authenticated.'
-	            )
-	          ),
-	          _react2['default'].createElement(
-	            'nav',
-	            { className: 'navbar navbar-default', role: 'navigation' },
-	            _react2['default'].createElement(
-	              'div',
-	              { className: 'col-sm-7 col-sm-offset-2', style: { marginTop: 15 } },
-	              _react2['default'].createElement(_SearchGithub2['default'], null)
+	              'You are not authenticated. ',
+	              _react2['default'].createElement(
+	                'a',
+	                { href: '' },
+	                'Login'
+	              )
 	            )
 	          )
 	        );
