@@ -22976,7 +22976,7 @@
 	    _get(Object.getPrototypeOf(Main.prototype), 'constructor', this).call(this, props);
 	    this.state = {
 	      loggedIn: false,
-	      name: 'Guest'
+	      googleUser: {}
 	    };
 	  }
 
@@ -22990,12 +22990,12 @@
 	      if (currentAuthData) {
 	        console.log('User is already logged in with payload::', currentAuthData);
 	        this.setState({
-	          loggedIn: true
+	          loggedIn: true,
+	          googleUser: currentAuthData["google"]
 	        });
+	        console.log(this.state.googleUser);
 	      } else {
-
 	        var controller = this;
-	        // TODO: Page needs to be killed until state set
 	        this.setState({
 	          loggedIn: false
 	        });
@@ -23004,9 +23004,11 @@
 	          if (error) {
 	            console.log('Login Failed!', error);
 	          } else {
-	            console.log('Authenticated successfully with payload:', authData);
+	            console.log('Authenticated successfully');
 	            controller.init();
 	          }
+	        }, {
+	          scope: "email"
 	        });
 	      }
 	    }
