@@ -16,14 +16,30 @@ class Main extends React.Component{
   }
   authDataCallback(authData) {
     if (authData) {
-      this.setState({
-        loggedIn: true,
-        googleUser: authData["google"],
-        email: authData["google"]["email"]
-      });
+      console.log(authData["google"]["email"]);
+      if (authData["google"]["email"] != "ziruixiao@gmail.com") {
+        console.log("unauth");
+        this.ref.unauth();
+        this.setState({
+          loggedIn: false,
+          googleUser: {},
+          email: ''
+        });
+        document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
+
+      } else {
+        this.setState({
+          loggedIn: true,
+          googleUser: authData["google"],
+          email: authData["google"]["email"]
+
+        });
+      }
     } else {
       this.setState({
-        loggedIn: false
+        loggedIn: false,
+        googleUser: {},
+        email: ''
       });
     }
   }
