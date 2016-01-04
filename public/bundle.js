@@ -22906,17 +22906,17 @@
 
 	var _componentsMain2 = _interopRequireDefault(_componentsMain);
 
-	var _componentsHomeView = __webpack_require__(451);
+	var _componentsHomeView = __webpack_require__(452);
 
 	var _componentsHomeView2 = _interopRequireDefault(_componentsHomeView);
 
-	var _componentsProfile = __webpack_require__(452);
+	var _componentsProfileView = __webpack_require__(453);
 
-	var _componentsProfile2 = _interopRequireDefault(_componentsProfile);
+	var _componentsProfileView2 = _interopRequireDefault(_componentsProfileView);
 
 	var _reactRouter = __webpack_require__(158);
 
-	var _componentsListView = __webpack_require__(478);
+	var _componentsListView = __webpack_require__(479);
 
 	var _componentsListView2 = _interopRequireDefault(_componentsListView);
 
@@ -22924,7 +22924,7 @@
 	  _reactRouter.Route,
 	  { name: 'app', path: '/', handler: _componentsMain2['default'] },
 	  _react2['default'].createElement(_reactRouter.Route, { name: 'list', path: 'list', handler: _componentsListView2['default'] }),
-	  _react2['default'].createElement(_reactRouter.Route, { name: 'profile', path: 'profile/:username', handler: _componentsProfile2['default'] }),
+	  _react2['default'].createElement(_reactRouter.Route, { name: 'profile', path: 'profile/:username', handler: _componentsProfileView2['default'] }),
 	  _react2['default'].createElement(_reactRouter.DefaultRoute, { handler: _componentsHomeView2['default'] })
 	);
 	module.exports = exports['default'];
@@ -22942,6 +22942,8 @@
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -22967,6 +22969,10 @@
 
 	var _reBase2 = _interopRequireDefault(_reBase);
 
+	var _firebaseActions = __webpack_require__(451);
+
+	var firebaseActions = _interopRequireWildcard(_firebaseActions);
+
 	var Main = (function (_React$Component) {
 	  _inherits(Main, _React$Component);
 
@@ -22985,9 +22991,6 @@
 	    key: 'authDataCallback',
 	    value: function authDataCallback(authData) {
 	      if (authData) {
-
-	        // TODO: Security check to see if email is valid for Delts only
-
 	        this.setState({
 	          loggedIn: true,
 	          googleUser: authData["google"],
@@ -23051,7 +23054,7 @@
 	            _react2['default'].createElement(
 	              'h3',
 	              null,
-	              'You are not authenticated. '
+	              'You must log in to view this site. '
 	            ),
 	            _react2['default'].createElement(
 	              'button',
@@ -40885,6 +40888,42 @@
 /* 451 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * Created by Felix on 1/3/16.
+	 */
+	/**
+	 * Created by Felix on 1/2/16.
+	 */
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var _firebase = __webpack_require__(450);
+
+	var _firebase2 = _interopRequireDefault(_firebase);
+
+	var verifyEmail = function verifyEmail(email) {
+	  console.log("email to verify is ", email);
+	  new _firebase2["default"]("https://rushchad.firebaseio.com/users").orderByChild("email").startAt(email).endAt(email).once('value', function (snap) {
+	    if (snap.val() == null) {
+	      console.log("null found");
+	      return false;
+	    } else {
+	      console.log('accounts matching email address');
+	      return true;
+	    }
+	  });
+	};
+	exports.verifyEmail = verifyEmail;
+
+/***/ },
+/* 452 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -40934,7 +40973,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 452 */
+/* 453 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40957,19 +40996,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _GithubRepos = __webpack_require__(453);
+	var _GithubRepos = __webpack_require__(454);
 
 	var _GithubRepos2 = _interopRequireDefault(_GithubRepos);
 
-	var _GithubUserProfile = __webpack_require__(454);
+	var _GithubUserProfile = __webpack_require__(455);
 
 	var _GithubUserProfile2 = _interopRequireDefault(_GithubUserProfile);
 
-	var _NotesNotes = __webpack_require__(455);
+	var _NotesNotes = __webpack_require__(456);
 
 	var _NotesNotes2 = _interopRequireDefault(_NotesNotes);
 
-	var _utilsHelpers = __webpack_require__(458);
+	var _utilsHelpers = __webpack_require__(459);
 
 	var _utilsHelpers2 = _interopRequireDefault(_utilsHelpers);
 
@@ -40979,13 +41018,13 @@
 
 	var base = _reBase2['default'].createClass('https://github-note-taker.firebaseio.com/');
 
-	var Profile = (function (_React$Component) {
-	  _inherits(Profile, _React$Component);
+	var ProfileView = (function (_React$Component) {
+	  _inherits(ProfileView, _React$Component);
 
-	  function Profile(props) {
-	    _classCallCheck(this, Profile);
+	  function ProfileView(props) {
+	    _classCallCheck(this, ProfileView);
 
-	    _get(Object.getPrototypeOf(Profile.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(ProfileView.prototype), 'constructor', this).call(this, props);
 	    this.state = {
 	      notes: [],
 	      bio: {},
@@ -40993,7 +41032,7 @@
 	    };
 	  }
 
-	  _createClass(Profile, [{
+	  _createClass(ProfileView, [{
 	    key: 'init',
 	    value: function init() {
 	      var _this = this;
@@ -41068,20 +41107,20 @@
 	    }
 	  }]);
 
-	  return Profile;
+	  return ProfileView;
 	})(_react2['default'].Component);
 
 	;
 
-	Profile.contextTypes = {
+	ProfileView.contextTypes = {
 	  router: _react2['default'].PropTypes.func.isRequired
 	};
 
-	exports['default'] = Profile;
+	exports['default'] = ProfileView;
 	module.exports = exports['default'];
 
 /***/ },
-/* 453 */
+/* 454 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41163,7 +41202,7 @@
 	module.exports = Repos;
 
 /***/ },
-/* 454 */
+/* 455 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41293,7 +41332,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 455 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41316,11 +41355,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _NotesList = __webpack_require__(456);
+	var _NotesList = __webpack_require__(457);
 
 	var _NotesList2 = _interopRequireDefault(_NotesList);
 
-	var _AddNote = __webpack_require__(457);
+	var _AddNote = __webpack_require__(458);
 
 	var _AddNote2 = _interopRequireDefault(_AddNote);
 
@@ -41367,7 +41406,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 456 */
+/* 457 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41428,7 +41467,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 457 */
+/* 458 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41501,7 +41540,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 458 */
+/* 459 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41512,7 +41551,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _axios = __webpack_require__(459);
+	var _axios = __webpack_require__(460);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
@@ -41539,28 +41578,28 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 459 */
+/* 460 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(460);
+	module.exports = __webpack_require__(461);
 
 /***/ },
-/* 460 */
+/* 461 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(461);
-	var utils = __webpack_require__(462);
-	var deprecatedMethod = __webpack_require__(463);
-	var dispatchRequest = __webpack_require__(464);
-	var InterceptorManager = __webpack_require__(471);
+	var defaults = __webpack_require__(462);
+	var utils = __webpack_require__(463);
+	var deprecatedMethod = __webpack_require__(464);
+	var dispatchRequest = __webpack_require__(465);
+	var InterceptorManager = __webpack_require__(472);
 
 	// Polyfill ES6 Promise if needed
 	(function () {
 	  // webpack is being used to set es6-promise to the native Promise
 	  // for the standalone build. It's necessary to make sure polyfill exists.
-	  var P = __webpack_require__(472);
+	  var P = __webpack_require__(473);
 	  if (P && typeof P.polyfill === 'function') {
 	    P.polyfill();
 	  }
@@ -41623,7 +41662,7 @@
 	axios.all = function (promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(477);
+	axios.spread = __webpack_require__(478);
 
 	// Expose interceptors
 	axios.interceptors = {
@@ -41662,12 +41701,12 @@
 
 
 /***/ },
-/* 461 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(462);
+	var utils = __webpack_require__(463);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -41720,7 +41759,7 @@
 
 
 /***/ },
-/* 462 */
+/* 463 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -41943,7 +41982,7 @@
 
 
 /***/ },
-/* 463 */
+/* 464 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -41971,7 +42010,7 @@
 
 
 /***/ },
-/* 464 */
+/* 465 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -41988,11 +42027,11 @@
 	    try {
 	      // For browsers use XHR adapter
 	      if (typeof window !== 'undefined') {
-	        __webpack_require__(465)(resolve, reject, config);
+	        __webpack_require__(466)(resolve, reject, config);
 	      }
 	      // For node use HTTP adapter
 	      else if (typeof process !== 'undefined') {
-	        __webpack_require__(465)(resolve, reject, config);
+	        __webpack_require__(466)(resolve, reject, config);
 	      }
 	    } catch (e) {
 	      reject(e);
@@ -42004,20 +42043,20 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 465 */
+/* 466 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	/*global ActiveXObject:true*/
 
-	var defaults = __webpack_require__(461);
-	var utils = __webpack_require__(462);
-	var buildUrl = __webpack_require__(466);
-	var cookies = __webpack_require__(467);
-	var parseHeaders = __webpack_require__(468);
-	var transformData = __webpack_require__(469);
-	var urlIsSameOrigin = __webpack_require__(470);
+	var defaults = __webpack_require__(462);
+	var utils = __webpack_require__(463);
+	var buildUrl = __webpack_require__(467);
+	var cookies = __webpack_require__(468);
+	var parseHeaders = __webpack_require__(469);
+	var transformData = __webpack_require__(470);
+	var urlIsSameOrigin = __webpack_require__(471);
 
 	module.exports = function xhrAdapter(resolve, reject, config) {
 	  // Transform request data
@@ -42116,12 +42155,12 @@
 
 
 /***/ },
-/* 466 */
+/* 467 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(462);
+	var utils = __webpack_require__(463);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -42174,12 +42213,12 @@
 
 
 /***/ },
-/* 467 */
+/* 468 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(462);
+	var utils = __webpack_require__(463);
 
 	module.exports = {
 	  write: function write(name, value, expires, path, domain, secure) {
@@ -42217,12 +42256,12 @@
 
 
 /***/ },
-/* 468 */
+/* 469 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(462);
+	var utils = __webpack_require__(463);
 
 	/**
 	 * Parse headers into an object
@@ -42257,12 +42296,12 @@
 
 
 /***/ },
-/* 469 */
+/* 470 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(462);
+	var utils = __webpack_require__(463);
 
 	/**
 	 * Transform the data for a request or a response
@@ -42282,12 +42321,12 @@
 
 
 /***/ },
-/* 470 */
+/* 471 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(462);
+	var utils = __webpack_require__(463);
 	var msie = /(msie|trident)/i.test(navigator.userAgent);
 	var urlParsingNode = document.createElement('a');
 	var originUrl;
@@ -42340,12 +42379,12 @@
 
 
 /***/ },
-/* 471 */
+/* 472 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(462);
+	var utils = __webpack_require__(463);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -42398,7 +42437,7 @@
 
 
 /***/ },
-/* 472 */
+/* 473 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, setImmediate, global, module) {/*!
@@ -42537,7 +42576,7 @@
 	    function lib$es6$promise$asap$$attemptVertex() {
 	      try {
 	        var r = require;
-	        var vertx = __webpack_require__(475);
+	        var vertx = __webpack_require__(476);
 	        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
 	        return lib$es6$promise$asap$$useVertxTimer();
 	      } catch(e) {
@@ -43362,7 +43401,7 @@
 	    };
 
 	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(476)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(477)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return lib$es6$promise$umd$$ES6Promise; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof module !== 'undefined' && module['exports']) {
 	      module['exports'] = lib$es6$promise$umd$$ES6Promise;
@@ -43374,10 +43413,10 @@
 	}).call(this);
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(473).setImmediate, (function() { return this; }()), __webpack_require__(474)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(474).setImmediate, (function() { return this; }()), __webpack_require__(475)(module)))
 
 /***/ },
-/* 473 */
+/* 474 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(4).nextTick;
@@ -43456,10 +43495,10 @@
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(473).setImmediate, __webpack_require__(473).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(474).setImmediate, __webpack_require__(474).clearImmediate))
 
 /***/ },
-/* 474 */
+/* 475 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -43475,20 +43514,20 @@
 
 
 /***/ },
-/* 475 */
+/* 476 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 476 */
+/* 477 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 477 */
+/* 478 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -43521,7 +43560,7 @@
 
 
 /***/ },
-/* 478 */
+/* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

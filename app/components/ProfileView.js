@@ -7,7 +7,7 @@ import Rebase from 're-base';
 
 var base = Rebase.createClass('https://github-note-taker.firebaseio.com/');
 
-class Profile extends React.Component{
+class ProfileView extends React.Component{
   constructor(props){
     super(props);
     this.state = {
@@ -70,8 +70,8 @@ class Profile extends React.Component{
   }
 };
 
-Profile.contextTypes = {
+ProfileView.contextTypes = {
   router: React.PropTypes.func.isRequired
 };
 
-export default Profile;
+export default ProfileView;

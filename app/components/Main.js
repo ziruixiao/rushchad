@@ -3,6 +3,7 @@ import { RouteHandler } from 'react-router';
 import SearchGithub from './SearchGithub';
 import Header from './Header';
 import Rebase from 're-base';
+import * as firebaseActions from './firebaseActions';
 
 class Main extends React.Component{
   constructor(props){
@@ -15,9 +16,6 @@ class Main extends React.Component{
   }
   authDataCallback(authData) {
     if (authData) {
-
-      // TODO: Security check to see if email is valid for Delts only
-
       this.setState({
         loggedIn: true,
         googleUser: authData["google"],

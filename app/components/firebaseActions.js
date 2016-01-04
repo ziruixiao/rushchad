@@ -6,15 +6,20 @@
  */
 import Firebase from 'firebase'
 
-export const authenticate = () => {
-  console.log('called')
-  var ref = new Firebase('https://rushchad.firebaseio.com')
-  ref.authWithOAuthPopup('google', function (error, authData) {
-    if (error) {
-      console.log('Login Failed!', error)
-    } else {
-      console.log('Authenticated successfully with payload:', authData)
-    }
-  })
+export const verifyEmail = (email) => {
+  console.log("email to verify is ", email);
+  new Firebase("https://rushchad.firebaseio.com/users").orderByChild("email")
+    .startAt(email)
+    .endAt(email)
+    .once('value', function(snap) {
+      if (snap.val() == null) {
+        console.log("null found");
+        return false;
+      } else {
+        console.log('accounts matching email address');
+        return true;
+      }
+    });
+
 }
 
