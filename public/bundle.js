@@ -22975,31 +22975,21 @@
 
 	    _get(Object.getPrototypeOf(Main.prototype), 'constructor', this).call(this, props);
 	    this.state = {
-	      loggedIn: this.props.loggedIn,
-	      googleUser: this.props.googleUser,
-	      email: this.props.email
+	      loggedIn: props.loggedIn,
+	      googleUser: props.googleUser,
+	      email: props.email
 	    };
 	  }
 
 	  _createClass(Main, [{
-	    key: 'init',
-	    value: function init() {
-	      console.log('Init called');
-	      var controller = this;
-
-	      this.ref = new Firebase('https://rushchad.firebaseio.com/');
-	      var currentAuthData = this.ref.getAuth();
-	      if (currentAuthData) {
-	        console.log('User is already logged in.');
-	        console.log(currentAuthData["google"]);
+	    key: 'authDataCallback',
+	    value: function authDataCallback(authData) {
+	      if (authData) {
 	        this.setState({
 	          loggedIn: true,
-	          googleUser: currentAuthData["google"],
-	          email: currentAuthData["google"]["email"]
+	          googleUser: authData["google"],
+	          email: authData["google"]["email"]
 	        });
-	        console.log(this.state.loggedIn);
-	        console.log(this.state.googleUser);
-	        console.log(this.state.email);
 	      } else {
 
 	        this.setState({
@@ -23011,12 +23001,17 @@
 	            console.log('Login Failed!', error);
 	          } else {
 	            console.log('Authenticated successfully');
-	            controller.init();
 	          }
 	        }, {
 	          scope: "email"
 	        });
 	      }
+	    }
+	  }, {
+	    key: 'init',
+	    value: function init() {
+	      this.ref = new Firebase('https://rushchad.firebaseio.com/');
+	      this.ref.onAuth(this.authDataCallback.bind(this));
 	    }
 	  }, {
 	    key: 'componentWillMount',
@@ -23064,6 +23059,11 @@
 	          { className: 'main-container' },
 	          _react2['default'].createElement(_Header2['default'], null),
 	          _react2['default'].createElement(
+	            'h3',
+	            null,
+	            this.state.email
+	          ),
+	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
 	            _react2['default'].createElement(_reactRouter.RouteHandler, this.props)
@@ -23086,6 +23086,17 @@
 	})(_react2['default'].Component);
 
 	;
+	Main.propTypes = {
+	  loggedIn: _react2['default'].PropTypes.bool,
+	  googleUser: _react2['default'].PropTypes.object,
+	  email: _react2['default'].PropTypes.string
+	};
+
+	Main.defaultProps = {
+	  loggedIn: false,
+	  googleUser: {},
+	  email: ''
+	};
 
 	Main.contextTypes = {
 	  router: _react2['default'].PropTypes.func.isRequired

@@ -8,28 +8,18 @@ class Main extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      loggedIn: this.props.loggedIn,
-      googleUser: this.props.googleUser,
-      email: this.props.email
+      loggedIn: props.loggedIn,
+      googleUser: props.googleUser,
+      email: props.email
     };
   }
-  init(){
-    console.log('Init called');
-    var controller = this;
-
-    this.ref = new Firebase('https://rushchad.firebaseio.com/');
-    var currentAuthData = this.ref.getAuth();
-    if (currentAuthData) {
-      console.log('User is already logged in.');
-      console.log(currentAuthData["google"]);
+  authDataCallback(authData) {
+    if (authData) {
       this.setState({
         loggedIn: true,
-        googleUser: currentAuthData["google"],
-        email: currentAuthData["google"]["email"]
+        googleUser: authData["google"],
+        email: authData["google"]["email"]
       });
-      console.log(this.state.loggedIn);
-      console.log(this.state.googleUser);
-      console.log(this.state.email);
     } else {
 
       this.setState({
@@ -41,12 +31,15 @@ class Main extends React.Component{
           console.log('Login Failed!', error);
         } else {
           console.log('Authenticated successfully');
-          controller.init();
         }
       }, {
         scope: "email"
       });
     }
+  }
+  init(){
+    this.ref = new Firebase('https://rushchad.firebaseio.com/');
+    this.ref.onAuth(this.authDataCallback.bind(this));
   }
 
   componentWillMount(){
@@ -73,7 +66,7 @@ class Main extends React.Component{
       return (
         <div className="main-container">
           <Header />
-
+          <h3>{ this.state.email}</h3>
           <div className="container">
 
             <RouteHandler {...this.props}/>
@@ -88,6 +81,17 @@ class Main extends React.Component{
     }
   }
 };
+Main.propTypes = {
+  loggedIn: React.PropTypes.bool,
+  googleUser: React.PropTypes.object,
+  email: React.PropTypes.string
+};
+
+Main.defaultProps = {
+  loggedIn: false,
+  googleUser: {},
+  email: ''
+}
 
 Main.contextTypes = {
   router: React.PropTypes.func.isRequired
