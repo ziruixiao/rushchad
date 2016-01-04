@@ -22985,25 +22985,17 @@
 	    key: 'authDataCallback',
 	    value: function authDataCallback(authData) {
 	      if (authData) {
+
+	        // TODO: Security check to see if email is valid for Delts only
+
 	        this.setState({
 	          loggedIn: true,
 	          googleUser: authData["google"],
 	          email: authData["google"]["email"]
 	        });
 	      } else {
-
 	        this.setState({
 	          loggedIn: false
-	        });
-	        console.log('Attempting to authenticate user account');
-	        this.ref.authWithOAuthPopup('google', function (error, authData) {
-	          if (error) {
-	            console.log('Login Failed!', error);
-	          } else {
-	            console.log('Authenticated successfully');
-	          }
-	        }, {
-	          scope: "email"
 	        });
 	      }
 	    }
@@ -23032,6 +23024,21 @@
 	      this.init();
 	    }
 	  }, {
+	    key: 'login',
+	    value: function login() {
+	      console.log('Attempting to authenticate user account');
+	      this.ref = new Firebase('https://rushchad.firebaseio.com/');
+	      this.ref.authWithOAuthPopup('google', function (error, authData) {
+	        if (error) {
+	          console.log('Login Failed!', error);
+	        } else {
+	          console.log('Authenticated successfully');
+	        }
+	      }, {
+	        scope: "email"
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      if (!this.state.loggedIn) {
@@ -23044,12 +23051,12 @@
 	            _react2['default'].createElement(
 	              'h3',
 	              null,
-	              'You are not authenticated. ',
-	              _react2['default'].createElement(
-	                'a',
-	                { href: '' },
-	                'Login'
-	              )
+	              'You are not authenticated. '
+	            ),
+	            _react2['default'].createElement(
+	              'button',
+	              { onClick: this.login.bind(this) },
+	              'Login'
 	            )
 	          )
 	        );
@@ -23057,12 +23064,7 @@
 	        return _react2['default'].createElement(
 	          'div',
 	          { className: 'main-container' },
-	          _react2['default'].createElement(_Header2['default'], null),
-	          _react2['default'].createElement(
-	            'h3',
-	            null,
-	            this.state.email
-	          ),
+	          _react2['default'].createElement(_Header2['default'], { googleUser: this.state.googleUser }),
 	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
@@ -23086,6 +23088,7 @@
 	})(_react2['default'].Component);
 
 	;
+
 	Main.propTypes = {
 	  loggedIn: _react2['default'].PropTypes.bool,
 	  googleUser: _react2['default'].PropTypes.object,
@@ -23212,6 +23215,10 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
+	var _reBase = __webpack_require__(448);
+
+	var _reBase2 = _interopRequireDefault(_reBase);
+
 	var Header = (function (_React$Component) {
 	  _inherits(Header, _React$Component);
 
@@ -23294,7 +23301,7 @@
 	              _react2['default'].createElement(
 	                _reactBootstrap.NavItem,
 	                { href: '#', eventKey: 4 },
-	                _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'user' })
+	                this.props.googleUser["displayName"]
 	              )
 	            )
 	          )
@@ -23325,8 +23332,14 @@
 	    alert('Modal to add new will be here');
 	    // router.transitionTo('profile', {username: "ziruixiao"});
 	  } else if (selectedKey == 5) {
-	      alert('Log out later');
+	      logOut();
 	    }
+	}
+
+	function logOut() {
+	  var ref = new Firebase('https://rushchad.firebaseio.com/');
+	  console.log(ref.getAuth());
+	  ref.unauth();
 	}
 
 	Header.contextTypes = {

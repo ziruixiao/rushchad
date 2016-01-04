@@ -1,5 +1,6 @@
 import React from 'react';
 import { Glyphicon, Input, Nav, Navbar, NavItem } from 'react-bootstrap'
+import Rebase from 're-base';
 
 class Header extends React.Component{
   render () {
@@ -29,7 +30,7 @@ class Header extends React.Component{
               <NavItem href='#' eventKey={5}><Glyphicon glyph='log-out' /></NavItem>
             </Nav>
             <Nav onSelect={handleSelect.bind(this)} pullRight>
-              <NavItem href='#' eventKey={4}><Glyphicon glyph='user' /></NavItem>
+              <NavItem href='#' eventKey={4}>{ this.props.googleUser["displayName"] }</NavItem>
             </Nav>
 
           </Navbar.Collapse>
@@ -56,8 +57,15 @@ function handleModal(selectedKey) {
     alert('Modal to add new will be here');
     // router.transitionTo('profile', {username: "ziruixiao"});
   } else if (selectedKey == 5) {
-    alert('Log out later');
+    logOut();
   }
+}
+
+function logOut() {
+  var ref = new Firebase('https://rushchad.firebaseio.com/');
+  console.log(ref.getAuth());
+  ref.unauth();
+
 }
 
 Header.contextTypes = {

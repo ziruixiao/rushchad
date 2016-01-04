@@ -15,25 +15,17 @@ class Main extends React.Component{
   }
   authDataCallback(authData) {
     if (authData) {
+
+      // TODO: Security check to see if email is valid for Delts only
+
       this.setState({
         loggedIn: true,
         googleUser: authData["google"],
         email: authData["google"]["email"]
       });
     } else {
-
       this.setState({
         loggedIn: false
-      });
-      console.log('Attempting to authenticate user account');
-      this.ref.authWithOAuthPopup('google', function (error, authData) {
-        if (error) {
-          console.log('Login Failed!', error);
-        } else {
-          console.log('Authenticated successfully');
-        }
-      }, {
-        scope: "email"
       });
     }
   }
@@ -53,20 +45,33 @@ class Main extends React.Component{
   componentWillReceiveProps(){
     this.init();
   }
+  login() {
+    console.log('Attempting to authenticate user account');
+    this.ref = new Firebase('https://rushchad.firebaseio.com/');
+    this.ref.authWithOAuthPopup('google', function (error, authData) {
+      if (error) {
+        console.log('Login Failed!', error);
+      } else {
+        console.log('Authenticated successfully');
+      }
+    }, {
+      scope: "email"
+    });
+  }
   render(){
     if (!this.state.loggedIn) {
       return (
         <div className="main-container">
           <div className="container">
-            <h3>You are not authenticated. <a href="">Login</a></h3>
+            <h3>You must log in to view this site. </h3>
+            <button onClick={this.login.bind(this)}>Login</button>
           </div>
         </div>
       )
     } else {
       return (
         <div className="main-container">
-          <Header />
-          <h3>{ this.state.email}</h3>
+          <Header googleUser={this.state.googleUser}/>
           <div className="container">
 
             <RouteHandler {...this.props}/>
@@ -81,6 +86,8 @@ class Main extends React.Component{
     }
   }
 };
+
+
 Main.propTypes = {
   loggedIn: React.PropTypes.bool,
   googleUser: React.PropTypes.object,
