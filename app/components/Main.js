@@ -17,31 +17,38 @@ class Main extends React.Component{
   authDataCallback(authData) {
     if (authData) {
       console.log(authData["google"]["email"]);
-      if (authData["google"]["email"] != "ziruixiao@gmail.com") {
+      /*if (authData["google"]["email"] != "ziruixiao@gmail.com") {
         console.log("unauth");
         this.ref.unauth();
         this.setState({
           loggedIn: false,
           googleUser: {},
-          email: ''
+          email: '',
+          users: [],
+          rushees: {}
         });
         document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
 
-      } else {
+      } else { // successful login*/
+        this.setupFirebaseConnections();
         this.setState({
           loggedIn: true,
           googleUser: authData["google"],
           email: authData["google"]["email"]
-
         });
-      }
+      //}
     } else {
       this.setState({
         loggedIn: false,
         googleUser: {},
-        email: ''
+        email: '',
+        users: [],
+        rusheese: {}
       });
     }
+  }
+  setupFirebaseConnections() {
+
   }
   init(){
     this.ref = new Firebase('https://rushchad.firebaseio.com/');
@@ -105,13 +112,17 @@ class Main extends React.Component{
 Main.propTypes = {
   loggedIn: React.PropTypes.bool,
   googleUser: React.PropTypes.object,
-  email: React.PropTypes.string
+  email: React.PropTypes.string,
+  users: React.PropTypes.array,
+  rushees: React.PropTypes.object
 };
 
 Main.defaultProps = {
   loggedIn: false,
   googleUser: {},
-  email: ''
+  email: '',
+  users: [],
+  rushees: {}
 }
 
 Main.contextTypes = {

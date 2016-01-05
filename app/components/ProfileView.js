@@ -5,7 +5,7 @@ import Notes from './Notes/Notes';
 import helpers from '../utils/helpers';
 import Rebase from 're-base';
 
-var base = Rebase.createClass('https://github-note-taker.firebaseio.com/');
+var base = Rebase.createClass('https://rushchad.firebaseio.com/');
 
 class ProfileView extends React.Component{
   constructor(props){
@@ -17,10 +17,14 @@ class ProfileView extends React.Component{
     };
   }
   init(){
-    this.ref = base.syncState(this.router.getCurrentParams().username, {
+    this.ref = base.syncState('users', {
       context: this,
       asArray: true,
-      state: 'notes'
+      state: 'notes',
+      queries: {
+        orderByChild: 'access',
+        equalTo: 'normal'
+      }
     });
 
     helpers.getGithubInfo(this.router.getCurrentParams().username)

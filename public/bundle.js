@@ -22997,31 +22997,38 @@
 	    value: function authDataCallback(authData) {
 	      if (authData) {
 	        console.log(authData["google"]["email"]);
-	        if (authData["google"]["email"] != "ziruixiao@gmail.com") {
+	        /*if (authData["google"]["email"] != "ziruixiao@gmail.com") {
 	          console.log("unauth");
 	          this.ref.unauth();
 	          this.setState({
 	            loggedIn: false,
 	            googleUser: {},
-	            email: ''
+	            email: '',
+	            users: [],
+	            rushees: {}
 	          });
-	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
-	        } else {
+	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
+	         } else { // successful login*/
+	        this.setupFirebaseConnections();
+	        this.setState({
+	          loggedIn: true,
+	          googleUser: authData["google"],
+	          email: authData["google"]["email"]
+	        });
+	        //}
+	      } else {
 	          this.setState({
-	            loggedIn: true,
-	            googleUser: authData["google"],
-	            email: authData["google"]["email"]
-
+	            loggedIn: false,
+	            googleUser: {},
+	            email: '',
+	            users: [],
+	            rusheese: {}
 	          });
 	        }
-	      } else {
-	        this.setState({
-	          loggedIn: false,
-	          googleUser: {},
-	          email: ''
-	        });
-	      }
 	    }
+	  }, {
+	    key: 'setupFirebaseConnections',
+	    value: function setupFirebaseConnections() {}
 	  }, {
 	    key: 'init',
 	    value: function init() {
@@ -23115,13 +23122,17 @@
 	Main.propTypes = {
 	  loggedIn: _react2['default'].PropTypes.bool,
 	  googleUser: _react2['default'].PropTypes.object,
-	  email: _react2['default'].PropTypes.string
+	  email: _react2['default'].PropTypes.string,
+	  users: _react2['default'].PropTypes.array,
+	  rushees: _react2['default'].PropTypes.object
 	};
 
 	Main.defaultProps = {
 	  loggedIn: false,
 	  googleUser: {},
-	  email: ''
+	  email: '',
+	  users: [],
+	  rushees: {}
 	};
 
 	Main.contextTypes = {
@@ -41123,7 +41134,7 @@
 
 	var _reBase2 = _interopRequireDefault(_reBase);
 
-	var base = _reBase2['default'].createClass('https://github-note-taker.firebaseio.com/');
+	var base = _reBase2['default'].createClass('https://rushchad.firebaseio.com/');
 
 	var ProfileView = (function (_React$Component) {
 	  _inherits(ProfileView, _React$Component);
@@ -41144,10 +41155,14 @@
 	    value: function init() {
 	      var _this = this;
 
-	      this.ref = base.syncState(this.router.getCurrentParams().username, {
+	      this.ref = base.syncState('users', {
 	        context: this,
 	        asArray: true,
-	        state: 'notes'
+	        state: 'notes',
+	        queries: {
+	          orderByChild: 'access',
+	          equalTo: 'normal'
+	        }
 	      });
 
 	      _utilsHelpers2['default'].getGithubInfo(this.router.getCurrentParams().username).then(function (dataObj) {
@@ -41553,10 +41568,11 @@
 	          "li",
 	          { className: "list-group-item", key: index },
 	          " ",
-	          note,
+	          note["email"],
 	          " "
 	        );
 	      });
+	      console.log(this.props.notes);
 	      return _react2["default"].createElement(
 	        "ul",
 	        { className: "list-group" },
