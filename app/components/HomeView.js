@@ -1,11 +1,18 @@
 import React from 'react';
+import {
+  Col
+} from 'react-bootstrap';
+import RusheeTile from './RusheeTile';
 
 class HomeView extends React.Component{
   render(){
     return (
-      <h2 className="text-center">
-        Home View
-      </h2>
+      <div>
+        <h2 className="text-center">
+          Home View
+        </h2>
+        <RusheeTile />
+      </div>
     )
   }
 };
