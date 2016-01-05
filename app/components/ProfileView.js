@@ -17,7 +17,7 @@ class ProfileView extends React.Component{
     };
   }
   init(){
-    this.ref = base.syncState('users', {
+    this.ref = base.syncState('rushees', {
       context: this,
       asArray: true,
       state: 'notes',
