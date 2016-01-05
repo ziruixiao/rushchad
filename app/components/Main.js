@@ -88,7 +88,7 @@ class Main extends React.Component{
           <Header googleUser={this.state.googleUser}/>
           <div className="container">
 
-            <RouteHandler {...this.props}/>
+            <RouteHandler {...this.state}/>
           </div>
           <nav className="navbar navbar-default" role="navigation">
             <div className="col-sm-7 col-sm-offset-2" style={{marginTop: 15}}>

@@ -6,14 +6,16 @@ import {
 
 } from 'react-bootstrap';
 
-class RusheePopup extends React.Component{
+class DetailView extends React.Component{
   render(){
+    var { email } = this.props;
     return (
       <div>
-
+        Rushee Detail View
+        Email is { email}
       </div>
     )
   }
 };
 
-export default RusheePopup;
+export default DetailView;
