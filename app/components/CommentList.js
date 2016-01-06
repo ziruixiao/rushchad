@@ -21,6 +21,24 @@ class CommentList extends React.Component{
         var numLikes = 0;
         var numDislikes = 0;
 
+        if (comment["likes"]) {
+          Object.keys(comment["likes"]).map((likeUserId, likeValue) => {
+            var numLikeValue = Number(likeValue);
+            if (likeValue == 1) {
+              if (likeUserId == this.props.loggedInUserId) { // current user liked comment
+                likeButton = <Button bsSize="small" bsStyle="success" active><Glyphicon glyph="thumbs-up" /></Button>;
+              }
+              numLikes++;
+            } else if (likeValue == 0) {
+              if (likeUserId == this.props.loggedInUserId) { // current user liked comment
+                dislikeButton = <Button bsSize="small" bsStyle="danger" active><Glyphicon glyph="thumbs-down" /></Button>;
+              }
+              numDislikes++;
+            }
+          });
+        }
+
+
         return (
           <div key={key} className="top-bottom-space">
             <Row>

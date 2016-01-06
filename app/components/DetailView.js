@@ -97,7 +97,7 @@ class DetailView extends React.Component{
           </tr>
           </tbody>
         </Table>
-        <CommentList users={this.props.users} comments={rusheeComments} rusheeId={rusheeId}/>
+        <CommentList users={this.props.users} loggedInUserId={this.props.loggedInUserId} comments={rusheeComments} rusheeId={rusheeId}/>
 
 
       </div>

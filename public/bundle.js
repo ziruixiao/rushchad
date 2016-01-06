@@ -44279,7 +44279,7 @@
 	            )
 	          )
 	        ),
-	        _react2['default'].createElement(_CommentList2['default'], { users: this.props.users, comments: rusheeComments, rusheeId: rusheeId })
+	        _react2['default'].createElement(_CommentList2['default'], { users: this.props.users, loggedInUserId: this.props.loggedInUserId, comments: rusheeComments, rusheeId: rusheeId })
 	      );
 	    }
 	  }]);
@@ -44341,6 +44341,7 @@
 	      var _this = this;
 
 	      var comments;
+	      console.log(this.props);
 	      if (this.props.comments) {
 	        comments = this.props.comments.map(function (comment, key) {
 
@@ -44356,6 +44357,34 @@
 	          );
 	          var numLikes = 0;
 	          var numDislikes = 0;
+
+	          if (comment["likes"]) {
+	            Object.keys(comment["likes"]).map(function (likeUserId, likeValue) {
+	              var numLikeValue = Number(likeValue);
+	              console.log("user who liked this was ", likeUserId);
+	              if (likeValue == 1) {
+	                if (likeUserId != _this.props.loggedInUserId) {
+	                  // current user liked comment
+	                  likeButton = _react2['default'].createElement(
+	                    _reactBootstrap.Button,
+	                    { bsSize: 'small', bsStyle: 'success', active: true },
+	                    _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'thumbs-up' })
+	                  );
+	                }
+	                numLikes++;
+	              } else if (likeValue == 0) {
+	                if (likeUserId != _this.props.loggedInUserId) {
+	                  // current user liked comment
+	                  dislikeButton = _react2['default'].createElement(
+	                    _reactBootstrap.Button,
+	                    { bsSize: 'small', bsStyle: 'danger', active: true },
+	                    _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'thumbs-down' })
+	                  );
+	                }
+	                numDislikes++;
+	              }
+	            });
+	          }
 
 	          return _react2['default'].createElement(
 	            'div',
