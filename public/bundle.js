@@ -44135,19 +44135,19 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
 	      var rusheeId = this.router.getCurrentParams().rusheeId;
 	      var rushee = this.props.rushees[rusheeId];
 	      var rusheeName, rusheeFacebook, rusheePhone, rusheeEmail, rusheePhotos;
 	      var numRatings = 0;
 	      var stars = 0.1;
 	      var rusheeComments;
+	      var userStars = 0;
+	      var userRating = 'none';
 
 	      if (rushee) {
-	        var lastUpdated = _react2['default'].createElement(
-	          _reactBootstrap.Badge,
-	          null,
-	          _react2['default'].createElement(_reactTimeago2['default'], { date: new Date(Number(rushee["lastUpdated"]) * 1000) })
-	        );
+	        var lastUpdated = _react2['default'].createElement(_reactTimeago2['default'], { date: new Date(Number(rushee["lastUpdated"]) * 1000) });
 	        var facebook = rushee["facebook"];
 	        var name = rushee["firstName"] + ' ' + rushee["lastName"];
 	        var email = rushee["email"];
@@ -44214,6 +44214,11 @@
 	          var sum = 0;
 	          Object.keys(rushee["ratings"]).map(function (key) {
 	            sum += Number(rushee["ratings"][key]["value"]);
+	            if (key == _this.props.loggedInUserId) {
+	              //this is our user's vote
+	              userStars = Number(rushee["ratings"][key]["value"]);
+	              userRating = userStars + ' ' + ' stars';
+	            }
 	            count++;
 	          });
 	          stars = Math.round(sum / count);
@@ -44244,6 +44249,28 @@
 	          rusheeName
 	        ),
 	        _react2['default'].createElement(
+	          _reactBootstrap.Col,
+	          { xs: 12 },
+	          'Updated',
+	          ' ',
+	          lastUpdated
+	        ),
+	        _react2['default'].createElement(
+	          _reactBootstrap.Col,
+	          { xs: 12 },
+	          rusheePhone
+	        ),
+	        _react2['default'].createElement(
+	          _reactBootstrap.Col,
+	          { xs: 12 },
+	          rusheeFacebook
+	        ),
+	        _react2['default'].createElement(
+	          _reactBootstrap.Col,
+	          { xs: 12 },
+	          rusheeEmail
+	        ),
+	        _react2['default'].createElement(
 	          _reactBootstrap.Table,
 	          { striped: true, bordered: true, condensed: true, hover: true },
 	          _react2['default'].createElement(
@@ -44255,6 +44282,7 @@
 	              _react2['default'].createElement(
 	                'td',
 	                { className: 'vert-align' },
+	                'Fraternity Vote',
 	                _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 25, disabled: true, rating: stars, totalStars: 5 }),
 	                _react2['default'].createElement(
 	                  _reactBootstrap.Badge,
@@ -44265,16 +44293,13 @@
 	              _react2['default'].createElement(
 	                'td',
 	                { className: 'vert-align' },
-	                rusheePhone,
-	                rusheeFacebook,
-	                rusheeEmail
-	              ),
-	              _react2['default'].createElement(
-	                'td',
-	                { className: 'vert-align' },
-	                'Updated',
-	                _react2['default'].createElement('br', null),
-	                lastUpdated
+	                'Your Vote',
+	                _react2['default'].createElement(_reactStarRating2['default'], { name: 'userRusheeRating', size: 25, rating: userStars, totalStars: 5 }),
+	                _react2['default'].createElement(
+	                  _reactBootstrap.Badge,
+	                  null,
+	                  userRating
+	                )
 	              )
 	            )
 	          )
@@ -44341,7 +44366,6 @@
 	      var _this = this;
 
 	      var comments;
-	      console.log(this.props);
 	      if (this.props.comments) {
 	        comments = this.props.comments.map(function (comment, key) {
 
@@ -44361,9 +44385,8 @@
 	          if (comment["likes"]) {
 	            Object.keys(comment["likes"]).map(function (likeUserId, likeValue) {
 	              var numLikeValue = Number(likeValue);
-	              console.log("user who liked this was ", likeUserId);
 	              if (likeValue == 1) {
-	                if (likeUserId != _this.props.loggedInUserId) {
+	                if (likeUserId == _this.props.loggedInUserId) {
 	                  // current user liked comment
 	                  likeButton = _react2['default'].createElement(
 	                    _reactBootstrap.Button,
@@ -44373,7 +44396,7 @@
 	                }
 	                numLikes++;
 	              } else if (likeValue == 0) {
-	                if (likeUserId != _this.props.loggedInUserId) {
+	                if (likeUserId == _this.props.loggedInUserId) {
 	                  // current user liked comment
 	                  dislikeButton = _react2['default'].createElement(
 	                    _reactBootstrap.Button,

@@ -28,9 +28,11 @@ class DetailView extends React.Component{
     var numRatings = 0;
     var stars = 0.1;
     var rusheeComments;
+    var userStars = 0;
+    var userRating = 'none';
 
     if (rushee) {
-      var lastUpdated = <Badge><TimeAgo date={new Date(Number(rushee["lastUpdated"])*1000)}/></Badge>
+      var lastUpdated = <TimeAgo date={new Date(Number(rushee["lastUpdated"])*1000)}/>
       var facebook = rushee["facebook"];
       var name = rushee["firstName"] + ' ' + rushee["lastName"];
       var email = rushee["email"];
@@ -51,6 +53,10 @@ class DetailView extends React.Component{
         var sum = 0;
         Object.keys(rushee["ratings"]).map((key) => {
           sum += Number(rushee["ratings"][key]["value"]);
+          if (key == this.props.loggedInUserId) { //this is our user's vote
+            userStars = Number(rushee["ratings"][key]["value"]);
+            userRating = userStars + ' ' + ' stars';
+          }
           count++;
         });
         stars = Math.round(sum/count);
@@ -78,21 +84,30 @@ class DetailView extends React.Component{
         <Col xs={12}>
           {rusheeName}
         </Col>
+        <Col xs={12}>
+          Updated{' '}{lastUpdated}
+        </Col>
+        <Col xs={12}>
+          {rusheePhone}
+        </Col>
+        <Col xs={12}>
+          {rusheeFacebook}
+        </Col>
+        <Col xs={12}>
+          {rusheeEmail}
+        </Col>
         <Table striped bordered condensed hover>
           <tbody>
           <tr>
             <td className="vert-align">
+              Fraternity Vote
               <StarRating name="rusheeRating" size={25} disabled rating={stars} totalStars={5} />
               <Badge>{numRatings + ' votes'}</Badge>
             </td>
             <td className="vert-align">
-              {rusheePhone}
-              {rusheeFacebook}
-              {rusheeEmail}
-            </td>
-            <td className="vert-align">
-              Updated<br />
-              {lastUpdated}
+              Your Vote
+              <StarRating name="userRusheeRating" size={25} rating={userStars} totalStars={5} />
+              <Badge>{userRating}</Badge>
             </td>
           </tr>
           </tbody>
