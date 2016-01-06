@@ -11,13 +11,14 @@ class Main extends React.Component{
     this.state = {
       loggedIn: props.loggedIn,
       googleUser: props.googleUser,
-      email: props.email
+      email: props.email,
+      users: props.users,
+      rushees: props.rushees
     };
   }
   authDataCallback(authData) {
     if (authData) {
-      console.log(authData["google"]["email"]);
-      /*if (authData["google"]["email"] != "ziruixiao@gmail.com") {
+      if (authData["google"]["email"] != "ziruixiao@gmail.com") {
         console.log("unauth");
         this.ref.unauth();
         this.setState({
@@ -36,7 +37,7 @@ class Main extends React.Component{
           googleUser: authData["google"],
           email: authData["google"]["email"]
         });
-      //}
+      }
     } else {
       this.setState({
         loggedIn: false,
@@ -48,7 +49,19 @@ class Main extends React.Component{
     }
   }
   setupFirebaseConnections() {
+    var usersRef = new Firebase('https://rushchad.firebaseio.com/users');
+    usersRef.once('value', function(dataSnapshot) {
+      this.setState({
+        users: dataSnapshot.val()
+      });
+    }.bind(this));
 
+    var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees');
+    rusheesRef.once('value', function(dataSnapshot) {
+      this.setState({
+        rushees: dataSnapshot.val()
+      });
+    }.bind(this));
   }
   init(){
     this.ref = new Firebase('https://rushchad.firebaseio.com/');
@@ -93,9 +106,10 @@ class Main extends React.Component{
       return (
         <div className="main-container">
           <Header googleUser={this.state.googleUser}/>
+
           <div className="container">
 
-            <RouteHandler {...this.state}/>
+            <RouteHandler {...this.state} users={this.state.users} rushees={this.state.rushees}/>
           </div>
           <nav className="navbar navbar-default" role="navigation">
             <div className="col-sm-7 col-sm-offset-2" style={{marginTop: 15}}>

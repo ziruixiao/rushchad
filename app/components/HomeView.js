@@ -6,12 +6,12 @@ import RusheeTile from './RusheeTile';
 
 class HomeView extends React.Component{
   render(){
+    var rusheeTiles = Object.keys(this.props.rushees).map((key) => {
+      return <RusheeTile key={key} rusheeId={key} rushee={this.props.rushees[key]}/>
+    });
     return (
       <div>
-        <h2 className="text-center">
-          Home View
-        </h2>
-        <RusheeTile />
+        {rusheeTiles}
       </div>
     )
   }

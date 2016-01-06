@@ -22929,7 +22929,7 @@
 	  { name: 'app', path: '/', handler: _componentsMain2['default'] },
 	  _react2['default'].createElement(_reactRouter.Route, { name: 'list', path: 'list', handler: _componentsListView2['default'] }),
 	  _react2['default'].createElement(_reactRouter.Route, { name: 'profile', path: 'profile/:username', handler: _componentsProfileView2['default'] }),
-	  _react2['default'].createElement(_reactRouter.Route, { name: 'detail', path: 'detail/:rushee', handler: _componentsDetailView2['default'] }),
+	  _react2['default'].createElement(_reactRouter.Route, { name: 'detail', path: 'detail/:rusheeId', handler: _componentsDetailView2['default'] }),
 	  _react2['default'].createElement(_reactRouter.DefaultRoute, { handler: _componentsHomeView2['default'] })
 	);
 	module.exports = exports['default'];
@@ -22943,6 +22943,8 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -22988,7 +22990,9 @@
 	    this.state = {
 	      loggedIn: props.loggedIn,
 	      googleUser: props.googleUser,
-	      email: props.email
+	      email: props.email,
+	      users: props.users,
+	      rushees: props.rushees
 	    };
 	  }
 
@@ -22996,8 +23000,7 @@
 	    key: 'authDataCallback',
 	    value: function authDataCallback(authData) {
 	      if (authData) {
-	        console.log(authData["google"]["email"]);
-	        /*if (authData["google"]["email"] != "ziruixiao@gmail.com") {
+	        if (authData["google"]["email"] != "ziruixiao@gmail.com") {
 	          console.log("unauth");
 	          this.ref.unauth();
 	          this.setState({
@@ -23007,28 +23010,43 @@
 	            users: [],
 	            rushees: {}
 	          });
-	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
-	         } else { // successful login*/
-	        this.setupFirebaseConnections();
-	        this.setState({
-	          loggedIn: true,
-	          googleUser: authData["google"],
-	          email: authData["google"]["email"]
-	        });
-	        //}
-	      } else {
+	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
+	        } else {
+	          // successful login*/
+	          this.setupFirebaseConnections();
 	          this.setState({
-	            loggedIn: false,
-	            googleUser: {},
-	            email: '',
-	            users: [],
-	            rusheese: {}
+	            loggedIn: true,
+	            googleUser: authData["google"],
+	            email: authData["google"]["email"]
 	          });
 	        }
+	      } else {
+	        this.setState({
+	          loggedIn: false,
+	          googleUser: {},
+	          email: '',
+	          users: [],
+	          rusheese: {}
+	        });
+	      }
 	    }
 	  }, {
 	    key: 'setupFirebaseConnections',
-	    value: function setupFirebaseConnections() {}
+	    value: function setupFirebaseConnections() {
+	      var usersRef = new Firebase('https://rushchad.firebaseio.com/users');
+	      usersRef.once('value', (function (dataSnapshot) {
+	        this.setState({
+	          users: dataSnapshot.val()
+	        });
+	      }).bind(this));
+
+	      var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees');
+	      rusheesRef.once('value', (function (dataSnapshot) {
+	        this.setState({
+	          rushees: dataSnapshot.val()
+	        });
+	      }).bind(this));
+	    }
 	  }, {
 	    key: 'init',
 	    value: function init() {
@@ -23098,7 +23116,7 @@
 	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
-	            _react2['default'].createElement(_reactRouter.RouteHandler, this.state)
+	            _react2['default'].createElement(_reactRouter.RouteHandler, _extends({}, this.state, { users: this.state.users, rushees: this.state.rushees }))
 	          ),
 	          _react2['default'].createElement(
 	            'nav',
@@ -23270,7 +23288,7 @@
 	        null,
 	        _react2['default'].createElement(
 	          _reactBootstrap.Navbar,
-	          { inverse: true, staticTop: true },
+	          { inverse: true },
 	          _react2['default'].createElement(
 	            _reactBootstrap.Navbar.Header,
 	            null,
@@ -40994,15 +41012,15 @@
 	  _createClass(HomeView, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
+	      var rusheeTiles = Object.keys(this.props.rushees).map(function (key) {
+	        return _react2['default'].createElement(_RusheeTile2['default'], { key: key, rusheeId: key, rushee: _this.props.rushees[key] });
+	      });
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(
-	          'h2',
-	          { className: 'text-center' },
-	          'Home View'
-	        ),
-	        _react2['default'].createElement(_RusheeTile2['default'], null)
+	        rusheeTiles
 	      );
 	    }
 	  }]);
@@ -41061,23 +41079,31 @@
 	    key: 'showDetailView',
 	    value: function showDetailView() {
 	      var router = this.context.router;
-	      router.transitionTo('detail', { rushee: "ziruixiao" });
+	      router.transitionTo('detail', { rusheeId: this.props.rusheeId });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      console.log(this.props.rushee);
+	      var numComments = this.props.rushee["comments"] ? this.props.rushee["comments"].length : 0;
+	      var numRatings = this.props.rushee["ratings"] ? Object.keys(this.props.rushee["ratings"]).length : 0;
+	      var blankAvatar = "http://jagc.org/images/avatar.png";
+	      var thumbPhotoUrl = blankAvatar;
+
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
 	        _react2['default'].createElement(
 	          _reactBootstrap.Col,
-	          { xs: 12, sm: 4, md: 4 },
+	          { xs: 12, sm: 4, md: 3 },
 	          _react2['default'].createElement(
 	            _reactBootstrap.Panel,
 	            { header: _react2['default'].createElement(
 	                'div',
 	                null,
-	                'Rushee Name'
+	                this.props.rushee["firstName"],
+	                ' ',
+	                this.props.rushee["lastName"]
 	              ), footer: _react2['default'].createElement(
 	                'div',
 	                null,
@@ -41089,16 +41115,16 @@
 	                    { xs: 4, sm: 4, md: 4 },
 	                    _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'comment' }),
 	                    ' ',
-	                    '47'
+	                    numComments
 	                  ),
 	                  _react2['default'].createElement(
 	                    _reactBootstrap.Col,
 	                    { xs: 8, sm: 8, md: 8 },
-	                    _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 15, caption: '5 votes', disabled: true, rating: 3, totalStars: 5 })
+	                    _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 15, caption: numRatings + ' votes', disabled: true, rating: 3, totalStars: 5 })
 	                  )
 	                )
 	              ), bsStyle: 'info', onClick: this.showDetailView.bind(this) },
-	            _react2['default'].createElement(_reactBootstrap.Image, { src: 'http://jagc.org/images/avatar.png', responsive: true })
+	            _react2['default'].createElement(_reactBootstrap.Image, { src: thumbPhotoUrl, responsive: true })
 	          )
 	        )
 	      );
