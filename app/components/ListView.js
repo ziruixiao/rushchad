@@ -21,12 +21,23 @@ class ListView extends React.Component{
       var numComments= (rushee["comments"]) ? rushee["comments"].length : 0;
       var numRatings = (rushee["ratings"]) ? Object.keys(rushee["ratings"]).length : 0;
 
+      var stars = 0;
+      if (rushee["ratings"]) {
+        var count = 0;
+        var sum = 0;
+        Object.keys(rushee["ratings"]).map((key) => {
+          sum += Number(rushee["ratings"][key]["value"]);
+          count++;
+        });
+        stars = Math.round(sum/count);
+      }
+
       return (
-        <tr onClick={this.showDetailView.bind(this, key)}>
+        <tr key={key} onClick={this.showDetailView.bind(this, key)}>
           <td>{rushee["firstName"]}</td>
           <td>{rushee["lastName"]}</td>
           <td>{numComments}</td>
-          <td> <StarRating name="rusheeRating" size={17} disabled rating={3} totalStars={5} />
+          <td> <StarRating name="rusheeRating" size={17} disabled rating={stars} totalStars={5} />
           </td>
           <td>{numRatings}</td>
           <td><TimeAgo date={lastUpdated}/></td>

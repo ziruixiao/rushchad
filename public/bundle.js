@@ -41082,10 +41082,22 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
 	      var numComments = this.props.rushee["comments"] ? this.props.rushee["comments"].length : 0;
 	      var numRatings = this.props.rushee["ratings"] ? Object.keys(this.props.rushee["ratings"]).length : 0;
 	      var blankAvatar = "http://jagc.org/images/avatar.png";
 	      var thumbPhotoUrl = blankAvatar;
+	      var stars = 0;
+	      if (this.props.rushee["ratings"]) {
+	        var count = 0;
+	        var sum = 0;
+	        Object.keys(this.props.rushee["ratings"]).map(function (key) {
+	          sum += Number(_this.props.rushee["ratings"][key]["value"]);
+	          count++;
+	        });
+	        stars = Math.round(sum / count);
+	      }
 
 	      return _react2['default'].createElement(
 	        'div',
@@ -41121,7 +41133,7 @@
 	                  _react2['default'].createElement(
 	                    _reactBootstrap.Col,
 	                    { xs: 5, sm: 5, md: 5 },
-	                    _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 17, disabled: true, rating: 3, totalStars: 5 })
+	                    _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 17, disabled: true, rating: stars, totalStars: 5 })
 	                  ),
 	                  _react2['default'].createElement(
 	                    _reactBootstrap.Col,
@@ -43816,9 +43828,21 @@
 	        var lastUpdated = new Date(Number(rushee["lastUpdated"]) * 1000);
 	        var numComments = rushee["comments"] ? rushee["comments"].length : 0;
 	        var numRatings = rushee["ratings"] ? Object.keys(rushee["ratings"]).length : 0;
+
+	        var stars = 0;
+	        if (rushee["ratings"]) {
+	          var count = 0;
+	          var sum = 0;
+	          Object.keys(rushee["ratings"]).map(function (key) {
+	            sum += Number(rushee["ratings"][key]["value"]);
+	            count++;
+	          });
+	          stars = Math.round(sum / count);
+	        }
+
 	        return _react2['default'].createElement(
 	          'tr',
-	          { onClick: _this.showDetailView.bind(_this, key) },
+	          { key: key, onClick: _this.showDetailView.bind(_this, key) },
 	          _react2['default'].createElement(
 	            'td',
 	            null,
@@ -43838,7 +43862,7 @@
 	            'td',
 	            null,
 	            ' ',
-	            _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 17, disabled: true, rating: 3, totalStars: 5 })
+	            _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 17, disabled: true, rating: stars, totalStars: 5 })
 	          ),
 	          _react2['default'].createElement(
 	            'td',

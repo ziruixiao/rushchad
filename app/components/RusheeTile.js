@@ -22,6 +22,16 @@ class RusheeTile extends React.Component{
     var numRatings = (this.props.rushee["ratings"]) ? Object.keys(this.props.rushee["ratings"]).length : 0;
     var blankAvatar = "http://jagc.org/images/avatar.png";
     var thumbPhotoUrl = blankAvatar;
+    var stars = 0;
+    if (this.props.rushee["ratings"]) {
+      var count = 0;
+      var sum = 0;
+      Object.keys(this.props.rushee["ratings"]).map((key) => {
+        sum += Number(this.props.rushee["ratings"][key]["value"]);
+        count++;
+      });
+      stars = Math.round(sum/count);
+    }
 
     return (
       <div>
@@ -39,7 +49,7 @@ class RusheeTile extends React.Component{
                   <Badge>{numComments}</Badge>
                 </Col>
                 <Col xs={5} sm={5} md={5}>
-                  <StarRating name="rusheeRating" size={17} disabled rating={3} totalStars={5} />
+                  <StarRating name="rusheeRating" size={17} disabled rating={stars} totalStars={5} />
 
                 </Col>
                 <Col xs={2} sm={2} md={2}>
