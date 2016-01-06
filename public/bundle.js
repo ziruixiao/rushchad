@@ -22990,7 +22990,8 @@
 	      googleUser: props.googleUser,
 	      email: props.email,
 	      users: props.users,
-	      rushees: props.rushees
+	      rushees: props.rushees,
+	      loggedInUserId: props.loggedInUserId
 	    };
 	  }
 
@@ -23006,7 +23007,8 @@
 	            googleUser: {},
 	            email: '',
 	            users: [],
-	            rushees: {}
+	            rushees: {},
+	            loggedInUserId: -1
 	          });
 	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
 	        } else {
@@ -23015,7 +23017,8 @@
 	          this.setState({
 	            loggedIn: true,
 	            googleUser: authData["google"],
-	            email: authData["google"]["email"]
+	            email: authData["google"]["email"],
+	            loggedInUserId: 1
 	          });
 	        }
 	      } else {
@@ -23024,7 +23027,8 @@
 	          googleUser: {},
 	          email: '',
 	          users: [],
-	          rusheese: {}
+	          rusheese: {},
+	          loggedInUserId: -1
 	        });
 	      }
 	    }
@@ -23140,7 +23144,8 @@
 	  googleUser: _react2['default'].PropTypes.object,
 	  email: _react2['default'].PropTypes.string,
 	  users: _react2['default'].PropTypes.array,
-	  rushees: _react2['default'].PropTypes.object
+	  rushees: _react2['default'].PropTypes.object,
+	  loggedInUserId: _react2['default'].PropTypes.number
 	};
 
 	Main.defaultProps = {
@@ -23148,7 +23153,8 @@
 	  googleUser: {},
 	  email: '',
 	  users: [],
-	  rushees: {}
+	  rushees: {},
+	  loggedInUserId: -1
 	};
 
 	Main.contextTypes = {
@@ -41088,7 +41094,7 @@
 	      var numRatings = this.props.rushee["ratings"] ? Object.keys(this.props.rushee["ratings"]).length : 0;
 	      var blankAvatar = "http://jagc.org/images/avatar.png";
 	      var thumbPhotoUrl = blankAvatar;
-	      var stars = 0;
+	      var stars = 0.1;
 	      if (this.props.rushee["ratings"]) {
 	        var count = 0;
 	        var sum = 0;
@@ -43829,7 +43835,7 @@
 	        var numComments = rushee["comments"] ? rushee["comments"].length : 0;
 	        var numRatings = rushee["ratings"] ? Object.keys(rushee["ratings"]).length : 0;
 
-	        var stars = 0;
+	        var stars = 0.1;
 	        if (rushee["ratings"]) {
 	          var count = 0;
 	          var sum = 0;
@@ -44100,6 +44106,14 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
+	var _reactTimeago = __webpack_require__(482);
+
+	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
+
+	var _reactStarRating = __webpack_require__(454);
+
+	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
+
 	var DetailView = (function (_React$Component) {
 	  _inherits(DetailView, _React$Component);
 
@@ -44119,62 +44133,132 @@
 	    value: function render() {
 	      var rusheeId = this.router.getCurrentParams().rusheeId;
 	      var rushee = this.props.rushees[rusheeId];
-	      var rusheeName,
-	          rusheePhone,
-	          rusheeEmail,
-	          rusheeFacebook = '';
+	      var rusheeName, rusheeFacebook, rusheePhone, rusheeEmail;
+	      var numRatings = 0;
+	      var stars = 0.1;
 	      if (rushee) {
-	        rusheeFacebook = rushee["facebook"];
-	        rusheeName = rushee["firstName"] + ' ' + rushee["lastName"];
-	        rusheeEmail = _react2['default'].createElement(
-	          _reactBootstrap.Well,
+	        var lastUpdated = _react2['default'].createElement(
+	          _reactBootstrap.Badge,
 	          null,
-	          _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'email' }),
+	          _react2['default'].createElement(_reactTimeago2['default'], { date: new Date(Number(rushee["lastUpdated"]) * 1000) })
+	        );
+	        var facebook = rushee["facebook"];
+	        var name = rushee["firstName"] + ' ' + rushee["lastName"];
+	        var email = rushee["email"];
+	        var phone = rushee["phone"];
+	        if (facebook) {
+	          rusheeName = _react2['default'].createElement(
+	            'h1',
+	            null,
+	            _react2['default'].createElement(
+	              'a',
+	              { href: facebook, target: '_blank' },
+	              name,
+	              ' '
+	            ),
+	            _react2['default'].createElement(
+	              _reactBootstrap.Button,
+	              null,
+	              'Edit'
+	            )
+	          );
+	          rusheeFacebook = _react2['default'].createElement(
+	            'div',
+	            null,
+	            _react2['default'].createElement(_reactBootstrap.Glyphicon, { bsSize: 'small', glyph: 'facebook' }),
+	            ' ',
+	            _react2['default'].createElement(
+	              'a',
+	              { href: facebook, target: '_blank' },
+	              'Facebook'
+	            )
+	          );
+	        } else {
+	          rusheeName = _react2['default'].createElement(
+	            'h1',
+	            null,
+	            name,
+	            ' ',
+	            _react2['default'].createElement(
+	              _reactBootstrap.Button,
+	              null,
+	              'Edit'
+	            )
+	          );
+	        }
+	        rusheeEmail = _react2['default'].createElement(
+	          'div',
+	          null,
+	          _react2['default'].createElement(_reactBootstrap.Glyphicon, { bsSize: 'small', glyph: 'email' }),
+	          ' ',
 	          rushee["email"]
 	        );
 	        rusheePhone = _react2['default'].createElement(
-	          _reactBootstrap.Well,
+	          'div',
 	          null,
-	          _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'phone' }),
+	          _react2['default'].createElement(_reactBootstrap.Glyphicon, { bsSize: 'small', glyph: 'phone' }),
+	          ' ',
 	          rushee["phone"]
 	        );
+
+	        numRatings = rushee["ratings"] ? Object.keys(rushee["ratings"]).length : 0;
+
+	        if (rushee["ratings"]) {
+	          var count = 0;
+	          var sum = 0;
+	          Object.keys(rushee["ratings"]).map(function (key) {
+	            sum += Number(rushee["ratings"][key]["value"]);
+	            count++;
+	          });
+	          stars = Math.round(sum / count);
+	        }
 	      }
+
 	      console.log(rushee);
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
 	        _react2['default'].createElement(
-	          _reactBootstrap.Row,
-	          null,
-	          _react2['default'].createElement(
-	            _reactBootstrap.Col,
-	            { xs: 11, md: 8 },
-	            _react2['default'].createElement(
-	              'h1',
-	              null,
-	              rusheeName
-	            )
-	          ),
-	          _react2['default'].createElement(
-	            _reactBootstrap.Col,
-	            { xs: 6, md: 2 },
-	            'Button 1'
-	          ),
-	          _react2['default'].createElement(
-	            _reactBootstrap.Col,
-	            { xs: 6, md: 2 },
-	            'Button 2'
-	          )
+	          _reactBootstrap.Col,
+	          { xs: 12 },
+	          rusheeName
 	        ),
 	        _react2['default'].createElement(
-	          _reactBootstrap.Row,
-	          null,
-	          rusheePhone,
-	          rusheeEmail
+	          _reactBootstrap.Table,
+	          { striped: true, bordered: true, condensed: true, hover: true },
+	          _react2['default'].createElement(
+	            'tbody',
+	            null,
+	            _react2['default'].createElement(
+	              'tr',
+	              null,
+	              _react2['default'].createElement(
+	                'td',
+	                { className: 'vert-align' },
+	                _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 25, disabled: true, rating: stars, totalStars: 5 }),
+	                _react2['default'].createElement(
+	                  _reactBootstrap.Badge,
+	                  null,
+	                  numRatings + ' votes'
+	                )
+	              ),
+	              _react2['default'].createElement(
+	                'td',
+	                { className: 'vert-align' },
+	                rusheePhone,
+	                rusheeFacebook,
+	                rusheeEmail
+	              ),
+	              _react2['default'].createElement(
+	                'td',
+	                { className: 'vert-align' },
+	                'Updated',
+	                _react2['default'].createElement('br', null),
+	                lastUpdated
+	              )
+	            )
+	          )
 	        ),
-	        _react2['default'].createElement('br', null),
-	        _react2['default'].createElement('br', null),
-	        _react2['default'].createElement('br', null),
 	        rusheeFacebook
 	      );
 	    }

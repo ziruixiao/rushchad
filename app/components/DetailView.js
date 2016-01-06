@@ -4,11 +4,15 @@
 import React from 'react';
 import {
   Badge,
+  Button,
   Col,
   Glyphicon,
   Row,
+  Table,
   Well
 } from 'react-bootstrap';
+import TimeAgo from 'react-timeago';
+import StarRating from 'react-star-rating';
 
 class DetailView extends React.Component{
   componentWillMount(){
@@ -17,37 +21,65 @@ class DetailView extends React.Component{
   render(){
     var rusheeId = this.router.getCurrentParams().rusheeId;
     var rushee = this.props.rushees[rusheeId];
-    var rusheeName, rusheePhone, rusheeEmail, rusheeFacebook = '';
+    var rusheeName, rusheeFacebook, rusheePhone, rusheeEmail;
+    var numRatings = 0;
+    var stars = 0.1;
     if (rushee) {
-      rusheeFacebook = rushee["facebook"];
-      rusheeName = rushee["firstName"] + ' ' + rushee["lastName"];
-      rusheeEmail = <Well><Glyphicon glyph="email" />{rushee["email"]}</Well>;
-      rusheePhone = <Well><Glyphicon glyph="phone" />{rushee["phone"]}</Well>;
+      var lastUpdated = <Badge><TimeAgo date={new Date(Number(rushee["lastUpdated"])*1000)}/></Badge>
+      var facebook = rushee["facebook"];
+      var name = rushee["firstName"] + ' ' + rushee["lastName"];
+      var email = rushee["email"];
+      var phone = rushee["phone"];
+      if (facebook) {
+        rusheeName = <h1><a href={facebook} target="_blank">{name}{' '}</a><Button>Edit</Button></h1>
+        rusheeFacebook = <div><Glyphicon bsSize="small" glyph="facebook" />{' '}<a href={facebook} target="_blank">Facebook</a></div>;
+      } else {
+        rusheeName = <h1>{name}{' '}<Button>Edit</Button></h1>
+      }
+      rusheeEmail = <div><Glyphicon bsSize="small" glyph="email" />{' '}{rushee["email"]}</div>;
+      rusheePhone = <div><Glyphicon bsSize="small" glyph="phone" />{' '}{rushee["phone"]}</div>;
+
+      numRatings = (rushee["ratings"]) ? Object.keys(rushee["ratings"]).length : 0;
+
+      if (rushee["ratings"]) {
+        var count = 0;
+        var sum = 0;
+        Object.keys(rushee["ratings"]).map((key) => {
+          sum += Number(rushee["ratings"][key]["value"]);
+          count++;
+        });
+        stars = Math.round(sum/count);
+      }
     }
+
+
     console.log(rushee);
     return (
       <div>
-        <Row>
-          <Col xs={11} md={8}>
-            <h1>{rusheeName}</h1>
-          </Col>
-          <Col xs={6} md={2}>
-            Button 1
-          </Col>
-          <Col xs={6} md={2}>
-            Button 2
-          </Col>
-        </Row>
-        <Row>
-          {rusheePhone}
-          {rusheeEmail}
-        </Row>
-        <br />
+        <Col xs={12}>
+          {rusheeName}
+        </Col>
+        <Table striped bordered condensed hover>
+          <tbody>
+          <tr>
+            <td className="vert-align">
+              <StarRating name="rusheeRating" size={25} disabled rating={stars} totalStars={5} />
+              <Badge>{numRatings + ' votes'}</Badge>
+            </td>
+            <td className="vert-align">
+              {rusheePhone}
+              {rusheeFacebook}
+              {rusheeEmail}
+            </td>
+            <td className="vert-align">
+              Updated<br />
+              {lastUpdated}
+            </td>
+          </tr>
+          </tbody>
+        </Table>
 
-        <br />
 
-        <br />
-        {rusheeFacebook}
 
       </div>
     )

@@ -13,7 +13,8 @@ class Main extends React.Component{
       googleUser: props.googleUser,
       email: props.email,
       users: props.users,
-      rushees: props.rushees
+      rushees: props.rushees,
+      loggedInUserId: props.loggedInUserId
     };
   }
   authDataCallback(authData) {
@@ -26,7 +27,8 @@ class Main extends React.Component{
           googleUser: {},
           email: '',
           users: [],
-          rushees: {}
+          rushees: {},
+          loggedInUserId: -1
         });
         document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
 
@@ -35,7 +37,8 @@ class Main extends React.Component{
         this.setState({
           loggedIn: true,
           googleUser: authData["google"],
-          email: authData["google"]["email"]
+          email: authData["google"]["email"],
+          loggedInUserId: 1
         });
       }
     } else {
@@ -44,7 +47,8 @@ class Main extends React.Component{
         googleUser: {},
         email: '',
         users: [],
-        rusheese: {}
+        rusheese: {},
+        loggedInUserId: -1
       });
     }
   }
@@ -128,7 +132,8 @@ Main.propTypes = {
   googleUser: React.PropTypes.object,
   email: React.PropTypes.string,
   users: React.PropTypes.array,
-  rushees: React.PropTypes.object
+  rushees: React.PropTypes.object,
+  loggedInUserId: React.PropTypes.number
 };
 
 Main.defaultProps = {
@@ -136,7 +141,8 @@ Main.defaultProps = {
   googleUser: {},
   email: '',
   users: [],
-  rushees: {}
+  rushees: {},
+  loggedInUserId: -1
 }
 
 Main.contextTypes = {

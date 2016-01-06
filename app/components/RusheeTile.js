@@ -22,7 +22,7 @@ class RusheeTile extends React.Component{
     var numRatings = (this.props.rushee["ratings"]) ? Object.keys(this.props.rushee["ratings"]).length : 0;
     var blankAvatar = "http://jagc.org/images/avatar.png";
     var thumbPhotoUrl = blankAvatar;
-    var stars = 0;
+    var stars = 0.1;
     if (this.props.rushee["ratings"]) {
       var count = 0;
       var sum = 0;

@@ -21,7 +21,7 @@ class ListView extends React.Component{
       var numComments= (rushee["comments"]) ? rushee["comments"].length : 0;
       var numRatings = (rushee["ratings"]) ? Object.keys(rushee["ratings"]).length : 0;
 
-      var stars = 0;
+      var stars = 0.1;
       if (rushee["ratings"]) {
         var count = 0;
         var sum = 0;
