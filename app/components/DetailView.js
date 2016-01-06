@@ -5,6 +5,8 @@ import React from 'react';
 import {
   Badge,
   Button,
+  Carousel,
+  CarouselItem,
   Col,
   Glyphicon,
   Row,
@@ -13,6 +15,7 @@ import {
 } from 'react-bootstrap';
 import TimeAgo from 'react-timeago';
 import StarRating from 'react-star-rating';
+import CommentList from './CommentList';
 
 class DetailView extends React.Component{
   componentWillMount(){
@@ -21,9 +24,11 @@ class DetailView extends React.Component{
   render(){
     var rusheeId = this.router.getCurrentParams().rusheeId;
     var rushee = this.props.rushees[rusheeId];
-    var rusheeName, rusheeFacebook, rusheePhone, rusheeEmail;
+    var rusheeName, rusheeFacebook, rusheePhone, rusheeEmail, rusheePhotos;
     var numRatings = 0;
     var stars = 0.1;
+    var rusheeComments;
+
     if (rushee) {
       var lastUpdated = <Badge><TimeAgo date={new Date(Number(rushee["lastUpdated"])*1000)}/></Badge>
       var facebook = rushee["facebook"];
@@ -49,6 +54,20 @@ class DetailView extends React.Component{
           count++;
         });
         stars = Math.round(sum/count);
+      }
+
+      if (rushee["photos"]) {
+        rusheePhotos = rushee["photos"].map((photo, index) => {
+          return (
+          <CarouselItem>
+            <img width={900} height={500} alt="900x500" src={photo}/>
+          </CarouselItem>
+          )
+        });
+      }
+
+      if (rushee["comments"]) {
+        rusheeComments = rushee["comments"];
       }
     }
 
@@ -78,7 +97,7 @@ class DetailView extends React.Component{
           </tr>
           </tbody>
         </Table>
-
+        <CommentList users={this.props.users} comments={rusheeComments} rusheeId={rusheeId}/>
 
 
       </div>
