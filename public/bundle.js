@@ -22920,7 +22920,7 @@
 
 	var _componentsListView2 = _interopRequireDefault(_componentsListView);
 
-	var _componentsDetailView = __webpack_require__(482);
+	var _componentsDetailView = __webpack_require__(483);
 
 	var _componentsDetailView2 = _interopRequireDefault(_componentsDetailView);
 
@@ -22943,8 +22943,6 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -23033,14 +23031,14 @@
 	  }, {
 	    key: 'setupFirebaseConnections',
 	    value: function setupFirebaseConnections() {
-	      var usersRef = new Firebase('https://rushchad.firebaseio.com/users');
+	      var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
 	      usersRef.once('value', (function (dataSnapshot) {
 	        this.setState({
 	          users: dataSnapshot.val()
 	        });
 	      }).bind(this));
 
-	      var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees');
+	      var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
 	      rusheesRef.once('value', (function (dataSnapshot) {
 	        this.setState({
 	          rushees: dataSnapshot.val()
@@ -23116,7 +23114,7 @@
 	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
-	            _react2['default'].createElement(_reactRouter.RouteHandler, _extends({}, this.state, { users: this.state.users, rushees: this.state.rushees }))
+	            _react2['default'].createElement(_reactRouter.RouteHandler, this.state)
 	          ),
 	          _react2['default'].createElement(
 	            'nav',
@@ -41084,7 +41082,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.props.rushee);
 	      var numComments = this.props.rushee["comments"] ? this.props.rushee["comments"].length : 0;
 	      var numRatings = this.props.rushee["ratings"] ? Object.keys(this.props.rushee["ratings"]).length : 0;
 	      var blankAvatar = "http://jagc.org/images/avatar.png";
@@ -41095,10 +41092,10 @@
 	        null,
 	        _react2['default'].createElement(
 	          _reactBootstrap.Col,
-	          { xs: 12, sm: 4, md: 3 },
+	          { xs: 12, sm: 4, lg: 3 },
 	          _react2['default'].createElement(
 	            _reactBootstrap.Panel,
-	            { header: _react2['default'].createElement(
+	            { className: 'fixed-panel', header: _react2['default'].createElement(
 	                'div',
 	                null,
 	                this.props.rushee["firstName"],
@@ -41115,16 +41112,29 @@
 	                    { xs: 4, sm: 4, md: 4 },
 	                    _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'comment' }),
 	                    ' ',
-	                    numComments
+	                    _react2['default'].createElement(
+	                      _reactBootstrap.Badge,
+	                      null,
+	                      numComments
+	                    )
 	                  ),
 	                  _react2['default'].createElement(
 	                    _reactBootstrap.Col,
-	                    { xs: 8, sm: 8, md: 8 },
-	                    _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 15, caption: numRatings + ' votes', disabled: true, rating: 3, totalStars: 5 })
+	                    { xs: 5, sm: 5, md: 5 },
+	                    _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 17, disabled: true, rating: 3, totalStars: 5 })
+	                  ),
+	                  _react2['default'].createElement(
+	                    _reactBootstrap.Col,
+	                    { xs: 2, sm: 2, md: 2 },
+	                    _react2['default'].createElement(
+	                      _reactBootstrap.Badge,
+	                      null,
+	                      numRatings
+	                    )
 	                  )
 	                )
 	              ), bsStyle: 'info', onClick: this.showDetailView.bind(this) },
-	            _react2['default'].createElement(_reactBootstrap.Image, { src: thumbPhotoUrl, responsive: true })
+	            _react2['default'].createElement(_reactBootstrap.Image, { src: thumbPhotoUrl, responsive: true, className: 'img-responsive center-block' })
 	          )
 	        )
 	      );
@@ -43745,25 +43755,35 @@
 /* 481 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
+	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(204);
+
+	var _reactTimeago = __webpack_require__(482);
+
+	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
+
+	var _reactStarRating = __webpack_require__(454);
+
+	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
 	var ListView = (function (_React$Component) {
 	  _inherits(ListView, _React$Component);
@@ -43771,30 +43791,264 @@
 	  function ListView() {
 	    _classCallCheck(this, ListView);
 
-	    _get(Object.getPrototypeOf(ListView.prototype), "constructor", this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(ListView.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
 	  _createClass(ListView, [{
-	    key: "render",
+	    key: 'showDetailView',
+	    value: function showDetailView(rusheeId) {
+	      console.log(rusheeId);
+	      var router = this.context.router;
+	      router.transitionTo('detail', { rusheeId: rusheeId });
+	    }
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.router = this.context.router;
+	    }
+	  }, {
+	    key: 'render',
 	    value: function render() {
-	      return _react2["default"].createElement(
-	        "h2",
-	        { className: "text-center" },
-	        "List View"
+	      var _this = this;
+
+	      var rusheeList = Object.keys(this.props.rushees).map(function (key) {
+	        var rushee = _this.props.rushees[key];
+	        var lastUpdated = new Date(Number(rushee["lastUpdated"]) * 1000);
+	        var numComments = rushee["comments"] ? rushee["comments"].length : 0;
+	        var numRatings = rushee["ratings"] ? Object.keys(rushee["ratings"]).length : 0;
+	        return _react2['default'].createElement(
+	          'tr',
+	          { onClick: _this.showDetailView.bind(_this, key) },
+	          _react2['default'].createElement(
+	            'td',
+	            null,
+	            rushee["firstName"]
+	          ),
+	          _react2['default'].createElement(
+	            'td',
+	            null,
+	            rushee["lastName"]
+	          ),
+	          _react2['default'].createElement(
+	            'td',
+	            null,
+	            numComments
+	          ),
+	          _react2['default'].createElement(
+	            'td',
+	            null,
+	            ' ',
+	            _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 17, disabled: true, rating: 3, totalStars: 5 })
+	          ),
+	          _react2['default'].createElement(
+	            'td',
+	            null,
+	            numRatings
+	          ),
+	          _react2['default'].createElement(
+	            'td',
+	            null,
+	            _react2['default'].createElement(_reactTimeago2['default'], { date: lastUpdated })
+	          )
+	        );
+	      });
+	      return _react2['default'].createElement(
+	        _reactBootstrap.Table,
+	        { striped: true, bordered: true, condensed: true, hover: true },
+	        _react2['default'].createElement(
+	          'thead',
+	          null,
+	          _react2['default'].createElement(
+	            'tr',
+	            null,
+	            _react2['default'].createElement(
+	              'th',
+	              null,
+	              'First'
+	            ),
+	            _react2['default'].createElement(
+	              'th',
+	              null,
+	              'Last'
+	            ),
+	            _react2['default'].createElement(
+	              'th',
+	              null,
+	              'Comments'
+	            ),
+	            _react2['default'].createElement(
+	              'th',
+	              null,
+	              'Rating'
+	            ),
+	            _react2['default'].createElement(
+	              'th',
+	              null,
+	              'Votes'
+	            ),
+	            _react2['default'].createElement(
+	              'th',
+	              null,
+	              'Last Updated'
+	            )
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          'tbody',
+	          null,
+	          rusheeList
+	        )
 	      );
 	    }
 	  }]);
 
 	  return ListView;
-	})(_react2["default"].Component);
+	})(_react2['default'].Component);
 
 	;
 
-	exports["default"] = ListView;
-	module.exports = exports["default"];
+	ListView.contextTypes = {
+	  router: _react2['default'].PropTypes.func.isRequired
+	};
+
+	exports['default'] = ListView;
+	module.exports = exports['default'];
 
 /***/ },
 /* 482 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict'
+
+	var React = __webpack_require__(1)
+	var assign = __webpack_require__(39)
+
+	module.exports = React.createClass(
+	  { displayName: 'Time-Ago'
+	  , timeoutId: 0
+	  , getDefaultProps: function(){
+	      return { live: true
+	             , component: 'span'
+	             , minPeriod: 0
+	             , maxPeriod: Infinity
+	             , formatter: function (value, unit, suffix) {
+	                 if(value !== 1){
+	                   unit += 's'
+	                 }
+	                 return value + ' ' + unit + ' ' + suffix
+	               }
+	             }
+	    }
+	  , propTypes:
+	      { live: React.PropTypes.bool.isRequired
+	      , minPeriod: React.PropTypes.number.isRequired
+	      , maxPeriod: React.PropTypes.number.isRequired
+	      , component: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]).isRequired
+	      , formatter: React.PropTypes.func.isRequired
+	      , date: React.PropTypes.oneOfType(
+	          [ React.PropTypes.string
+	          , React.PropTypes.number
+	          , React.PropTypes.instanceOf(Date)
+	          ]
+	        ).isRequired
+	      }
+	  , componentDidMount: function(){
+	      if(this.props.live) {
+	        this.tick(true)
+	      }
+	    }
+	  , componentDidUpdate: function(lastProps){
+	      if(this.props.live !== lastProps.live || this.props.date !== lastProps.date){
+	        if(!this.props.live && this.timeoutId){
+	          clearTimeout(this.timeoutId);
+	          this.timeoutId = undefined;
+	        }
+	        this.tick()
+	      }
+	    }
+	  , componentWillUnmount: function() {
+	    if(this.timeoutId) {
+	      clearTimeout(this.timeoutId);
+	      this.timeoutId = undefined;
+	    }
+	  }
+	  , tick: function(refresh){
+	      if(!this.isMounted() || !this.props.live){
+	        return
+	      }
+
+	      var period = 1000
+
+	      var then = (new Date(this.props.date)).valueOf()
+	      var now = Date.now()
+	      var seconds = Math.round(Math.abs(now-then)/1000)
+
+	      if(seconds < 60){
+	        period = 1000
+	      } else if(seconds < 60*60) {
+	        period = 1000 * 60
+	      } else if(seconds < 60*60*24) {
+	        period = 1000 * 60 * 60
+	      } else {
+	        period = 0
+	      }
+
+	      period = Math.min(Math.max(period, this.props.minPeriod), this.props.maxPeriod)
+
+	      if(!!period){
+	        this.timeoutId = setTimeout(this.tick, period)
+	      }
+
+	      if(!refresh){
+	        this.forceUpdate()
+	      }
+	    }
+	  , render: function(){
+	      var then = (new Date(this.props.date)).valueOf()
+	      var now = Date.now()
+	      var seconds = Math.round(Math.abs(now-then)/1000)
+
+	      var suffix = then < now ? 'ago' : 'from now'
+
+	      var value, unit
+
+	      if(seconds < 60){
+	        value = Math.round(seconds)
+	        unit = 'second'
+	      } else if(seconds < 60*60) {
+	        value = Math.round(seconds/60)
+	        unit = 'minute'
+	      } else if(seconds < 60*60*24) {
+	        value = Math.round(seconds/(60*60))
+	        unit = 'hour'
+	      } else if(seconds < 60*60*24*7) {
+	        value = Math.round(seconds/(60*60*24))
+	        unit = 'day'
+	      } else if(seconds < 60*60*24*30) {
+	        value = Math.round(seconds/(60*60*24*7))
+	        unit = 'week'
+	      } else if(seconds < 60*60*24*365) {
+	        value = Math.round(seconds/(60*60*24*30))
+	        unit = 'month'
+	      } else {
+	        value = Math.round(seconds/(60*60*24*365))
+	        unit = 'year'
+	      }
+
+	      var props = assign({}, this.props)
+
+	      delete props.date
+	      delete props.formatter
+	      delete props.component
+
+	      return React.createElement( this.props.component, props, this.props.formatter(value, unit, suffix, then) )
+	    }
+	  }
+	)
+
+
+/***/ },
+/* 483 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -43820,7 +44074,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(204);
+	var _reactBootstrap = __webpack_require__(204);
 
 	var DetailView = (function (_React$Component) {
 	  _inherits(DetailView, _React$Component);
@@ -43832,15 +44086,72 @@
 	  }
 
 	  _createClass(DetailView, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.router = this.context.router;
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var email = this.props.email;
-
+	      var rusheeId = this.router.getCurrentParams().rusheeId;
+	      var rushee = this.props.rushees[rusheeId];
+	      var rusheeName,
+	          rusheePhone,
+	          rusheeEmail,
+	          rusheeFacebook = '';
+	      if (rushee) {
+	        rusheeFacebook = rushee["facebook"];
+	        rusheeName = rushee["firstName"] + ' ' + rushee["lastName"];
+	        rusheeEmail = _react2['default'].createElement(
+	          _reactBootstrap.Well,
+	          null,
+	          _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'email' }),
+	          rushee["email"]
+	        );
+	        rusheePhone = _react2['default'].createElement(
+	          _reactBootstrap.Well,
+	          null,
+	          _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'phone' }),
+	          rushee["phone"]
+	        );
+	      }
+	      console.log(rushee);
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        'Rushee Detail View Email is ',
-	        email
+	        _react2['default'].createElement(
+	          _reactBootstrap.Row,
+	          null,
+	          _react2['default'].createElement(
+	            _reactBootstrap.Col,
+	            { xs: 11, md: 8 },
+	            _react2['default'].createElement(
+	              'h1',
+	              null,
+	              rusheeName
+	            )
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Col,
+	            { xs: 6, md: 2 },
+	            'Button 1'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Col,
+	            { xs: 6, md: 2 },
+	            'Button 2'
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          _reactBootstrap.Row,
+	          null,
+	          rusheePhone,
+	          rusheeEmail
+	        ),
+	        _react2['default'].createElement('br', null),
+	        _react2['default'].createElement('br', null),
+	        _react2['default'].createElement('br', null),
+	        rusheeFacebook
 	      );
 	    }
 	  }]);
@@ -43849,6 +44160,10 @@
 	})(_react2['default'].Component);
 
 	;
+
+	DetailView.contextTypes = {
+	  router: _react2['default'].PropTypes.func.isRequired
+	};
 
 	exports['default'] = DetailView;
 	module.exports = exports['default'];

@@ -49,14 +49,14 @@ class Main extends React.Component{
     }
   }
   setupFirebaseConnections() {
-    var usersRef = new Firebase('https://rushchad.firebaseio.com/users');
+    var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
     usersRef.once('value', function(dataSnapshot) {
       this.setState({
         users: dataSnapshot.val()
       });
     }.bind(this));
 
-    var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees');
+    var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
     rusheesRef.once('value', function(dataSnapshot) {
       this.setState({
         rushees: dataSnapshot.val()
@@ -109,7 +109,7 @@ class Main extends React.Component{
 
           <div className="container">
 
-            <RouteHandler {...this.state} users={this.state.users} rushees={this.state.rushees}/>
+            <RouteHandler {...this.state}/>
           </div>
           <nav className="navbar navbar-default" role="navigation">
             <div className="col-sm-7 col-sm-offset-2" style={{marginTop: 15}}>

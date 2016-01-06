@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import {
+  Badge,
   Col,
   Glyphicon,
   Image,
@@ -17,7 +18,6 @@ class RusheeTile extends React.Component{
     router.transitionTo('detail', {rusheeId: this.props.rusheeId});
   }
   render(){
-    console.log(this.props.rushee);
     var numComments = (this.props.rushee["comments"]) ? this.props.rushee["comments"].length : 0;
     var numRatings = (this.props.rushee["ratings"]) ? Object.keys(this.props.rushee["ratings"]).length : 0;
     var blankAvatar = "http://jagc.org/images/avatar.png";
@@ -26,8 +26,8 @@ class RusheeTile extends React.Component{
     return (
       <div>
 
-          <Col xs={12} sm={4} md={3}>
-            <Panel header={
+          <Col xs={12} sm={4} lg={3}>
+            <Panel className='fixed-panel' header={
               <div>{this.props.rushee["firstName"]}{' '}{this.props.rushee["lastName"]}</div>
 
             } footer={
@@ -36,16 +36,20 @@ class RusheeTile extends React.Component{
                 <Col xs={4} sm={4} md={4}>
                   <Glyphicon glyph='comment' />
                   {' '}
-                  {numComments}
+                  <Badge>{numComments}</Badge>
                 </Col>
-                <Col xs={8} sm={8} md={8}>
-                  <StarRating name="rusheeRating" size={15} caption={numRatings + ' votes'} disabled rating={3} totalStars={5} />
+                <Col xs={5} sm={5} md={5}>
+                  <StarRating name="rusheeRating" size={17} disabled rating={3} totalStars={5} />
+
+                </Col>
+                <Col xs={2} sm={2} md={2}>
+                  <Badge>{numRatings}</Badge>
                 </Col>
               </Row>
 
               </div>
             } bsStyle="info" onClick={this.showDetailView.bind(this)}>
-              <Image  src={thumbPhotoUrl} responsive/>
+              <Image  src={thumbPhotoUrl} responsive className="img-responsive center-block"/>
             </Panel>
           </Col>
 
