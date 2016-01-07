@@ -41056,65 +41056,46 @@
 	            _reactBootstrap.Modal.Body,
 	            null,
 	            _react2['default'].createElement(
-	              'h4',
+	              'form',
 	              null,
-	              'Text in a modal'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Duis mollis, est non commodo luctus, nisi erat porttitor ligula.'
-	            ),
-	            _react2['default'].createElement('hr', null),
-	            _react2['default'].createElement(
-	              'h4',
-	              null,
-	              'Overflowing text to show scroll behavior'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.'
-	            ),
-	            _react2['default'].createElement(
-	              'p',
-	              null,
-	              'Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.'
+	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Text', placeholder: 'Enter text' }),
+	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', label: 'Email Address', placeholder: 'Enter email' }),
+	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'password', label: 'Password' }),
+	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'file', label: 'File', help: '[Optional] Block level help text' }),
+	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', label: 'Checkbox', checked: true, readOnly: true }),
+	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'radio', label: 'Radio', checked: true, readOnly: true }),
+	              _react2['default'].createElement(
+	                _reactBootstrap.Input,
+	                { type: 'select', label: 'Select', placeholder: 'select' },
+	                _react2['default'].createElement(
+	                  'option',
+	                  { value: 'select' },
+	                  'select'
+	                ),
+	                _react2['default'].createElement(
+	                  'option',
+	                  { value: 'other' },
+	                  '...'
+	                )
+	              ),
+	              _react2['default'].createElement(
+	                _reactBootstrap.Input,
+	                { type: 'select', label: 'Multiple Select', multiple: true },
+	                _react2['default'].createElement(
+	                  'option',
+	                  { value: 'select' },
+	                  'select (multiple)'
+	                ),
+	                _react2['default'].createElement(
+	                  'option',
+	                  { value: 'other' },
+	                  '...'
+	                )
+	              ),
+	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'textarea', label: 'Text Area', placeholder: 'textarea' }),
+	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { value: 'Button Input' }),
+	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { type: 'reset', value: 'Reset Button' }),
+	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Submit Button' })
 	            )
 	          ),
 	          _react2['default'].createElement(

@@ -1,8 +1,10 @@
 import React from 'react';
 import {
   Col,
-Modal,
-Button
+  Input,
+  ButtonInput,
+  Modal,
+  Button
 } from 'react-bootstrap';
 
 class EditModalView extends React.Component{
@@ -11,24 +13,24 @@ class EditModalView extends React.Component{
       <div>
         <Modal show={this.props.showEditModal} onHide={this.props.closeAction}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Add/Edit Rushee</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>Text in a modal</h4>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-
-            <hr />
-
-            <h4>Overflowing text to show scroll behavior</h4>
-            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <form>
+              <Input type="text" label="Text" placeholder="Enter text" />
+              <Input type="email" label="Email Address" placeholder="Enter email" />
+              <Input type="password" label="Password" />
+              <Input type="checkbox" label="Checkbox" checked readOnly />
+              <Input type="radio" label="Radio" checked readOnly />
+              <Input type="select" label="Select" placeholder="select">
+                <option value="select">select</option>
+                <option value="other">...</option>
+              </Input>
+              <Input type="textarea" label="Text Area" placeholder="textarea" />
+              <ButtonInput value="Button Input" />
+              <ButtonInput type="reset" value="Reset Button" />
+              <ButtonInput type="submit" value="Submit Button" />
+            </form>
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.props.closeAction}>Close</Button>

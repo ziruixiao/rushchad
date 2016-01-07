@@ -7,6 +7,7 @@ class Header extends React.Component{
     return (
       <div>
         <Navbar inverse>
+
           <Navbar.Header>
             <Navbar.Brand>
               <a href='#'>Rushchad</a>
