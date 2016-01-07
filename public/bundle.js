@@ -41045,35 +41045,68 @@
 	var EditModalView = (function (_React$Component) {
 	  _inherits(EditModalView, _React$Component);
 
-	  function EditModalView() {
+	  function EditModalView(props) {
 	    _classCallCheck(this, EditModalView);
 
-	    _get(Object.getPrototypeOf(EditModalView.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(EditModalView.prototype), 'constructor', this).call(this, props);
+	    this.state = {
+	      errorShowing: false
+	    };
 	  }
 
 	  _createClass(EditModalView, [{
+	    key: 'handleAlertDismiss',
+	    value: function handleAlertDismiss() {
+	      this.setState({ errorShowing: false });
+	    }
+	  }, {
+	    key: 'handleAlertShow',
+	    value: function handleAlertShow() {
+	      this.setState({ errorShowing: true });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      var s_firstName = this.refs.firstName.getValue();
+	      var s_lastName = this.refs.lastName.getValue();
+	      if (s_firstName.length < 1 || s_lastName.length < 1) {
+	        this.handleAlertShow();
+	      } else {// continue with form
+
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.props);
-	      var firstName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'First Name', placeholder: 'Enter first name' });
-	      var lastName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Last Name', placeholder: 'Enter last name' });
+	      var firstName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'firstName', label: 'First Name', placeholder: 'Enter first name' });
+	      var lastName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'lastName', label: 'Last Name', placeholder: 'Enter last name' });
 
-	      var facebook = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Facebook Profile', placeholder: 'Enter link' });
-	      var email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', label: 'Email Address', placeholder: 'Enter email' });
-	      var phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Phone Number', placeholder: 'Enter phone' });
-	      var sophomore = _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', label: 'Sophomore' });
+	      var facebook = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'facebook', label: 'Facebook Profile', placeholder: 'Enter link' });
+	      var email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', ref: 'email', label: 'Email Address', placeholder: 'Enter email' });
+	      var phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'phone', label: 'Phone Number', placeholder: 'Enter phone' });
+	      var sophomore = _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', ref: 'sophomore', label: 'Sophomore' });
+
+	      var error = _react2['default'].createElement(
+	        _reactBootstrap.Alert,
+	        { bsStyle: 'danger', onDismiss: this.handleAlertDismiss.bind(this) },
+	        _react2['default'].createElement(
+	          'p',
+	          null,
+	          'Please make sure you enter first and last names.'
+	        )
+	      );
 
 	      if (this.props.activeEditRusheeId != "-1") {
 	        var editingRushee = this.props.rushees[this.props.activeEditRusheeId];
 	        if (editingRushee) {
-	          firstName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'First Name', defaultValue: editingRushee["firstName"], placeholder: 'Enter first name' });
-	          lastName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Last Name', defaultValue: editingRushee["lastName"], placeholder: 'Enter last name' });
+	          firstName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'firstName', label: 'First Name', defaultValue: editingRushee["firstName"], placeholder: 'Enter first name' });
+	          lastName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'lastName', label: 'Last Name', defaultValue: editingRushee["lastName"], placeholder: 'Enter last name' });
 
-	          facebook = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Facebook Profile', defaultValue: editingRushee["facebook"], placeholder: 'Enter link' });
-	          email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', label: 'Email Address', defaultValue: editingRushee["email"], placeholder: 'Enter email' });
-	          phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Phone Number', defaultValue: editingRushee["phone"], placeholder: 'Enter phone' });
+	          facebook = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'facebook', label: 'Facebook Profile', defaultValue: editingRushee["facebook"], placeholder: 'Enter link' });
+	          email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', ref: 'email', label: 'Email Address', defaultValue: editingRushee["email"], placeholder: 'Enter email' });
+	          phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'phone', label: 'Phone Number', defaultValue: editingRushee["phone"], placeholder: 'Enter phone' });
 	          if (editingRushee["survey"]["gradeYear"] != 0) {
-	            sophomore = _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', label: 'Sophomore', checked: true });
+	            sophomore = _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', ref: 'sophomore', label: 'Sophomore', checked: true });
 	          }
 	        }
 	      }
@@ -41095,9 +41128,10 @@
 	          _react2['default'].createElement(
 	            _reactBootstrap.Modal.Body,
 	            null,
+	            this.state.errorShowing ? error : null,
 	            _react2['default'].createElement(
 	              'form',
-	              null,
+	              { onSubmit: this.handleSubmit.bind(this) },
 	              _react2['default'].createElement(
 	                _reactBootstrap.Row,
 	                null,
@@ -41139,6 +41173,13 @@
 
 	;
 
+	EditModalView.propTypes = {
+	  errorShowing: _react2['default'].PropTypes.bool
+	};
+
+	EditModalView.defaultProps = {
+	  errorShowing: false
+	};
 	exports['default'] = EditModalView;
 	module.exports = exports['default'];
 
