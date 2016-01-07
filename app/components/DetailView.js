@@ -22,7 +22,6 @@ class DetailView extends React.Component{
     this.router = this.context.router;
   }
   editButton(editActiveRusheeId) {
-    console.log('edit button called');
     this.props.openEditModal(editActiveRusheeId);
   }
   render(){

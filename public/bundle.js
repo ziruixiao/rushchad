@@ -44346,7 +44346,6 @@
 	  }, {
 	    key: 'editButton',
 	    value: function editButton(editActiveRusheeId) {
-	      console.log('edit button called');
 	      this.props.openEditModal(editActiveRusheeId);
 	    }
 	  }, {
@@ -44571,6 +44570,10 @@
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
+	var _Comment = __webpack_require__(486);
+
+	var _Comment2 = _interopRequireDefault(_Comment);
+
 	var CommentList = (function (_React$Component) {
 	  _inherits(CommentList, _React$Component);
 
@@ -44607,6 +44610,12 @@
 	      }
 	    }
 	  }, {
+	    key: 'handleLike',
+	    value: function handleLike() {}
+	  }, {
+	    key: 'handleDislike',
+	    value: function handleDislike() {}
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this = this;
@@ -44624,117 +44633,7 @@
 	      if (this.props.comments) {
 	        comments = this.props.comments.map(function (comment, key) {
 
-	          var likeButton = _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { bsSize: 'small' },
-	            _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'thumbs-up' })
-	          );
-	          var dislikeButton = _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { bsSize: 'small' },
-	            _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'thumbs-down' })
-	          );
-	          var numLikes = 0;
-	          var numDislikes = 0;
-
-	          if (comment["likes"]) {
-	            Object.keys(comment["likes"]).map(function (likeUserId, likeValue) {
-	              var numLikeValue = Number(likeValue);
-	              if (likeValue == 1) {
-	                if (likeUserId == _this.props.loggedInUserId) {
-	                  // current user liked comment
-	                  likeButton = _react2['default'].createElement(
-	                    _reactBootstrap.Button,
-	                    { bsSize: 'small', bsStyle: 'success', active: true },
-	                    _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'thumbs-up' })
-	                  );
-	                }
-	                numLikes++;
-	              } else if (likeValue == 0) {
-	                if (likeUserId == _this.props.loggedInUserId) {
-	                  // current user liked comment
-	                  dislikeButton = _react2['default'].createElement(
-	                    _reactBootstrap.Button,
-	                    { bsSize: 'small', bsStyle: 'danger', active: true },
-	                    _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'thumbs-down' })
-	                  );
-	                }
-	                numDislikes++;
-	              }
-	            });
-	          }
-
-	          return _react2['default'].createElement(
-	            'div',
-	            { key: key, className: 'top-bottom-space' },
-	            _react2['default'].createElement(
-	              _reactBootstrap.Row,
-	              null,
-	              _react2['default'].createElement(
-	                _reactBootstrap.Col,
-	                { xs: 8, sm: 9 },
-	                _react2['default'].createElement(
-	                  'b',
-	                  null,
-	                  _this.props.users[comment["userId"]]["name"]
-	                )
-	              ),
-	              _react2['default'].createElement(
-	                _reactBootstrap.Col,
-	                { className: 'align-center', xs: 4, sm: 3 },
-	                _react2['default'].createElement(_reactTimeago2['default'], { date: new Date(Number(comment["lastUpdated"]) * 1000) })
-	              )
-	            ),
-	            _react2['default'].createElement(
-	              _reactBootstrap.Row,
-	              null,
-	              _react2['default'].createElement(
-	                _reactBootstrap.Col,
-	                { xs: 9 },
-	                comment["content"]
-	              ),
-	              _react2['default'].createElement(
-	                _reactBootstrap.Col,
-	                { xs: 3 },
-	                _react2['default'].createElement(
-	                  _reactBootstrap.Row,
-	                  null,
-	                  _react2['default'].createElement(
-	                    _reactBootstrap.Col,
-	                    { className: 'align-center', xs: 6 },
-	                    likeButton
-	                  ),
-	                  _react2['default'].createElement(
-	                    _reactBootstrap.Col,
-	                    { className: 'align-center', xs: 6 },
-	                    dislikeButton
-	                  )
-	                ),
-	                _react2['default'].createElement(
-	                  _reactBootstrap.Row,
-	                  null,
-	                  _react2['default'].createElement(
-	                    _reactBootstrap.Col,
-	                    { className: 'align-center', xs: 6 },
-	                    _react2['default'].createElement(
-	                      _reactBootstrap.Badge,
-	                      null,
-	                      numLikes
-	                    )
-	                  ),
-	                  _react2['default'].createElement(
-	                    _reactBootstrap.Col,
-	                    { className: 'align-center', xs: 6 },
-	                    _react2['default'].createElement(
-	                      _reactBootstrap.Badge,
-	                      null,
-	                      numDislikes
-	                    )
-	                  )
-	                )
-	              )
-	            )
-	          );
+	          return _react2['default'].createElement(_Comment2['default'], { commentUser: _this.props.users[comment["userId"]]["name"], loggedInUserId: _this.props.loggedInUserId, key: key, commentData: comment });
 	        });
 	      }
 	      return _react2['default'].createElement(
@@ -44791,6 +44690,217 @@
 	};
 
 	exports['default'] = CommentList;
+	module.exports = exports['default'];
+
+/***/ },
+/* 486 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by Felix on 1/7/16.
+	 */
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(204);
+
+	var _reactTimeago = __webpack_require__(483);
+
+	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
+
+	var Comment = (function (_React$Component) {
+	  _inherits(Comment, _React$Component);
+
+	  function Comment(props) {
+	    _classCallCheck(this, Comment);
+
+	    _get(Object.getPrototypeOf(Comment.prototype), 'constructor', this).call(this, props);
+	    this.state = {
+	      liked: false,
+	      disliked: false
+	    };
+	  }
+
+	  _createClass(Comment, [{
+	    key: 'handleLike',
+	    value: function handleLike() {
+	      this.setState({
+	        liked: true,
+	        disliked: false
+	      });
+	      // TODO: Firebase!
+	    }
+	  }, {
+	    key: 'handleDislike',
+	    value: function handleDislike() {
+	      this.setState({
+	        liked: false,
+	        disliked: true
+	      });
+	      // TODO: Firebase!
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this = this;
+
+	      var commentRow;
+	      var comment = this.props.commentData;
+	      if (comment) {
+	        var likeButton = _react2['default'].createElement(
+	          _reactBootstrap.Button,
+	          { onClick: this.handleLike.bind(this),
+	            bsSize: 'small' },
+	          _react2['default'].createElement(_reactBootstrap.Glyphicon, {
+	            glyph: 'thumbs-up' })
+	        );
+	        var dislikeButton = _react2['default'].createElement(
+	          _reactBootstrap.Button,
+	          { onClick: this.handleDislike.bind(this),
+	            bsSize: 'small' },
+	          _react2['default'].createElement(_reactBootstrap.Glyphicon, {
+	            glyph: 'thumbs-down' })
+	        );
+	        var numLikes = 0;
+	        var numDislikes = 0;
+
+	        if (comment["likes"]) {
+	          Object.keys(comment["likes"]).map(function (likeUserId, likeValue) {
+	            var numLikeValue = Number(likeValue);
+	            if (likeValue == 1) {
+	              if (likeUserId != _this.props.loggedInUserId) {
+	                // current user liked comment
+	                likeButton = _react2['default'].createElement(
+	                  _reactBootstrap.Button,
+	                  { bsSize: 'small', bsStyle: 'success', active: true },
+	                  _react2['default'].createElement(_reactBootstrap.Glyphicon, {
+	                    glyph: 'thumbs-up' })
+	                );
+	              }
+	              numLikes++;
+	            } else if (likeValue == 0) {
+	              if (likeUserId != _this.props.loggedInUserId) {
+	                // current user liked comment
+	                dislikeButton = _react2['default'].createElement(
+	                  _reactBootstrap.Button,
+	                  { bsSize: 'small', bsStyle: 'danger', active: true },
+	                  _react2['default'].createElement(_reactBootstrap.Glyphicon, {
+	                    glyph: 'thumbs-down' })
+	                );
+	              }
+	              numDislikes++;
+	            }
+	          });
+	        }
+	      }
+
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'top-bottom-space' },
+	        _react2['default'].createElement(
+	          _reactBootstrap.Row,
+	          null,
+	          _react2['default'].createElement(
+	            _reactBootstrap.Col,
+	            { xs: 8, sm: 9 },
+	            _react2['default'].createElement(
+	              'b',
+	              null,
+	              this.props.commentUser
+	            )
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Col,
+	            { className: 'align-center', xs: 4, sm: 3 },
+	            _react2['default'].createElement(_reactTimeago2['default'], { date: new Date(Number(comment["lastUpdated"]) * 1000) })
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          _reactBootstrap.Row,
+	          null,
+	          _react2['default'].createElement(
+	            _reactBootstrap.Col,
+	            { xs: 9 },
+	            comment["content"]
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Col,
+	            { xs: 3 },
+	            _react2['default'].createElement(
+	              _reactBootstrap.Row,
+	              null,
+	              _react2['default'].createElement(
+	                _reactBootstrap.Col,
+	                { className: 'align-center', xs: 6 },
+	                likeButton
+	              ),
+	              _react2['default'].createElement(
+	                _reactBootstrap.Col,
+	                { className: 'align-center', xs: 6 },
+	                dislikeButton
+	              )
+	            ),
+	            _react2['default'].createElement(
+	              _reactBootstrap.Row,
+	              null,
+	              _react2['default'].createElement(
+	                _reactBootstrap.Col,
+	                { className: 'align-center', xs: 6 },
+	                _react2['default'].createElement(
+	                  _reactBootstrap.Badge,
+	                  null,
+	                  numLikes
+	                )
+	              ),
+	              _react2['default'].createElement(
+	                _reactBootstrap.Col,
+	                { className: 'align-center', xs: 6 },
+	                _react2['default'].createElement(
+	                  _reactBootstrap.Badge,
+	                  null,
+	                  numDislikes
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Comment;
+	})(_react2['default'].Component);
+
+	;
+
+	Comment.propTypes = {
+	  liked: _react2['default'].PropTypes.bool,
+	  disliked: _react2['default'].PropTypes.bool
+	};
+
+	Comment.defaultProps = {
+	  liked: false,
+	  disliked: false
+	};
+
+	exports['default'] = Comment;
 	module.exports = exports['default'];
 
 /***/ }
