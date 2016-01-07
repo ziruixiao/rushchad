@@ -54,7 +54,7 @@ function handleSelect(selectedKey) {
 function handleModal(selectedKey) {
   var router = this.context.router;
   if (selectedKey == 3) {
-    alert('Modal to add new will be here');
+    this.props.onModalClick();
     // router.transitionTo('profile', {username: "ziruixiao"});
   } else if (selectedKey == 5) {
     logOut();

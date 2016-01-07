@@ -16,6 +16,7 @@ import {
 import TimeAgo from 'react-timeago';
 import StarRating from 'react-star-rating';
 import CommentList from './CommentList';
+import EditModalView from './EditModalView';
 
 class DetailView extends React.Component{
   componentWillMount(){

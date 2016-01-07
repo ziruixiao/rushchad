@@ -4,6 +4,7 @@ import SearchGithub from './SearchGithub';
 import Header from './Header';
 import Rebase from 're-base';
 import * as firebaseActions from './firebaseActions';
+import EditModalView from './EditModalView';
 
 class Main extends React.Component{
   constructor(props){
@@ -14,7 +15,8 @@ class Main extends React.Component{
       email: props.email,
       users: props.users,
       rushees: props.rushees,
-      loggedInUserId: props.loggedInUserId
+      loggedInUserId: props.loggedInUserId,
+      showEditModal: props.showEditModal
     };
   }
   authDataCallback(authData) {
@@ -28,7 +30,8 @@ class Main extends React.Component{
           email: '',
           users: [],
           rushees: {},
-          loggedInUserId: -1
+          loggedInUserId: -1,
+          showEditModal: false
         });
         document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
 
@@ -48,7 +51,8 @@ class Main extends React.Component{
         email: '',
         users: [],
         rusheese: {},
-        loggedInUserId: -1
+        loggedInUserId: -1,
+        showEditModal: false
       });
     }
   }
@@ -83,6 +87,17 @@ class Main extends React.Component{
   componentWillReceiveProps(){
     this.init();
   }
+  closeEditModal() {
+    this.setState({
+      showEditModal: false
+    });
+  }
+  openEditModal() {
+    console.log('modal should be open');
+    this.setState({
+      showEditModal: true
+    });
+  }
   login() {
     console.log('Attempting to authenticate user account');
     this.ref = new Firebase('https://rushchad.firebaseio.com/');
@@ -109,11 +124,11 @@ class Main extends React.Component{
     } else {
       return (
         <div className="main-container">
-          <Header googleUser={this.state.googleUser}/>
+          <Header googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this)} />
 
           <div className="container">
-
             <RouteHandler {...this.state}/>
+            <EditModalView showEditModal={this.state.showEditModal} closeAction={this.closeEditModal.bind(this)} />
           </div>
           <nav className="navbar navbar-default" role="navigation">
             <div className="col-sm-7 col-sm-offset-2" style={{marginTop: 15}}>
@@ -133,7 +148,8 @@ Main.propTypes = {
   email: React.PropTypes.string,
   users: React.PropTypes.array,
   rushees: React.PropTypes.object,
-  loggedInUserId: React.PropTypes.number
+  loggedInUserId: React.PropTypes.number,
+  showEditModal: React.PropTypes.bool
 };
 
 Main.defaultProps = {
@@ -142,7 +158,8 @@ Main.defaultProps = {
   email: '',
   users: [],
   rushees: {},
-  loggedInUserId: -1
+  loggedInUserId: -1,
+  showEditModal: false
 }
 
 Main.contextTypes = {
