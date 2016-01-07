@@ -23090,7 +23090,6 @@
 	  }, {
 	    key: 'openEditModal',
 	    value: function openEditModal() {
-	      console.log('modal should be open');
 	      this.setState({
 	        showEditModal: true
 	      });
@@ -41037,6 +41036,14 @@
 	  _createClass(EditModalView, [{
 	    key: 'render',
 	    value: function render() {
+
+	      var firstName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'First Name', placeholder: 'Enter first name' });
+	      var lastName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Last Name', placeholder: 'Enter last name' });
+
+	      var facebook = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Facebook Profile', placeholder: 'Enter link' });
+	      var email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', label: 'Email Address', placeholder: 'Enter email' });
+	      var phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Phone Number', placeholder: 'Enter phone' });
+	      var sophomore = _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', label: 'Sophomore' });
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
@@ -41049,7 +41056,7 @@
 	            _react2['default'].createElement(
 	              _reactBootstrap.Modal.Title,
 	              null,
-	              'Modal heading'
+	              'Add/Edit Rushee'
 	            )
 	          ),
 	          _react2['default'].createElement(
@@ -41058,44 +41065,26 @@
 	            _react2['default'].createElement(
 	              'form',
 	              null,
-	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Text', placeholder: 'Enter text' }),
-	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', label: 'Email Address', placeholder: 'Enter email' }),
-	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'password', label: 'Password' }),
-	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'file', label: 'File', help: '[Optional] Block level help text' }),
-	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', label: 'Checkbox', checked: true, readOnly: true }),
-	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'radio', label: 'Radio', checked: true, readOnly: true }),
 	              _react2['default'].createElement(
-	                _reactBootstrap.Input,
-	                { type: 'select', label: 'Select', placeholder: 'select' },
+	                _reactBootstrap.Row,
+	                null,
 	                _react2['default'].createElement(
-	                  'option',
-	                  { value: 'select' },
-	                  'select'
+	                  _reactBootstrap.Col,
+	                  { xs: 6 },
+	                  firstName
 	                ),
 	                _react2['default'].createElement(
-	                  'option',
-	                  { value: 'other' },
-	                  '...'
+	                  _reactBootstrap.Col,
+	                  { xs: 6 },
+	                  lastName
 	                )
 	              ),
-	              _react2['default'].createElement(
-	                _reactBootstrap.Input,
-	                { type: 'select', label: 'Multiple Select', multiple: true },
-	                _react2['default'].createElement(
-	                  'option',
-	                  { value: 'select' },
-	                  'select (multiple)'
-	                ),
-	                _react2['default'].createElement(
-	                  'option',
-	                  { value: 'other' },
-	                  '...'
-	                )
-	              ),
-	              _react2['default'].createElement(_reactBootstrap.Input, { type: 'textarea', label: 'Text Area', placeholder: 'textarea' }),
-	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { value: 'Button Input' }),
-	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { type: 'reset', value: 'Reset Button' }),
-	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Submit Button' })
+	              facebook,
+	              phone,
+	              email,
+	              sophomore,
+	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Save' }),
+	              'Click anywhere outside this form to discard changes.'
 	            )
 	          ),
 	          _react2['default'].createElement(

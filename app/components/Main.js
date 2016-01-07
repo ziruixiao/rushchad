@@ -93,7 +93,6 @@ class Main extends React.Component{
     });
   }
   openEditModal() {
-    console.log('modal should be open');
     this.setState({
       showEditModal: true
     });
