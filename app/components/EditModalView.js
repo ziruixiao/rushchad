@@ -8,6 +8,7 @@ Button,
   Modal,
 Row
 } from 'react-bootstrap';
+import * as firebaseActions from './firebaseActions';
 
 class EditModalView extends React.Component{
   constructor(props){
@@ -29,7 +30,18 @@ class EditModalView extends React.Component{
       this.handleAlertShow();
     } else { // continue with form
       this.handleAlertDismiss();
-      // TODO: Firebase!!
+
+      // 1. Build dictionary
+      var dictionary = {
+        "firstName": s_firstName,
+        "lastName": s_lastName,
+        "lastUpdated": Math.round(Number(Date.now())/1000),
+        "phone": this.refs.phone.getValue(),
+        "email": this.refs.email.getValue(),
+        "facebook": addHttp(this.refs.facebook.getValue())
+      };
+      firebaseActions.addOrUpdateRushee(this.props.activeEditRusheeId, dictionary, this.props.loggedInUserId);
+      this.props.closeAction();
     }
   }
 
@@ -40,7 +52,6 @@ class EditModalView extends React.Component{
     var facebook = <Input type="text" ref="facebook" label="Facebook Profile" placeholder="Enter link" />;
     var email = <Input type="email" ref="email" label="Email Address" placeholder="Enter email" />;
     var phone = <Input type="text" ref="phone" label="Phone Number" placeholder="Enter phone" />;
-    var sophomore = <Input type="checkbox" ref="sophomore" label="Sophomore" />;
 
     var error =
       <Alert bsStyle="danger" onDismiss={this.handleAlertDismiss.bind(this)}>
@@ -56,9 +67,6 @@ class EditModalView extends React.Component{
         facebook = <Input type="text" ref="facebook" label="Facebook Profile" defaultValue={editingRushee["facebook"]} placeholder="Enter link" />;
         email = <Input type="email" ref="email" label="Email Address" defaultValue={editingRushee["email"]} placeholder="Enter email" />;
         phone = <Input type="text" ref="phone" label="Phone Number" defaultValue={editingRushee["phone"]} placeholder="Enter phone" />;
-        if (editingRushee["survey"]["gradeYear"] != 0) {
-          sophomore = <Input type="checkbox" ref="sophomore" label="Sophomore" checked/>;
-        }
       }
     }
     return (
@@ -82,7 +90,6 @@ class EditModalView extends React.Component{
               {facebook}
               {phone}
               {email}
-              {sophomore}
               <ButtonInput type="submit" value="Save" />
               Click anywhere outside this form to discard changes.
             </form>
@@ -95,6 +102,13 @@ class EditModalView extends React.Component{
     )
   }
 };
+
+function addHttp(url) {
+  if (!/^https?:\/\//i.test(url)) {
+    url = 'http://' + url;
+  }
+  return url;
+}
 
 EditModalView.propTypes = {
   errorShowing: React.PropTypes.bool

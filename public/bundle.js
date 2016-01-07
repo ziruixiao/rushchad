@@ -40986,21 +40986,24 @@
 	/**
 	 * Created by Felix on 1/2/16.
 	 */
-	"use strict";
+	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
+	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _firebase = __webpack_require__(450);
 
 	var _firebase2 = _interopRequireDefault(_firebase);
 
+	var rusheesRef = new _firebase2['default']('https://rushchad.firebaseio.com/rushees');
+	var usersRef = new _firebase2['default']('https://rushchad.firebaseio.com/users');
+
 	var verifyEmail = function verifyEmail(email) {
 	  console.log("email to verify is ", email);
-	  new _firebase2["default"]("https://rushchad.firebaseio.com/users").orderByChild("email").startAt(email).endAt(email).once('value', function (snap) {
+	  new _firebase2['default']("https://rushchad.firebaseio.com/users").orderByChild("email").startAt(email).endAt(email).once('value', function (snap) {
 	    if (snap.val() == null) {
 	      console.log("null found");
 	      return false;
@@ -41010,7 +41013,55 @@
 	    }
 	  });
 	};
+
 	exports.verifyEmail = verifyEmail;
+	var addNewComment = function addNewComment() {// what happens when a new comment is made
+
+	};
+
+	exports.addNewComment = addNewComment;
+	var addOrUpdateRating = function addOrUpdateRating() {};
+
+	exports.addOrUpdateRating = addOrUpdateRating;
+	var addOrUpdateCommentLike = function addOrUpdateCommentLike() {};
+
+	exports.addOrUpdateCommentLike = addOrUpdateCommentLike;
+	var updateUserLastActive = function updateUserLastActive() {// sets last active time as now for the user
+
+	};
+
+	exports.updateUserLastActive = updateUserLastActive;
+	var addOrUpdateRushee = function addOrUpdateRushee(editRusheeId, dictionary, loggedInUserId) {
+	  //
+	  var payload = dictionary;
+	  if (editRusheeId == -1) {
+	    // new rushee
+	    console.log("A new rushee has been created.");
+	    payload["firstAdded"] = dictionary["lastUpdated"];
+	    payload["userId_AddedBy"] = loggedInUserId;
+	    payload["active"] = "yes";
+
+	    var newChildRef = rusheesRef.push();
+	    newChildRef.set(payload, function (error) {
+	      if (error) {
+	        alert("Sorry, the information could not be updated." + error);
+	      } else {
+	        console.log("A rushee has been added.");
+	      }
+	    });
+	  } else {
+	    // update rushee
+	    var childRef = rusheesRef.child(editRusheeId);
+	    childRef.update(payload, function (error) {
+	      if (error) {
+	        alert("Sorry, the information could not be updated." + error);
+	      } else {
+	        console.log("A rushee has been updated.");
+	      }
+	    });
+	  }
+	};
+	exports.addOrUpdateRushee = addOrUpdateRushee;
 
 /***/ },
 /* 452 */
@@ -41026,6 +41077,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -41037,6 +41090,10 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactBootstrap = __webpack_require__(204);
+
+	var _firebaseActions = __webpack_require__(451);
+
+	var firebaseActions = _interopRequireWildcard(_firebaseActions);
 
 	var EditModalView = (function (_React$Component) {
 	  _inherits(EditModalView, _React$Component);
@@ -41070,7 +41127,18 @@
 	      } else {
 	        // continue with form
 	        this.handleAlertDismiss();
-	        // TODO: Firebase!!
+
+	        // 1. Build dictionary
+	        var dictionary = {
+	          "firstName": s_firstName,
+	          "lastName": s_lastName,
+	          "lastUpdated": Math.round(Number(Date.now()) / 1000),
+	          "phone": this.refs.phone.getValue(),
+	          "email": this.refs.email.getValue(),
+	          "facebook": addHttp(this.refs.facebook.getValue())
+	        };
+	        firebaseActions.addOrUpdateRushee(this.props.activeEditRusheeId, dictionary, this.props.loggedInUserId);
+	        this.props.closeAction();
 	      }
 	    }
 	  }, {
@@ -41082,7 +41150,6 @@
 	      var facebook = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'facebook', label: 'Facebook Profile', placeholder: 'Enter link' });
 	      var email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', ref: 'email', label: 'Email Address', placeholder: 'Enter email' });
 	      var phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'phone', label: 'Phone Number', placeholder: 'Enter phone' });
-	      var sophomore = _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', ref: 'sophomore', label: 'Sophomore' });
 
 	      var error = _react2['default'].createElement(
 	        _reactBootstrap.Alert,
@@ -41103,9 +41170,6 @@
 	          facebook = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'facebook', label: 'Facebook Profile', defaultValue: editingRushee["facebook"], placeholder: 'Enter link' });
 	          email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', ref: 'email', label: 'Email Address', defaultValue: editingRushee["email"], placeholder: 'Enter email' });
 	          phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'phone', label: 'Phone Number', defaultValue: editingRushee["phone"], placeholder: 'Enter phone' });
-	          if (editingRushee["survey"]["gradeYear"] != 0) {
-	            sophomore = _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', ref: 'sophomore', label: 'Sophomore', checked: true });
-	          }
 	        }
 	      }
 	      return _react2['default'].createElement(
@@ -41147,7 +41211,6 @@
 	              facebook,
 	              phone,
 	              email,
-	              sophomore,
 	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Save' }),
 	              'Click anywhere outside this form to discard changes.'
 	            )
@@ -41170,6 +41233,13 @@
 	})(_react2['default'].Component);
 
 	;
+
+	function addHttp(url) {
+	  if (!/^https?:\/\//i.test(url)) {
+	    url = 'http://' + url;
+	  }
+	  return url;
+	}
 
 	EditModalView.propTypes = {
 	  errorShowing: _react2['default'].PropTypes.bool
@@ -41947,6 +42017,7 @@
 	        var email = rushee["email"];
 	        var phone = rushee["phone"];
 	        if (facebook) {
+	          facebook = addHttp(facebook);
 	          rusheeName = _react2['default'].createElement(
 	            'h1',
 	            null,
@@ -42114,6 +42185,12 @@
 	  openEditModal: _react2['default'].PropTypes.func.isRequired,
 	  closeEditModal: _react2['default'].PropTypes.func.isRequired
 	};
+	function addHttp(url) {
+	  if (!/^https?:\/\//i.test(url)) {
+	    url = 'http://' + url;
+	  }
+	  return url;
+	}
 
 	exports['default'] = DetailView;
 	module.exports = exports['default'];

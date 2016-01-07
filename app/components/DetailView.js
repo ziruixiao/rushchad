@@ -41,6 +41,7 @@ class DetailView extends React.Component{
       var email = rushee["email"];
       var phone = rushee["phone"];
       if (facebook) {
+        facebook = addHttp(facebook);
         rusheeName = <h1><a href={facebook} target="_blank">{name}{' '}</a><Button onClick={this.editButton.bind(this,rusheeId)}>Edit</Button></h1>
         rusheeFacebook = <div><Glyphicon bsSize="small" glyph="facebook" />{' '}<a href={facebook} target="_blank">Facebook</a></div>;
       } else {
@@ -128,6 +129,11 @@ DetailView.propTypes = {
   openEditModal: React.PropTypes.func.isRequired,
   closeEditModal: React.PropTypes.func.isRequired
 };
-
+function addHttp(url) {
+  if (!/^https?:\/\//i.test(url)) {
+    url = 'http://' + url;
+  }
+  return url;
+}
 
 export default DetailView;
