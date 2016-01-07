@@ -5,6 +5,7 @@ import Header from './Header';
 import Rebase from 're-base';
 import * as firebaseActions from './firebaseActions';
 import EditModalView from './EditModalView';
+import Chatbar from './Chatbar';
 
 class Main extends React.Component{
   constructor(props){
@@ -150,7 +151,7 @@ class Main extends React.Component{
             <RouteHandler {...this.state} />
             <EditModalView loggedInUserId={this.state.loggedInUserId} showEditModal={this.state.showEditModal} activeEditRusheeId={this.state.activeEditRusheeId} rushees={this.state.rushees} closeAction={this.closeEditModal.bind(this)} />
           </div>
-
+          <Chatbar />
         </div>
       )
     }
