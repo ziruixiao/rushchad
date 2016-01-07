@@ -16,11 +16,14 @@ import {
 import TimeAgo from 'react-timeago';
 import StarRating from 'react-star-rating';
 import CommentList from './CommentList';
-import EditModalView from './EditModalView';
 
 class DetailView extends React.Component{
   componentWillMount(){
     this.router = this.context.router;
+  }
+  editButton(editActiveRusheeId) {
+    console.log('edit button called');
+    this.props.openEditModal(editActiveRusheeId);
   }
   render(){
     var rusheeId = this.router.getCurrentParams().rusheeId;
@@ -39,10 +42,10 @@ class DetailView extends React.Component{
       var email = rushee["email"];
       var phone = rushee["phone"];
       if (facebook) {
-        rusheeName = <h1><a href={facebook} target="_blank">{name}{' '}</a><Button>Edit</Button></h1>
+        rusheeName = <h1><a href={facebook} target="_blank">{name}{' '}</a><Button onClick={this.editButton.bind(this,rusheeId)}>Edit</Button></h1>
         rusheeFacebook = <div><Glyphicon bsSize="small" glyph="facebook" />{' '}<a href={facebook} target="_blank">Facebook</a></div>;
       } else {
-        rusheeName = <h1>{name}{' '}<Button>Edit</Button></h1>
+        rusheeName = <h1>{name}{' '}<Button onClick={this.editButton.bind(this,rusheeId)}>Edit</Button></h1>
       }
       rusheeEmail = <div><Glyphicon bsSize="small" glyph="email" />{' '}{rushee["email"]}</div>;
       rusheePhone = <div><Glyphicon bsSize="small" glyph="phone" />{' '}{rushee["phone"]}</div>;
@@ -78,8 +81,6 @@ class DetailView extends React.Component{
       }
     }
 
-
-    console.log(rushee);
     return (
       <div>
         <Col xs={12}>
@@ -123,6 +124,10 @@ class DetailView extends React.Component{
 
 DetailView.contextTypes = {
   router: React.PropTypes.func.isRequired
+};
+DetailView.propTypes = {
+  openEditModal: React.PropTypes.func.isRequired,
+  closeEditModal: React.PropTypes.func.isRequired
 };
 
 

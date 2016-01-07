@@ -16,7 +16,8 @@ class Main extends React.Component{
       users: props.users,
       rushees: props.rushees,
       loggedInUserId: props.loggedInUserId,
-      showEditModal: props.showEditModal
+      showEditModal: props.showEditModal,
+      activeEditRusheeId:  "-1"
     };
   }
   authDataCallback(authData) {
@@ -31,7 +32,14 @@ class Main extends React.Component{
           users: [],
           rushees: {},
           loggedInUserId: -1,
-          showEditModal: false
+          showEditModal: false,
+          activeEditRusheeId:  "-1",
+          openEditModal: () => {
+
+          },
+          closeEditModal: () => {
+
+          }
         });
         document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
 
@@ -41,8 +49,12 @@ class Main extends React.Component{
           loggedIn: true,
           googleUser: authData["google"],
           email: authData["google"]["email"],
-          loggedInUserId: 1
+          loggedInUserId: 1,
+          openEditModal: this.openEditModal.bind(this),
+          closeEditModal: this.closeEditModal.bind(this),
+          activeEditRusheeId:  "-1"
         });
+
       }
     } else {
       this.setState({
@@ -52,7 +64,14 @@ class Main extends React.Component{
         users: [],
         rusheese: {},
         loggedInUserId: -1,
-        showEditModal: false
+        showEditModal: false,
+        activeEditRusheeId:  "-1",
+        openEditModal: () => {
+
+        },
+        closeEditModal: () => {
+
+        }
       });
     }
   }
@@ -89,12 +108,14 @@ class Main extends React.Component{
   }
   closeEditModal() {
     this.setState({
-      showEditModal: false
+      showEditModal: false,
+      activeEditRusheeId: "-1"
     });
   }
-  openEditModal() {
+  openEditModal(newActiveId) {
     this.setState({
-      showEditModal: true
+      showEditModal: true,
+      activeEditRusheeId: newActiveId
     });
   }
   login() {
@@ -123,11 +144,11 @@ class Main extends React.Component{
     } else {
       return (
         <div className="main-container">
-          <Header googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this)} />
+          <Header googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this,-1)} />
 
           <div className="container">
-            <RouteHandler {...this.state}/>
-            <EditModalView showEditModal={this.state.showEditModal} closeAction={this.closeEditModal.bind(this)} />
+            <RouteHandler {...this.state} />
+            <EditModalView showEditModal={this.state.showEditModal} activeEditRusheeId={this.state.activeEditRusheeId} rushees={this.state.rushees} closeAction={this.closeEditModal.bind(this)} />
           </div>
           <nav className="navbar navbar-default" role="navigation">
             <div className="col-sm-7 col-sm-offset-2" style={{marginTop: 15}}>
@@ -148,7 +169,10 @@ Main.propTypes = {
   users: React.PropTypes.array,
   rushees: React.PropTypes.object,
   loggedInUserId: React.PropTypes.number,
-  showEditModal: React.PropTypes.bool
+  showEditModal: React.PropTypes.bool,
+  activeEditRusheeId: React.PropTypes.string,
+  openEditModal: React.PropTypes.func,
+  closeEditModal: React.PropTypes.func
 };
 
 Main.defaultProps = {
@@ -158,7 +182,14 @@ Main.defaultProps = {
   users: [],
   rushees: {},
   loggedInUserId: -1,
-  showEditModal: false
+  showEditModal: false,
+  activeEditRusheeId:  "-1",
+  openEditModal: () => {
+
+  },
+  closeEditModal: () => {
+
+  }
 }
 
 Main.contextTypes = {

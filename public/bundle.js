@@ -22996,7 +22996,8 @@
 	      users: props.users,
 	      rushees: props.rushees,
 	      loggedInUserId: props.loggedInUserId,
-	      showEditModal: props.showEditModal
+	      showEditModal: props.showEditModal,
+	      activeEditRusheeId: "-1"
 	    };
 	  }
 
@@ -23014,7 +23015,10 @@
 	            users: [],
 	            rushees: {},
 	            loggedInUserId: -1,
-	            showEditModal: false
+	            showEditModal: false,
+	            activeEditRusheeId: "-1",
+	            openEditModal: function openEditModal() {},
+	            closeEditModal: function closeEditModal() {}
 	          });
 	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
 	        } else {
@@ -23024,7 +23028,10 @@
 	            loggedIn: true,
 	            googleUser: authData["google"],
 	            email: authData["google"]["email"],
-	            loggedInUserId: 1
+	            loggedInUserId: 1,
+	            openEditModal: this.openEditModal.bind(this),
+	            closeEditModal: this.closeEditModal.bind(this),
+	            activeEditRusheeId: "-1"
 	          });
 	        }
 	      } else {
@@ -23035,7 +23042,10 @@
 	          users: [],
 	          rusheese: {},
 	          loggedInUserId: -1,
-	          showEditModal: false
+	          showEditModal: false,
+	          activeEditRusheeId: "-1",
+	          openEditModal: function openEditModal() {},
+	          closeEditModal: function closeEditModal() {}
 	        });
 	      }
 	    }
@@ -23084,14 +23094,16 @@
 	    key: 'closeEditModal',
 	    value: function closeEditModal() {
 	      this.setState({
-	        showEditModal: false
+	        showEditModal: false,
+	        activeEditRusheeId: "-1"
 	      });
 	    }
 	  }, {
 	    key: 'openEditModal',
-	    value: function openEditModal() {
+	    value: function openEditModal(newActiveId) {
 	      this.setState({
-	        showEditModal: true
+	        showEditModal: true,
+	        activeEditRusheeId: newActiveId
 	      });
 	    }
 	  }, {
@@ -23135,12 +23147,12 @@
 	        return _react2['default'].createElement(
 	          'div',
 	          { className: 'main-container' },
-	          _react2['default'].createElement(_Header2['default'], { googleUser: this.state.googleUser, onModalClick: this.openEditModal.bind(this) }),
+	          _react2['default'].createElement(_Header2['default'], { googleUser: this.state.googleUser, onModalClick: this.openEditModal.bind(this, -1) }),
 	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
 	            _react2['default'].createElement(_reactRouter.RouteHandler, this.state),
-	            _react2['default'].createElement(_EditModalView2['default'], { showEditModal: this.state.showEditModal, closeAction: this.closeEditModal.bind(this) })
+	            _react2['default'].createElement(_EditModalView2['default'], { showEditModal: this.state.showEditModal, activeEditRusheeId: this.state.activeEditRusheeId, rushees: this.state.rushees, closeAction: this.closeEditModal.bind(this) })
 	          ),
 	          _react2['default'].createElement(
 	            'nav',
@@ -23168,7 +23180,10 @@
 	  users: _react2['default'].PropTypes.array,
 	  rushees: _react2['default'].PropTypes.object,
 	  loggedInUserId: _react2['default'].PropTypes.number,
-	  showEditModal: _react2['default'].PropTypes.bool
+	  showEditModal: _react2['default'].PropTypes.bool,
+	  activeEditRusheeId: _react2['default'].PropTypes.string,
+	  openEditModal: _react2['default'].PropTypes.func,
+	  closeEditModal: _react2['default'].PropTypes.func
 	};
 
 	Main.defaultProps = {
@@ -23178,7 +23193,10 @@
 	  users: [],
 	  rushees: {},
 	  loggedInUserId: -1,
-	  showEditModal: false
+	  showEditModal: false,
+	  activeEditRusheeId: "-1",
+	  openEditModal: function openEditModal() {},
+	  closeEditModal: function closeEditModal() {}
 	};
 
 	Main.contextTypes = {
@@ -41036,7 +41054,7 @@
 	  _createClass(EditModalView, [{
 	    key: 'render',
 	    value: function render() {
-
+	      console.log(this.props);
 	      var firstName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'First Name', placeholder: 'Enter first name' });
 	      var lastName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Last Name', placeholder: 'Enter last name' });
 
@@ -41044,6 +41062,21 @@
 	      var email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', label: 'Email Address', placeholder: 'Enter email' });
 	      var phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Phone Number', placeholder: 'Enter phone' });
 	      var sophomore = _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', label: 'Sophomore' });
+
+	      if (this.props.activeEditRusheeId != "-1") {
+	        var editingRushee = this.props.rushees[this.props.activeEditRusheeId];
+	        if (editingRushee) {
+	          firstName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'First Name', defaultValue: editingRushee["firstName"], placeholder: 'Enter first name' });
+	          lastName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Last Name', defaultValue: editingRushee["lastName"], placeholder: 'Enter last name' });
+
+	          facebook = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Facebook Profile', defaultValue: editingRushee["facebook"], placeholder: 'Enter link' });
+	          email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', label: 'Email Address', defaultValue: editingRushee["email"], placeholder: 'Enter email' });
+	          phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', label: 'Phone Number', defaultValue: editingRushee["phone"], placeholder: 'Enter phone' });
+	          if (editingRushee["survey"]["gradeYear"] != 0) {
+	            sophomore = _react2['default'].createElement(_reactBootstrap.Input, { type: 'checkbox', label: 'Sophomore', checked: true });
+	          }
+	        }
+	      }
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
@@ -44253,10 +44286,6 @@
 
 	var _CommentList2 = _interopRequireDefault(_CommentList);
 
-	var _EditModalView = __webpack_require__(452);
-
-	var _EditModalView2 = _interopRequireDefault(_EditModalView);
-
 	var DetailView = (function (_React$Component) {
 	  _inherits(DetailView, _React$Component);
 
@@ -44270,6 +44299,12 @@
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      this.router = this.context.router;
+	    }
+	  }, {
+	    key: 'editButton',
+	    value: function editButton(editActiveRusheeId) {
+	      console.log('edit button called');
+	      this.props.openEditModal(editActiveRusheeId);
 	    }
 	  }, {
 	    key: 'render',
@@ -44303,7 +44338,7 @@
 	            ),
 	            _react2['default'].createElement(
 	              _reactBootstrap.Button,
-	              null,
+	              { onClick: this.editButton.bind(this, rusheeId) },
 	              'Edit'
 	            )
 	          );
@@ -44326,7 +44361,7 @@
 	            ' ',
 	            _react2['default'].createElement(
 	              _reactBootstrap.Button,
-	              null,
+	              { onClick: this.editButton.bind(this, rusheeId) },
 	              'Edit'
 	            )
 	          );
@@ -44378,7 +44413,6 @@
 	        }
 	      }
 
-	      console.log(rushee);
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
@@ -44455,6 +44489,10 @@
 
 	DetailView.contextTypes = {
 	  router: _react2['default'].PropTypes.func.isRequired
+	};
+	DetailView.propTypes = {
+	  openEditModal: _react2['default'].PropTypes.func.isRequired,
+	  closeEditModal: _react2['default'].PropTypes.func.isRequired
 	};
 
 	exports['default'] = DetailView;
