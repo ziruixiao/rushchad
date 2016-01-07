@@ -49,7 +49,9 @@ class CommentList extends React.Component{
       <Alert bsStyle="danger" onDismiss={this.handleAlertDismiss.bind(this)}>
         <p>Please make sure your comment is not empty.</p>
       </Alert>;
+    var commentsLength = 0;
     if (this.props.comments) {
+      commentsLength = this.props.comments.length;
       comments = this.props.comments.map((comment, key) => {
 
         return <Comment commentUser={this.props.users[comment["userId"]]["name"]} loggedInUserId={this.props.loggedInUserId} key={key} commentData={comment}/>
@@ -57,7 +59,7 @@ class CommentList extends React.Component{
     }
     return (
       <div>
-        <h3>Comments</h3>
+        <h3>Comments ({commentsLength})</h3>
         <Well>
         { this.state.errorShowing ?  error : null }
           <div>
