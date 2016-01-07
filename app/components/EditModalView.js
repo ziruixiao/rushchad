@@ -28,7 +28,8 @@ class EditModalView extends React.Component{
     if (s_firstName.length < 1 || s_lastName.length < 1) {
       this.handleAlertShow();
     } else { // continue with form
-
+      this.handleAlertDismiss();
+      // TODO: Firebase!!
     }
   }
 

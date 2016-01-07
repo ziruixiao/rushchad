@@ -19,3 +19,8 @@
 .align-center {
     text-align: center;
 }
+
+.align-vertical {
+    display: flex;
+    align-items: center;
+}

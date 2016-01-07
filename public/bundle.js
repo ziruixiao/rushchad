@@ -23152,7 +23152,7 @@
 	            'div',
 	            { className: 'container' },
 	            _react2['default'].createElement(_reactRouter.RouteHandler, this.state),
-	            _react2['default'].createElement(_EditModalView2['default'], { showEditModal: this.state.showEditModal, activeEditRusheeId: this.state.activeEditRusheeId, rushees: this.state.rushees, closeAction: this.closeEditModal.bind(this) })
+	            _react2['default'].createElement(_EditModalView2['default'], { loggedInUserId: this.state.loggedInUserId, showEditModal: this.state.showEditModal, activeEditRusheeId: this.state.activeEditRusheeId, rushees: this.state.rushees, closeAction: this.closeEditModal.bind(this) })
 	          ),
 	          _react2['default'].createElement(
 	            'nav',
@@ -41071,8 +41071,10 @@
 	      var s_lastName = this.refs.lastName.getValue();
 	      if (s_firstName.length < 1 || s_lastName.length < 1) {
 	        this.handleAlertShow();
-	      } else {// continue with form
-
+	      } else {
+	        // continue with form
+	        this.handleAlertDismiss();
+	        // TODO: Firebase!!
 	      }
 	    }
 	  }, {
@@ -44572,18 +44574,53 @@
 	var CommentList = (function (_React$Component) {
 	  _inherits(CommentList, _React$Component);
 
-	  function CommentList() {
+	  function CommentList(props) {
 	    _classCallCheck(this, CommentList);
 
-	    _get(Object.getPrototypeOf(CommentList.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(CommentList.prototype), 'constructor', this).call(this, props);
+	    this.state = {
+	      errorShowing: false
+	    };
 	  }
 
 	  _createClass(CommentList, [{
+	    key: 'handleAlertDismiss',
+	    value: function handleAlertDismiss() {
+	      this.setState({ errorShowing: false });
+	    }
+	  }, {
+	    key: 'handleAlertShow',
+	    value: function handleAlertShow() {
+	      this.setState({ errorShowing: true });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      var s_comment = this.refs.newComment.getValue();
+	      if (s_comment.length < 1) {
+	        this.handleAlertShow();
+	      } else {
+	        // continue with form
+	        // TODO: Firebase!!
+	        console.log(s_comment);
+	        this.handleAlertDismiss();
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this = this;
 
 	      var comments;
+	      var error = _react2['default'].createElement(
+	        _reactBootstrap.Alert,
+	        { bsStyle: 'danger', onDismiss: this.handleAlertDismiss.bind(this) },
+	        _react2['default'].createElement(
+	          'p',
+	          null,
+	          'Please make sure your comment is not empty.'
+	        )
+	      );
 	      if (this.props.comments) {
 	        comments = this.props.comments.map(function (comment, key) {
 
@@ -44711,6 +44748,29 @@
 	        _react2['default'].createElement(
 	          _reactBootstrap.Well,
 	          null,
+	          this.state.errorShowing ? error : null,
+	          _react2['default'].createElement(
+	            'div',
+	            null,
+	            _react2['default'].createElement(
+	              'form',
+	              { onSubmit: this.handleSubmit.bind(this) },
+	              _react2['default'].createElement(
+	                _reactBootstrap.Row,
+	                { className: 'align-vertical' },
+	                _react2['default'].createElement(
+	                  _reactBootstrap.Col,
+	                  { xs: 10 },
+	                  _react2['default'].createElement(_reactBootstrap.Input, { type: 'textarea', ref: 'newComment', label: 'Add New Comment', placeholder: 'Type text here' })
+	                ),
+	                _react2['default'].createElement(
+	                  _reactBootstrap.Col,
+	                  { xs: 2 },
+	                  _react2['default'].createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Post' })
+	                )
+	              )
+	            )
+	          ),
 	          comments
 	        )
 	      );
@@ -44721,6 +44781,14 @@
 	})(_react2['default'].Component);
 
 	;
+
+	CommentList.propTypes = {
+	  errorShowing: _react2['default'].PropTypes.bool
+	};
+
+	CommentList.defaultProps = {
+	  errorShowing: false
+	};
 
 	exports['default'] = CommentList;
 	module.exports = exports['default'];
