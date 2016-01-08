@@ -3,8 +3,9 @@
  */
 import React from 'react';
 import Rebase from 're-base';
-import {Col, Navbar, Row, Nav, NavItem, NavDropdown, MenuItem, Panel} from 'react-bootstrap';
+import {Col, ButtonToolbar, Navbar, Row, Popover, Nav, Button, OverlayTrigger, NavItem, NavDropdown, MenuItem, Well, Panel} from 'react-bootstrap';
 import * as firebaseActions from './firebaseActions';
+import TimeAgo from 'react-timeago';
 
 class Chatbar extends React.Component{
   constructor(props){
@@ -47,29 +48,38 @@ class Chatbar extends React.Component{
     if (Object.keys(this.state.messages).length > 0) {
       chatMessages = Object.keys(this.state.messages).map((key) => {
         var oneMessage = this.state.messages[key];
-        var messageOwner = this.props.users[oneMessage["userId"]];
+        var messageOwner = this.props.users[oneMessage["userId"]]["name"];
         var messageContent = oneMessage["content"];
+        var messageTime = new Date(Number(oneMessage["lastUpdated"])*1000);
         return (
-          <div key={key}>
-            Hello
+          <div key={key} className="top-bottom-space chat-scroll">
+            <Row>
+            <Col className="align-left" xs={6}>
+              <strong>{messageOwner}</strong>
+            </Col>
+            <Col className="align-right" xs={6}>
+              <TimeAgo date={messageTime}/>
+            </Col>
+              </Row>
+            <Row>
+              <Col xs={12}>
+              {messageContent}
+                </Col>
+            </Row>
           </div>
         )
       });
     }
     return (
-      <div>
-        <Navbar fixedBottom>
-            <Nav pullRight>
-              <NavDropdown title="Click for Live Chat" id="basic-nav-dropdown">
-                <MenuItem><div>
+      <ButtonToolbar className="fixedBottomRight">
 
-                    {chatMessages}
+        <OverlayTrigger trigger="click" placement="top" overlay={<Popover className="chat-bar-button" title="9 users online">
+{chatMessages}
+</Popover>}>
+          <Button className="chat-bar-button" bsStyle="primary">Live Chat</Button>
+        </OverlayTrigger>
 
-                </div></MenuItem>
-              </NavDropdown>
-            </Nav>
-        </Navbar>
-      </div>
+      </ButtonToolbar>
     )
   }
 };

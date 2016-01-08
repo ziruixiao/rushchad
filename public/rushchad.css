@@ -1,3 +1,21 @@
+.fixedBottomRight {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    min-width: 300px;
+    max-width: 100%;
+
+}
+
+.chat-scroll {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+.chat-bar-button {
+    min-width: 300px;
+    max-width: 100%;
+}
+
 .fixed-panel {
     min-height: 300px;
     max-height: 300px;
@@ -6,6 +24,16 @@
 .table td {
     text-align: center;
 }
+
+.align-left {
+    text-align: left;
+}
+
+.align-right {
+    text-align: right;
+}
+
+
 .table tbody>tr>td.vert-align{
     vertical-align: middle;
 }
