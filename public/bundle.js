@@ -41501,7 +41501,7 @@
 	          _reactBootstrap.OverlayTrigger,
 	          { trigger: 'click', placement: 'top', overlay: _react2['default'].createElement(
 	              _reactBootstrap.Popover,
-	              { id: 'chatPopOver', className: 'chat-bar-button', title: '9 users online' },
+	              { id: 'chatPopOver', className: 'chat-bar-button absolute-positioning', title: '9 users online' },
 	              _react2['default'].createElement(
 	                'div',
 	                { id: 'chatBox', className: 'chat-scroll' },

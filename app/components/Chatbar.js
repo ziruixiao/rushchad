@@ -111,7 +111,7 @@ class Chatbar extends React.Component{
     return (
       <ButtonToolbar className="fixedBottomRight">
 
-        <OverlayTrigger trigger="click" placement="top" overlay={<Popover id="chatPopOver"  className="chat-bar-button" title="9 users online">
+        <OverlayTrigger trigger="click" placement="top" overlay={<Popover id="chatPopOver"  className="chat-bar-button absolute-positioning" title="9 users online">
           <div id="chatBox" className="chat-scroll">
             {chatMessages}
            </div>
