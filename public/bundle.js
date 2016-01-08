@@ -22906,21 +22906,21 @@
 
 	var _componentsMain2 = _interopRequireDefault(_componentsMain);
 
-	var _componentsHomeView = __webpack_require__(455);
+	var _componentsHomeView = __webpack_require__(454);
 
 	var _componentsHomeView2 = _interopRequireDefault(_componentsHomeView);
 
-	var _componentsProfileView = __webpack_require__(458);
+	var _componentsProfileView = __webpack_require__(457);
 
 	var _componentsProfileView2 = _interopRequireDefault(_componentsProfileView);
 
 	var _reactRouter = __webpack_require__(158);
 
-	var _componentsListView = __webpack_require__(459);
+	var _componentsListView = __webpack_require__(458);
 
 	var _componentsListView2 = _interopRequireDefault(_componentsListView);
 
-	var _componentsDetailView = __webpack_require__(461);
+	var _componentsDetailView = __webpack_require__(460);
 
 	var _componentsDetailView2 = _interopRequireDefault(_componentsDetailView);
 
@@ -22986,12 +22986,6 @@
 
 	var _Chatbar2 = _interopRequireDefault(_Chatbar);
 
-	var _events = __webpack_require__(454);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	var eventEmitter = new _events2['default'].EventEmitter();
-
 	var Main = (function (_React$Component) {
 	  _inherits(Main, _React$Component);
 
@@ -23012,40 +23006,40 @@
 	  }
 
 	  _createClass(Main, [{
-	    key: 'unauthorize',
-	    value: function unauthorize() {
-	      console.log("unauth");
-	      this.ref.unauth();
-	      this.setState({
-	        loggedIn: false,
-	        googleUser: {},
-	        email: '',
-	        users: [],
-	        rushees: {},
-	        loggedInUserId: -1,
-	        showEditModal: false,
-	        activeEditRusheeId: "-1",
-	        openEditModal: function openEditModal() {},
-	        closeEditModal: function closeEditModal() {}
-	      });
-	      document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
-	    }
-	  }, {
 	    key: 'authDataCallback',
 	    value: function authDataCallback(authData) {
 	      if (authData) {
-
-	        eventEmitter.on('goodLogin', (function () {
+	        if (authData["google"]["email"] != "ziruixiao@gmail.com") {
+	          console.log("unauth");
+	          this.ref.unauth();
 	          this.setState({
+	            loggedIn: false,
+	            googleUser: {},
+	            email: '',
+	            users: [],
+	            rushees: {},
+	            loggedInUserId: -1,
+	            showEditModal: false,
+	            activeEditRusheeId: "-1",
+	            openEditModal: function openEditModal() {},
+	            closeEditModal: function closeEditModal() {}
+	          });
+	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
+	        } else {
+	          // successful login*/
+	          this.setupFirebaseConnections();
+	          this.setState({
+	            loggedIn: true,
 	            googleUser: authData["google"],
 	            email: authData["google"]["email"],
+	            loggedInUserId: 1,
 	            openEditModal: this.openEditModal.bind(this),
 	            closeEditModal: this.closeEditModal.bind(this),
 	            activeEditRusheeId: "-1"
+	          }, function () {
+	            firebaseActions.updateUserLastActive(this.state.loggedInUserId);
 	          });
-	        }).bind(this));
-	        eventEmitter.on('badLogin', this.unauthorize.bind(this));
-	        this.setupFirebaseConnections(authData["google"]["email"]);
+	        }
 	      } else {
 	        this.setState({
 	          loggedIn: false,
@@ -23063,36 +23057,19 @@
 	    }
 	  }, {
 	    key: 'setupFirebaseConnections',
-	    value: function setupFirebaseConnections(userEmail) {
+	    value: function setupFirebaseConnections() {
 	      var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
 	      usersRef.once('value', (function (dataSnapshot) {
-	        var totalCount = Object.keys(dataSnapshot.val()).length;
-	        var loginSuccessful = false;
-	        dataSnapshot.val().some((function (val, index) {
-	          if (val["email"] == userEmail) {
-	            // login successful and validated
-	            this.setState({
-	              loggedIn: true,
-	              users: dataSnapshot.val()
+	        this.setState({
+	          users: dataSnapshot.val()
+	        });
+	      }).bind(this));
 
-	            }, function () {
-	              var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
-	              rusheesRef.once('value', (function (dataSnapshot) {
-	                this.setState({
-	                  rushees: dataSnapshot.val()
-	                });
-	              }).bind(this));
-	              firebaseActions.updateUserLastActive(index);
-	            });
-	            loginSuccessful = true;
-	            eventEmitter.emit('goodLogin');
-	            return;
-	          }
-	          totalCount--;
-	          if (totalCount == 0 && !loginSuccessful) {
-	            eventEmitter.emit('badLogin');
-	          }
-	        }).bind(this));
+	      var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
+	      rusheesRef.once('value', (function (dataSnapshot) {
+	        this.setState({
+	          rushees: dataSnapshot.val()
+	        });
 	      }).bind(this));
 	    }
 	  }, {
@@ -41042,6 +41019,22 @@
 	exports.verifyEmail = verifyEmail;
 	var addNewComment = function addNewComment(rusheeId, dictionary) {
 	  // what happens when a new comment is made
+	  var childRef = rusheesRef.child(rusheeId);
+	  childRef.once("value", function (snapshot) {
+	    if (!snapshot.child("comments").exists()) {
+	      // just push a comment
+	      console.log("there is no comments child");
+	      childRef.child('comments').set([], function () {
+	        var commentRef = childRef.child("comments");
+	        var newCommentRef = commentRef.push();
+	        newCommentRef.set(dictionary);
+	      });
+	    } else {
+	      var commentRef = childRef.child("comments");
+	      var newCommentRef = commentRef.push();
+	      newCommentRef.set(dictionary);
+	    }
+	  });
 	  console.log(dictionary);
 	  console.log(rusheeId);
 	};
@@ -41379,310 +41372,6 @@
 
 /***/ },
 /* 454 */
-/***/ function(module, exports) {
-
-	// Copyright Joyent, Inc. and other Node contributors.
-	//
-	// Permission is hereby granted, free of charge, to any person obtaining a
-	// copy of this software and associated documentation files (the
-	// "Software"), to deal in the Software without restriction, including
-	// without limitation the rights to use, copy, modify, merge, publish,
-	// distribute, sublicense, and/or sell copies of the Software, and to permit
-	// persons to whom the Software is furnished to do so, subject to the
-	// following conditions:
-	//
-	// The above copyright notice and this permission notice shall be included
-	// in all copies or substantial portions of the Software.
-	//
-	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-	// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-	function EventEmitter() {
-	  this._events = this._events || {};
-	  this._maxListeners = this._maxListeners || undefined;
-	}
-	module.exports = EventEmitter;
-
-	// Backwards-compat with node 0.10.x
-	EventEmitter.EventEmitter = EventEmitter;
-
-	EventEmitter.prototype._events = undefined;
-	EventEmitter.prototype._maxListeners = undefined;
-
-	// By default EventEmitters will print a warning if more than 10 listeners are
-	// added to it. This is a useful default which helps finding memory leaks.
-	EventEmitter.defaultMaxListeners = 10;
-
-	// Obviously not all Emitters should be limited to 10. This function allows
-	// that to be increased. Set to zero for unlimited.
-	EventEmitter.prototype.setMaxListeners = function(n) {
-	  if (!isNumber(n) || n < 0 || isNaN(n))
-	    throw TypeError('n must be a positive number');
-	  this._maxListeners = n;
-	  return this;
-	};
-
-	EventEmitter.prototype.emit = function(type) {
-	  var er, handler, len, args, i, listeners;
-
-	  if (!this._events)
-	    this._events = {};
-
-	  // If there is no 'error' event listener then throw.
-	  if (type === 'error') {
-	    if (!this._events.error ||
-	        (isObject(this._events.error) && !this._events.error.length)) {
-	      er = arguments[1];
-	      if (er instanceof Error) {
-	        throw er; // Unhandled 'error' event
-	      }
-	      throw TypeError('Uncaught, unspecified "error" event.');
-	    }
-	  }
-
-	  handler = this._events[type];
-
-	  if (isUndefined(handler))
-	    return false;
-
-	  if (isFunction(handler)) {
-	    switch (arguments.length) {
-	      // fast cases
-	      case 1:
-	        handler.call(this);
-	        break;
-	      case 2:
-	        handler.call(this, arguments[1]);
-	        break;
-	      case 3:
-	        handler.call(this, arguments[1], arguments[2]);
-	        break;
-	      // slower
-	      default:
-	        args = Array.prototype.slice.call(arguments, 1);
-	        handler.apply(this, args);
-	    }
-	  } else if (isObject(handler)) {
-	    args = Array.prototype.slice.call(arguments, 1);
-	    listeners = handler.slice();
-	    len = listeners.length;
-	    for (i = 0; i < len; i++)
-	      listeners[i].apply(this, args);
-	  }
-
-	  return true;
-	};
-
-	EventEmitter.prototype.addListener = function(type, listener) {
-	  var m;
-
-	  if (!isFunction(listener))
-	    throw TypeError('listener must be a function');
-
-	  if (!this._events)
-	    this._events = {};
-
-	  // To avoid recursion in the case that type === "newListener"! Before
-	  // adding it to the listeners, first emit "newListener".
-	  if (this._events.newListener)
-	    this.emit('newListener', type,
-	              isFunction(listener.listener) ?
-	              listener.listener : listener);
-
-	  if (!this._events[type])
-	    // Optimize the case of one listener. Don't need the extra array object.
-	    this._events[type] = listener;
-	  else if (isObject(this._events[type]))
-	    // If we've already got an array, just append.
-	    this._events[type].push(listener);
-	  else
-	    // Adding the second element, need to change to array.
-	    this._events[type] = [this._events[type], listener];
-
-	  // Check for listener leak
-	  if (isObject(this._events[type]) && !this._events[type].warned) {
-	    if (!isUndefined(this._maxListeners)) {
-	      m = this._maxListeners;
-	    } else {
-	      m = EventEmitter.defaultMaxListeners;
-	    }
-
-	    if (m && m > 0 && this._events[type].length > m) {
-	      this._events[type].warned = true;
-	      console.error('(node) warning: possible EventEmitter memory ' +
-	                    'leak detected. %d listeners added. ' +
-	                    'Use emitter.setMaxListeners() to increase limit.',
-	                    this._events[type].length);
-	      if (typeof console.trace === 'function') {
-	        // not supported in IE 10
-	        console.trace();
-	      }
-	    }
-	  }
-
-	  return this;
-	};
-
-	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-	EventEmitter.prototype.once = function(type, listener) {
-	  if (!isFunction(listener))
-	    throw TypeError('listener must be a function');
-
-	  var fired = false;
-
-	  function g() {
-	    this.removeListener(type, g);
-
-	    if (!fired) {
-	      fired = true;
-	      listener.apply(this, arguments);
-	    }
-	  }
-
-	  g.listener = listener;
-	  this.on(type, g);
-
-	  return this;
-	};
-
-	// emits a 'removeListener' event iff the listener was removed
-	EventEmitter.prototype.removeListener = function(type, listener) {
-	  var list, position, length, i;
-
-	  if (!isFunction(listener))
-	    throw TypeError('listener must be a function');
-
-	  if (!this._events || !this._events[type])
-	    return this;
-
-	  list = this._events[type];
-	  length = list.length;
-	  position = -1;
-
-	  if (list === listener ||
-	      (isFunction(list.listener) && list.listener === listener)) {
-	    delete this._events[type];
-	    if (this._events.removeListener)
-	      this.emit('removeListener', type, listener);
-
-	  } else if (isObject(list)) {
-	    for (i = length; i-- > 0;) {
-	      if (list[i] === listener ||
-	          (list[i].listener && list[i].listener === listener)) {
-	        position = i;
-	        break;
-	      }
-	    }
-
-	    if (position < 0)
-	      return this;
-
-	    if (list.length === 1) {
-	      list.length = 0;
-	      delete this._events[type];
-	    } else {
-	      list.splice(position, 1);
-	    }
-
-	    if (this._events.removeListener)
-	      this.emit('removeListener', type, listener);
-	  }
-
-	  return this;
-	};
-
-	EventEmitter.prototype.removeAllListeners = function(type) {
-	  var key, listeners;
-
-	  if (!this._events)
-	    return this;
-
-	  // not listening for removeListener, no need to emit
-	  if (!this._events.removeListener) {
-	    if (arguments.length === 0)
-	      this._events = {};
-	    else if (this._events[type])
-	      delete this._events[type];
-	    return this;
-	  }
-
-	  // emit removeListener for all listeners on all events
-	  if (arguments.length === 0) {
-	    for (key in this._events) {
-	      if (key === 'removeListener') continue;
-	      this.removeAllListeners(key);
-	    }
-	    this.removeAllListeners('removeListener');
-	    this._events = {};
-	    return this;
-	  }
-
-	  listeners = this._events[type];
-
-	  if (isFunction(listeners)) {
-	    this.removeListener(type, listeners);
-	  } else if (listeners) {
-	    // LIFO order
-	    while (listeners.length)
-	      this.removeListener(type, listeners[listeners.length - 1]);
-	  }
-	  delete this._events[type];
-
-	  return this;
-	};
-
-	EventEmitter.prototype.listeners = function(type) {
-	  var ret;
-	  if (!this._events || !this._events[type])
-	    ret = [];
-	  else if (isFunction(this._events[type]))
-	    ret = [this._events[type]];
-	  else
-	    ret = this._events[type].slice();
-	  return ret;
-	};
-
-	EventEmitter.prototype.listenerCount = function(type) {
-	  if (this._events) {
-	    var evlistener = this._events[type];
-
-	    if (isFunction(evlistener))
-	      return 1;
-	    else if (evlistener)
-	      return evlistener.length;
-	  }
-	  return 0;
-	};
-
-	EventEmitter.listenerCount = function(emitter, type) {
-	  return emitter.listenerCount(type);
-	};
-
-	function isFunction(arg) {
-	  return typeof arg === 'function';
-	}
-
-	function isNumber(arg) {
-	  return typeof arg === 'number';
-	}
-
-	function isObject(arg) {
-	  return typeof arg === 'object' && arg !== null;
-	}
-
-	function isUndefined(arg) {
-	  return arg === void 0;
-	}
-
-
-/***/ },
-/* 455 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41707,7 +41396,7 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _RusheeTile = __webpack_require__(456);
+	var _RusheeTile = __webpack_require__(455);
 
 	var _RusheeTile2 = _interopRequireDefault(_RusheeTile);
 
@@ -41745,7 +41434,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 456 */
+/* 455 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41773,7 +41462,7 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactStarRating = __webpack_require__(457);
+	var _reactStarRating = __webpack_require__(456);
 
 	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
@@ -41879,13 +41568,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 457 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";function _interopRequireDefault(t){return t&&t.__esModule?t:{"default":t}}function _classCallCheck(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function _possibleConstructorReturn(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function _inherits(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function isFloat(t){return t===Number(t)&&t%1!==0}var _extends=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var a=arguments[e];for(var n in a)Object.prototype.hasOwnProperty.call(a,n)&&(t[n]=a[n])}return t},_createClass=function(){function t(t,e){for(var a=0;a<e.length;a++){var n=e[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}return function(e,a,n){return a&&t(e.prototype,a),n&&t(e,n),e}}();Object.defineProperty(exports,"__esModule",{value:!0});var _react=__webpack_require__(1),_react2=_interopRequireDefault(_react),_reactDom=__webpack_require__(265),_reactDom2=_interopRequireDefault(_reactDom),_classnames=__webpack_require__(239),_classnames2=_interopRequireDefault(_classnames),StarRating=function(t){function e(t){_classCallCheck(this,e);var a=_possibleConstructorReturn(this,Object.getPrototypeOf(e).call(this,t));return a.state={currentRatingVal:t.rating,currentRatingPos:a.getStarRatingPosition(t.rating),editing:t.editing||!0,rating:t.rating,pos:a.getStarRatingPosition(t.rating),glyph:a.getStars(),size:t.size},a}return _inherits(e,t),_createClass(e,[{key:"componentWillMount",value:function(){this.min=0,this.max=this.props.totalStars||5,this.props.rating&&(this.state.editing=this.props.editing||!1)}},{key:"componentDidMount",value:function(){this.root=_reactDom2["default"].findDOMNode(this.refs.root),this.ratingContainer=_reactDom2["default"].findDOMNode(this.refs.ratingContainer)}},{key:"componentWillUnmount",value:function(){delete this.root,delete this.ratingContainer}},{key:"getStars",value:function(){for(var t="",e=this.props.totalStars,a=0;e>a;a++)t+="★";return t}},{key:"getPosition",value:function(t){return t.clientX-this.root.getBoundingClientRect().left}},{key:"getWidthFromValue",value:function(t){var e=this.min,a=this.max;return e>=t||e===a?0:t>=a?100:100*(t-e)/(a-e)}},{key:"applyPrecision",value:function(t,e){return parseFloat(t.toFixed(e))}},{key:"getDecimalPlaces",value:function(t){var e=(""+t).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);return e?Math.max(0,(e[1]?e[1].length:0)-(e[2]?+e[2]:0)):0}},{key:"getValueFromPosition",value:function(t){var e=this.getDecimalPlaces(this.props.step),a=this.ratingContainer.offsetWidth,n=this.max-this.min,r=n*t/(a*this.props.step);r=Math.ceil(r);var i=this.applyPrecision(parseFloat(this.min+r*this.props.step),e);return i=Math.max(Math.min(i,this.max),this.min)}},{key:"calculate",value:function(t){var e=this.getValueFromPosition(t),a=this.getWidthFromValue(e);return a+="%",{width:a,val:e}}},{key:"getStarRatingPosition",value:function(t){return this.getWidthFromValue(t)+"%"}},{key:"getRatingEvent",value:function(t){var e=this.getPosition(t);return this.calculate(e)}},{key:"getSvg",value:function(t){for(var e=[],a=0;a<this.props.totalStars;a++){var n={};n.transform="translate("+50*a+", 0)",n.fill=a+this.props.step<=t?"#FFA91B":"#C6C6C6",e.push(_react2["default"].createElement("path",_extends({},n,{key:"star-"+a,mask:"url(#half-star-mask)",d:"m0,18.1l19.1,0l5.9,-18.1l5.9,18.1l19.1,0l-15.4,11.2l5.9,18.1l-15.4,-11.2l-15.4,11.2l5.9,-18.1l-15.4,-11.2l0,0z"})))}var r={width:e.length*this.props.size+"px",height:this.props.size+"px"};return _react2["default"].createElement("svg",{className:"rsr__star",style:r,viewBox:"0 0 "+e.length+" 50",preserveAspectRatio:"xMinYMin meet",version:"1.1",xmlns:"http://www.w3.org/2000/svg"},_react2["default"].createElement("g",null,e.map(function(t){return t})))}},{key:"updateRating",value:function(t,e){this.setState({pos:t,rating:e})}},{key:"shouldComponentUpdate",value:function(t,e){return t!==this.props?(this.updateRating(this.getStarRatingPosition(t.rating),t.rating),!0):e.currentRatingVal!==this.state.currentRatingVal||e.rating!==this.state.rating}},{key:"handleMouseLeave",value:function(){this.setState({pos:this.state.currentRatingPos,rating:this.state.currentRatingVal})}},{key:"handleMouseMove",value:function(t){var e=this.getRatingEvent(t);this.updateRating(e.width,e.val)}},{key:"handleClick",value:function(t){if(this.props.disabled)return t.stopPropagation(),t.preventDefault(),!1;var e={currentRatingPos:this.state.pos,currentRatingVal:this.state.rating,caption:this.props.caption,name:this.props.name};this.setState(e),this.props.onRatingClick(t,{rating:this.state.rating,position:this.state.pos,caption:this.props.caption,name:this.props.name})}},{key:"treatName",value:function(t){return"string"==typeof t?t.toLowerCase().split(" ").join("_"):void 0}},{key:"getClasses",value:function(){return(0,_classnames2["default"])({"rsr-root":!0,"rsr--disabled":this.props.disabled,"rsr--editing":this.state.editing})}},{key:"getCaption",value:function(){return this.props.caption?_react2["default"].createElement("span",{className:"rsr__caption"},this.props.caption):null}},{key:"setAttrs",value:function(){var t={};return this.state.editing&&(t.onMouseMove=this.handleMouseMove.bind(this),t.onMouseLeave=this.handleMouseLeave.bind(this),t.onClick=this.handleClick.bind(this)),t}},{key:"render",value:function(){var t=this.getClasses(),e=this.getCaption(),a=this.setAttrs();return _react2["default"].createElement("span",{className:"rsr-container"},e,_react2["default"].createElement("div",{ref:"root",className:t},_react2["default"].createElement("div",_extends({ref:"ratingContainer",className:"rsr rating-gly-star","data-content":this.state.glyph},a),this.getSvg(this.state.rating),_react2["default"].createElement("input",{type:"number",name:this.props.name,value:this.state.currentRatingVal,style:{display:"none !important"},min:this.min,max:this.max,readOnly:!0}))))}}]),e}(_react2["default"].Component);StarRating.propTypes={name:_react2["default"].PropTypes.string.isRequired,caption:_react2["default"].PropTypes.string,totalStars:_react2["default"].PropTypes.number.isRequired,rating:_react2["default"].PropTypes.number,onRatingClick:_react2["default"].PropTypes.func,disabled:_react2["default"].PropTypes.bool,editing:_react2["default"].PropTypes.bool,size:_react2["default"].PropTypes.number},StarRating.defaultProps={step:1,totalStars:5,onRatingClick:function(){},disabled:!1,size:50,rating:0},exports["default"]=StarRating;
 
 /***/ },
-/* 458 */
+/* 457 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41964,7 +41653,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 459 */
+/* 458 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41989,11 +41678,11 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactTimeago = __webpack_require__(460);
+	var _reactTimeago = __webpack_require__(459);
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
-	var _reactStarRating = __webpack_require__(457);
+	var _reactStarRating = __webpack_require__(456);
 
 	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
@@ -42139,7 +41828,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 460 */
+/* 459 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
@@ -42272,7 +41961,7 @@
 
 
 /***/ },
-/* 461 */
+/* 460 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42300,15 +41989,15 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactTimeago = __webpack_require__(460);
+	var _reactTimeago = __webpack_require__(459);
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
-	var _reactStarRating = __webpack_require__(457);
+	var _reactStarRating = __webpack_require__(456);
 
 	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
-	var _CommentList = __webpack_require__(462);
+	var _CommentList = __webpack_require__(461);
 
 	var _CommentList2 = _interopRequireDefault(_CommentList);
 
@@ -42330,16 +42019,6 @@
 	    key: 'editButton',
 	    value: function editButton(editActiveRusheeId) {
 	      this.props.openEditModal(editActiveRusheeId);
-	    }
-	  }, {
-	    key: 'openEditModal',
-	    value: function openEditModal() {
-	      this.props.openEditModal();
-	    }
-	  }, {
-	    key: 'closeEditModal',
-	    value: function closeEditModal() {
-	      this.props.closeEditModal();
 	    }
 	  }, {
 	    key: 'render',
@@ -42541,7 +42220,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 462 */
+/* 461 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42568,11 +42247,11 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactTimeago = __webpack_require__(460);
+	var _reactTimeago = __webpack_require__(459);
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
-	var _Comment = __webpack_require__(463);
+	var _Comment = __webpack_require__(462);
 
 	var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -42642,9 +42321,9 @@
 	      );
 	      var commentsLength = 0;
 	      if (this.props.comments) {
-	        commentsLength = this.props.comments.length;
-	        comments = this.props.comments.map(function (comment, key) {
-
+	        commentsLength = Object.keys(this.props.comments).length;
+	        comments = Object.keys(this.props.comments).map(function (key) {
+	          var comment = _this.props.comments[key];
 	          return _react2['default'].createElement(_Comment2['default'], { commentUser: _this.props.users[comment["userId"]]["name"], loggedInUserId: _this.props.loggedInUserId, key: key, commentData: comment });
 	        });
 	      }
@@ -42707,7 +42386,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 463 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42735,7 +42414,7 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactTimeago = __webpack_require__(460);
+	var _reactTimeago = __webpack_require__(459);
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 

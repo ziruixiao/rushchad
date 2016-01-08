@@ -6,10 +6,6 @@ import Rebase from 're-base';
 import * as firebaseActions from './firebaseActions';
 import EditModalView from './EditModalView';
 import Chatbar from './Chatbar';
-import events from 'events';
-
-var eventEmitter = new events.EventEmitter();
-
 
 class Main extends React.Component{
   constructor(props){
@@ -25,42 +21,44 @@ class Main extends React.Component{
       activeEditRusheeId:  "-1"
     };
   }
-  unauthorize() {
-    console.log("unauth");
-    this.ref.unauth();
-    this.setState({
-      loggedIn: false,
-      googleUser: {},
-      email: '',
-      users: [],
-      rushees: {},
-      loggedInUserId: -1,
-      showEditModal: false,
-      activeEditRusheeId:  "-1",
-      openEditModal: () => {
-
-      },
-      closeEditModal: () => {
-
-      }
-    });
-    document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
-
-  }
   authDataCallback(authData) {
     if (authData) {
-
-      eventEmitter.on('goodLogin', function() {
+      if (authData["google"]["email"] != "ziruixiao@gmail.com") {
+        console.log("unauth");
+        this.ref.unauth();
         this.setState({
+          loggedIn: false,
+          googleUser: {},
+          email: '',
+          users: [],
+          rushees: {},
+          loggedInUserId: -1,
+          showEditModal: false,
+          activeEditRusheeId:  "-1",
+          openEditModal: () => {
+
+          },
+          closeEditModal: () => {
+
+          }
+        });
+        document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
+
+      } else { // successful login*/
+        this.setupFirebaseConnections();
+        this.setState({
+          loggedIn: true,
           googleUser: authData["google"],
           email: authData["google"]["email"],
+          loggedInUserId: 1,
           openEditModal: this.openEditModal.bind(this),
           closeEditModal: this.closeEditModal.bind(this),
           activeEditRusheeId:  "-1"
+        }, function () {
+          firebaseActions.updateUserLastActive(this.state.loggedInUserId);
         });
-      }.bind(this));
-      eventEmitter.on('badLogin', this.unauthorize.bind(this));
-      this.setupFirebaseConnections(authData["google"]["email"]);
+
+      }
     } else {
       this.setState({
         loggedIn: false,
@@ -80,36 +78,19 @@ class Main extends React.Component{
       });
     }
   }
-  setupFirebaseConnections(userEmail) {
+  setupFirebaseConnections() {
     var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
     usersRef.once('value', function(dataSnapshot) {
-      var totalCount = Object.keys(dataSnapshot.val()).length;
-      var loginSuccessful = false;
-      dataSnapshot.val().some(function (val, index) {
-        if (val["email"] == userEmail) {
-          // login successful and validated
-          this.setState({
-            loggedIn: true,
-            users: dataSnapshot.val()
+      this.setState({
+        users: dataSnapshot.val()
+      });
+    }.bind(this));
 
-          }, function() {
-            var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
-            rusheesRef.once('value', function(dataSnapshot) {
-              this.setState({
-                rushees: dataSnapshot.val()
-              });
-            }.bind(this));
-            firebaseActions.updateUserLastActive(index);
-          });
-          loginSuccessful = true;
-          eventEmitter.emit('goodLogin');
-          return;
-        }
-        totalCount--;
-        if (totalCount==0 && !loginSuccessful) {
-          eventEmitter.emit('badLogin');
-        }
-      }.bind(this));
+    var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
+    rusheesRef.once('value', function(dataSnapshot) {
+      this.setState({
+        rushees: dataSnapshot.val()
+      });
     }.bind(this));
   }
   init(){
@@ -169,7 +150,7 @@ class Main extends React.Component{
           <Header googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this,-1)} />
 
           <div className="container">
-            <RouteHandler {...this.state} openEditModal={this.openEditModal.bind(this)} />
+            <RouteHandler {...this.state} />
             <EditModalView loggedInUserId={this.state.loggedInUserId} showEditModal={this.state.showEditModal} activeEditRusheeId={this.state.activeEditRusheeId} rushees={this.state.rushees} closeAction={this.closeEditModal.bind(this)} />
           </div>
           <Chatbar />

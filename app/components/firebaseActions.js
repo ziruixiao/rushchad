@@ -27,6 +27,21 @@ export const verifyEmail = (email) => {
 }
 
 export const addNewComment = (rusheeId, dictionary) => { // what happens when a new comment is made
+  var childRef = rusheesRef.child(rusheeId);
+  childRef.once("value", function(snapshot) {
+    if (!snapshot.child("comments").exists()) { // just push a comment
+      console.log("there is no comments child");
+      childRef.child('comments').set([], function() {
+        var commentRef = childRef.child("comments");
+        var newCommentRef = commentRef.push();
+        newCommentRef.set(dictionary);
+      });
+    } else {
+      var commentRef = childRef.child("comments");
+      var newCommentRef = commentRef.push();
+      newCommentRef.set(dictionary);
+    }
+  });
   console.log(dictionary);
   console.log(rusheeId);
 }
