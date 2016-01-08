@@ -41372,6 +41372,15 @@
 	      chatRef.on('value', (function (dataSnapshot) {
 	        this.setState({
 	          messages: dataSnapshot.val()
+	        }, function () {
+
+	          var chatBox = document.getElementById('chatBox');
+	          if (chatBox) {
+	            if (chatBox.scrollHeight - chatBox.scrollTop < 800) {
+	              // scroll to bottom
+	              chatBox.scrollTop = chatBox.scrollHeight + 2000;
+	            }
+	          }
 	        });
 	      }).bind(this));
 	    }
