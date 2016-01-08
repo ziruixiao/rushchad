@@ -96,8 +96,17 @@ export const addOrUpdateCommentLike = (rusheeId, commentId, userId, value) => {
 }
 
 export const addOrUpdateRating = (rusheeId, userId, dictionary) => {
-  console.log(rusheeId);
-  console.log(userId);
-  console.log(dictionary);
+  var childRef = rusheesRef.child(rusheeId);
+  childRef.once("value", function(snapshot) {
+    if (!snapshot.child("ratings").exists()) { // no likes currently exist
+      childRef.child('ratings').set([], function() {
+        var likeRef = childRef.child("ratings");
+        likeRef.child(userId).set(dictionary);
+      });
+    } else {
+      var likeRef = childRef.child("ratings");
+      likeRef.child(userId).set(dictionary);
+    }
+  });
 }
 
