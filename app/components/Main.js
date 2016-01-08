@@ -155,7 +155,7 @@ class Main extends React.Component{
           </div>
           <br />
           <br />
-          <Chatbar />
+          <Chatbar users={this.state.users} loggedInUserId={this.state.loggedInUserId}/>
         </div>
       )
     }

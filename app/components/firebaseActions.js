@@ -8,6 +8,7 @@ import Firebase from 'firebase'
 
 var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees');
 var usersRef = new Firebase('https://rushchad.firebaseio.com/users');
+var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
 
 export const verifyEmail = (email) => {
   console.log("email to verify is ", email);
@@ -110,3 +111,7 @@ export const addOrUpdateRating = (rusheeId, userId, dictionary) => {
   });
 }
 
+export const addNewChatMessage = (dictionary) => {
+  var childRef = chatRef.push();
+  childRef.set(dictionary);
+}

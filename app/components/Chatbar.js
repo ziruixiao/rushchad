@@ -3,16 +3,33 @@
  */
 import React from 'react';
 import Rebase from 're-base';
-import {Col, Button, ButtonGroup} from 'react-bootstrap';
+import {Col, Navbar, Row, Nav, NavItem, NavDropdown, MenuItem, Panel} from 'react-bootstrap';
+import * as firebaseActions from './firebaseActions';
 
 class Chatbar extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+      messages: []
     };
   }
   init(){
+    var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
+    chatRef.on('value', function(dataSnapshot) {
+      this.setState({
+        messages: dataSnapshot.val()
+      });
+    }.bind(this));
+  }
+  handleNewMessage() {
+    var s_content = this.refs.newMessage.getValue();
 
+    var dictionary = {
+      content: s_content,
+      lastUpdated: Math.round(Number(Date.now())/1000),
+      userId: this.props.loggedInUserId
+    };
+    firebaseActions.addNewChatMessage(dictionary);
   }
   componentWillMount(){
     this.router = this.context.router;
@@ -26,13 +43,32 @@ class Chatbar extends React.Component{
     this.init();
   }
   render(){
+    var chatMessages;
+    if (Object.keys(this.state.messages).length > 0) {
+      chatMessages = Object.keys(this.state.messages).map((key) => {
+        var oneMessage = this.state.messages[key];
+        var messageOwner = this.props.users[oneMessage["userId"]];
+        var messageContent = oneMessage["content"];
+        return (
+          <div key={key}>
+            Hello
+          </div>
+        )
+      });
+    }
     return (
       <div>
-        <Col xsOffset={9} xs={3}>
-        <Button className="fixedBottomRight" bsStyle="primary">
-        Chat
-        </Button>
-          </Col>
+        <Navbar fixedBottom>
+            <Nav pullRight>
+              <NavDropdown title="Click for Live Chat" id="basic-nav-dropdown">
+                <MenuItem><div>
+
+                    {chatMessages}
+
+                </div></MenuItem>
+              </NavDropdown>
+            </Nav>
+        </Navbar>
       </div>
     )
   }

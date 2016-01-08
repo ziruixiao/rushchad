@@ -23162,7 +23162,7 @@
 	          ),
 	          _react2['default'].createElement('br', null),
 	          _react2['default'].createElement('br', null),
-	          _react2['default'].createElement(_Chatbar2['default'], null)
+	          _react2['default'].createElement(_Chatbar2['default'], { users: this.state.users, loggedInUserId: this.state.loggedInUserId })
 	        );
 	      }
 	    }
@@ -41004,6 +41004,7 @@
 
 	var rusheesRef = new _firebase2['default']('https://rushchad.firebaseio.com/rushees');
 	var usersRef = new _firebase2['default']('https://rushchad.firebaseio.com/users');
+	var chatRef = new _firebase2['default']('https://rushchad.firebaseio.com/chat');
 
 	var verifyEmail = function verifyEmail(email) {
 	  console.log("email to verify is ", email);
@@ -41112,7 +41113,13 @@
 	    }
 	  });
 	};
+
 	exports.addOrUpdateRating = addOrUpdateRating;
+	var addNewChatMessage = function addNewChatMessage(dictionary) {
+	  var childRef = chatRef.push();
+	  childRef.set(dictionary);
+	};
+	exports.addNewChatMessage = addNewChatMessage;
 
 /***/ },
 /* 452 */
@@ -41319,6 +41326,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -41335,6 +41344,10 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
+	var _firebaseActions = __webpack_require__(451);
+
+	var firebaseActions = _interopRequireWildcard(_firebaseActions);
+
 	var Chatbar = (function (_React$Component) {
 	  _inherits(Chatbar, _React$Component);
 
@@ -41342,12 +41355,33 @@
 	    _classCallCheck(this, Chatbar);
 
 	    _get(Object.getPrototypeOf(Chatbar.prototype), 'constructor', this).call(this, props);
-	    this.state = {};
+	    this.state = {
+	      messages: []
+	    };
 	  }
 
 	  _createClass(Chatbar, [{
 	    key: 'init',
-	    value: function init() {}
+	    value: function init() {
+	      var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
+	      chatRef.on('value', (function (dataSnapshot) {
+	        this.setState({
+	          messages: dataSnapshot.val()
+	        });
+	      }).bind(this));
+	    }
+	  }, {
+	    key: 'handleNewMessage',
+	    value: function handleNewMessage() {
+	      var s_content = this.refs.newMessage.getValue();
+
+	      var dictionary = {
+	        content: s_content,
+	        lastUpdated: Math.round(Number(Date.now()) / 1000),
+	        userId: this.props.loggedInUserId
+	      };
+	      firebaseActions.addNewChatMessage(dictionary);
+	    }
 	  }, {
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
@@ -41369,16 +41403,43 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
+	      var chatMessages;
+	      if (Object.keys(this.state.messages).length > 0) {
+	        chatMessages = Object.keys(this.state.messages).map(function (key) {
+	          var oneMessage = _this.state.messages[key];
+	          var messageOwner = _this.props.users[oneMessage["userId"]];
+	          var messageContent = oneMessage["content"];
+	          return _react2['default'].createElement(
+	            'div',
+	            { key: key },
+	            'Hello'
+	          );
+	        });
+	      }
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
 	        _react2['default'].createElement(
-	          _reactBootstrap.Col,
-	          { xsOffset: 9, xs: 3 },
+	          _reactBootstrap.Navbar,
+	          { fixedBottom: true },
 	          _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { className: 'fixedBottomRight', bsStyle: 'primary' },
-	            'Chat'
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2['default'].createElement(
+	              _reactBootstrap.NavDropdown,
+	              { title: 'Click for Live Chat', id: 'basic-nav-dropdown' },
+	              _react2['default'].createElement(
+	                _reactBootstrap.MenuItem,
+	                null,
+	                _react2['default'].createElement(
+	                  'div',
+	                  null,
+	                  chatMessages
+	                )
+	              )
+	            )
 	          )
 	        )
 	      );
