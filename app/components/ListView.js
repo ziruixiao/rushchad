@@ -18,7 +18,7 @@ class ListView extends React.Component{
     var rusheeList = Object.keys(this.props.rushees).map((key) => {
       var rushee = this.props.rushees[key];
       var lastUpdated = new Date(Number(rushee["lastUpdated"])*1000);
-      var numComments= (rushee["comments"]) ? rushee["comments"].length : 0;
+      var numComments= (rushee["comments"]) ? Object.keys(rushee["comments"]).length : 0;
       var numRatings = (rushee["ratings"]) ? Object.keys(rushee["ratings"]).length : 0;
 
       var stars = 0.1;
@@ -59,6 +59,7 @@ class ListView extends React.Component{
         {rusheeList}
         </tbody>
       </Table>
+
     )
   }
 };

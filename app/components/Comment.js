@@ -34,9 +34,6 @@ class Comment extends React.Component{
       disliked: true
     });
     firebaseActions.addOrUpdateCommentLike(this.props.rusheeId, this.props.commentId, this.props.loggedInUserId, 0);
-
-    console.log('dislike');
-    // TODO: Firebase!
   }
   render(){
     var commentRow;

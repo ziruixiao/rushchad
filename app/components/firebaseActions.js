@@ -81,10 +81,6 @@ export const addNewComment = (rusheeId, dictionary) => { // what happens when a 
 }
 
 export const addOrUpdateCommentLike = (rusheeId, commentId, userId, value) => {
-  console.log(rusheeId);
-  console.log(commentId);
-  console.log(userId);
-  console.log(value);
   var childRef = rusheesRef.child(rusheeId).child("comments").child(commentId);
   childRef.once("value", function(snapshot) {
     if (!snapshot.child("likes").exists()) { // no likes currently exist
@@ -99,7 +95,9 @@ export const addOrUpdateCommentLike = (rusheeId, commentId, userId, value) => {
   });
 }
 
-export const addOrUpdateRating = () => {
-
+export const addOrUpdateRating = (rusheeId, userId, dictionary) => {
+  console.log(rusheeId);
+  console.log(userId);
+  console.log(dictionary);
 }
 

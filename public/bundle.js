@@ -23160,6 +23160,8 @@
 	            _react2['default'].createElement(_reactRouter.RouteHandler, this.state),
 	            _react2['default'].createElement(_EditModalView2['default'], { loggedInUserId: this.state.loggedInUserId, showEditModal: this.state.showEditModal, activeEditRusheeId: this.state.activeEditRusheeId, rushees: this.state.rushees, closeAction: this.closeEditModal.bind(this) })
 	          ),
+	          _react2['default'].createElement('br', null),
+	          _react2['default'].createElement('br', null),
 	          _react2['default'].createElement(_Chatbar2['default'], null)
 	        );
 	      }
@@ -41079,10 +41081,6 @@
 
 	exports.addNewComment = addNewComment;
 	var addOrUpdateCommentLike = function addOrUpdateCommentLike(rusheeId, commentId, userId, value) {
-	  console.log(rusheeId);
-	  console.log(commentId);
-	  console.log(userId);
-	  console.log(value);
 	  var childRef = rusheesRef.child(rusheeId).child("comments").child(commentId);
 	  childRef.once("value", function (snapshot) {
 	    if (!snapshot.child("likes").exists()) {
@@ -41099,7 +41097,11 @@
 	};
 
 	exports.addOrUpdateCommentLike = addOrUpdateCommentLike;
-	var addOrUpdateRating = function addOrUpdateRating() {};
+	var addOrUpdateRating = function addOrUpdateRating(rusheeId, userId, dictionary) {
+	  console.log(rusheeId);
+	  console.log(userId);
+	  console.log(dictionary);
+	};
 	exports.addOrUpdateRating = addOrUpdateRating;
 
 /***/ },
@@ -41730,7 +41732,7 @@
 	      var rusheeList = Object.keys(this.props.rushees).map(function (key) {
 	        var rushee = _this.props.rushees[key];
 	        var lastUpdated = new Date(Number(rushee["lastUpdated"]) * 1000);
-	        var numComments = rushee["comments"] ? rushee["comments"].length : 0;
+	        var numComments = rushee["comments"] ? Object.keys(rushee["comments"]).length : 0;
 	        var numRatings = rushee["ratings"] ? Object.keys(rushee["ratings"]).length : 0;
 
 	        var stars = 0.1;
@@ -41992,6 +41994,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -42016,6 +42020,10 @@
 
 	var _CommentList2 = _interopRequireDefault(_CommentList);
 
+	var _firebaseActions = __webpack_require__(451);
+
+	var firebaseActions = _interopRequireWildcard(_firebaseActions);
+
 	var DetailView = (function (_React$Component) {
 	  _inherits(DetailView, _React$Component);
 
@@ -42034,6 +42042,15 @@
 	    key: 'editButton',
 	    value: function editButton(editActiveRusheeId) {
 	      this.props.openEditModal(editActiveRusheeId);
+	    }
+	  }, {
+	    key: 'handleVote',
+	    value: function handleVote(e, vals) {
+	      var dictionary = {
+	        "value": vals["rating"],
+	        "lastUpdated": Math.round(Number(Date.now()) / 1000)
+	      };
+	      firebaseActions.addOrUpdateRating(this.router.getCurrentParams().rusheeId, this.props.loggedInUserId, dictionary);
 	    }
 	  }, {
 	    key: 'render',
@@ -42197,7 +42214,7 @@
 	                'td',
 	                { className: 'vert-align' },
 	                'Your Vote',
-	                _react2['default'].createElement(_reactStarRating2['default'], { name: 'userRusheeRating', size: 25, rating: userStars, totalStars: 5 }),
+	                _react2['default'].createElement(_reactStarRating2['default'], { name: 'userRusheeRating', size: 25, onRatingClick: this.handleVote.bind(this), rating: userStars, totalStars: 5 }),
 	                _react2['default'].createElement(
 	                  _reactBootstrap.Badge,
 	                  null,
@@ -42282,7 +42299,8 @@
 
 	    _get(Object.getPrototypeOf(CommentList.prototype), 'constructor', this).call(this, props);
 	    this.state = {
-	      errorShowing: false
+	      errorShowing: false,
+	      timestamp: Number(Date.now())
 	    };
 	  }
 
@@ -42311,6 +42329,9 @@
 	          "lastUpdated": Math.round(Number(Date.now()) / 1000)
 	        };
 	        firebaseActions.addNewComment(this.props.rusheeId, dictionary);
+	        this.setState({
+	          timestamp: Number(Date.now())
+	        });
 	      }
 	    }
 	  }, {
@@ -42368,7 +42389,7 @@
 	                _react2['default'].createElement(
 	                  _reactBootstrap.Col,
 	                  { xs: 10 },
-	                  _react2['default'].createElement(_reactBootstrap.Input, { type: 'textarea', ref: 'newComment', label: 'Add New Comment', placeholder: 'Type text here' })
+	                  _react2['default'].createElement(_reactBootstrap.Input, { key: this.state.timestamp, type: 'textarea', ref: 'newComment', label: 'Add New Comment', placeholder: 'Type text here' })
 	                ),
 	                _react2['default'].createElement(
 	                  _reactBootstrap.Col,
@@ -42390,11 +42411,13 @@
 	;
 
 	CommentList.propTypes = {
-	  errorShowing: _react2['default'].PropTypes.bool
+	  errorShowing: _react2['default'].PropTypes.bool,
+	  timestamp: _react2['default'].PropTypes.number
 	};
 
 	CommentList.defaultProps = {
-	  errorShowing: false
+	  errorShowing: false,
+	  timestamp: Number(Date.now())
 	};
 
 	exports['default'] = CommentList;
@@ -42469,9 +42492,6 @@
 	        disliked: true
 	      });
 	      firebaseActions.addOrUpdateCommentLike(this.props.rusheeId, this.props.commentId, this.props.loggedInUserId, 0);
-
-	      console.log('dislike');
-	      // TODO: Firebase!
 	    }
 	  }, {
 	    key: 'render',

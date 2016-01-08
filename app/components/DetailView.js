@@ -16,6 +16,7 @@ import {
 import TimeAgo from 'react-timeago';
 import StarRating from 'react-star-rating';
 import CommentList from './CommentList';
+import * as firebaseActions from './firebaseActions';
 
 class DetailView extends React.Component{
   componentWillMount(){
@@ -24,7 +25,13 @@ class DetailView extends React.Component{
   editButton(editActiveRusheeId) {
     this.props.openEditModal(editActiveRusheeId);
   }
-
+  handleVote(e,vals) {
+    var dictionary = {
+      "value": vals["rating"],
+      "lastUpdated":  Math.round(Number(Date.now())/1000)
+    };
+    firebaseActions.addOrUpdateRating(this.router.getCurrentParams().rusheeId, this.props.loggedInUserId, dictionary);
+  }
   render(){
     var rusheeId = this.router.getCurrentParams().rusheeId;
     var rushee = this.props.rushees[rusheeId];
@@ -109,7 +116,7 @@ class DetailView extends React.Component{
             </td>
             <td className="vert-align">
               Your Vote
-              <StarRating name="userRusheeRating" size={25} rating={userStars} totalStars={5} />
+              <StarRating name="userRusheeRating" size={25} onRatingClick={this.handleVote.bind(this)} rating={userStars} totalStars={5} />
               <Badge>{userRating}</Badge>
             </td>
           </tr>

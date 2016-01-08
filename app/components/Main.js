@@ -153,6 +153,8 @@ class Main extends React.Component{
             <RouteHandler {...this.state} />
             <EditModalView loggedInUserId={this.state.loggedInUserId} showEditModal={this.state.showEditModal} activeEditRusheeId={this.state.activeEditRusheeId} rushees={this.state.rushees} closeAction={this.closeEditModal.bind(this)} />
           </div>
+          <br />
+          <br />
           <Chatbar />
         </div>
       )

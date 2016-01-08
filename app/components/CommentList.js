@@ -19,7 +19,8 @@ class CommentList extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      errorShowing: false
+      errorShowing: false,
+      timestamp: Number(Date.now())
     };
   }
   handleAlertDismiss() {
@@ -40,6 +41,9 @@ class CommentList extends React.Component{
         "lastUpdated":  Math.round(Number(Date.now())/1000)
       };
       firebaseActions.addNewComment(this.props.rusheeId, dictionary);
+      this.setState({
+        timestamp: Number(Date.now())
+      });
     }
   }
   handleLike() {
@@ -71,7 +75,7 @@ class CommentList extends React.Component{
         <form onSubmit={this.handleSubmit.bind(this)}>
           <Row className="align-vertical">
             <Col xs={10}>
-              <Input type="textarea" ref="newComment" label="Add New Comment" placeholder="Type text here" />
+              <Input key={this.state.timestamp} type="textarea" ref="newComment" label="Add New Comment" placeholder="Type text here" />
             </Col>
             <Col xs={2} >
               <ButtonInput type="submit" value="Post" />
@@ -88,11 +92,13 @@ class CommentList extends React.Component{
 };
 
 CommentList.propTypes = {
-  errorShowing: React.PropTypes.bool
+  errorShowing: React.PropTypes.bool,
+  timestamp: React.PropTypes.number
 };
 
 CommentList.defaultProps = {
-  errorShowing: false
+  errorShowing: false,
+  timestamp: Number(Date.now())
 };
 
 export default CommentList;
