@@ -38,8 +38,11 @@ export const addOrUpdateCommentLike = () => {
 
 }
 
-export const updateUserLastActive = () => { // sets last active time as now for the user
-
+export const updateUserLastActive = (loggedInUserId) => { // sets last active time as now for the user
+  var childRef = usersRef.child(loggedInUserId);
+  childRef.update({
+    lastActive: Math.round(Number(Date.now())/1000)
+  });
 }
 
 export const addOrUpdateRushee = (editRusheeId, dictionary, loggedInUserId) => { //

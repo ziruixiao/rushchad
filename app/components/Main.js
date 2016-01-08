@@ -6,6 +6,10 @@ import Rebase from 're-base';
 import * as firebaseActions from './firebaseActions';
 import EditModalView from './EditModalView';
 import Chatbar from './Chatbar';
+import events from 'events';
+
+var eventEmitter = new events.EventEmitter();
+
 
 class Main extends React.Component{
   constructor(props){
@@ -21,42 +25,43 @@ class Main extends React.Component{
       activeEditRusheeId:  "-1"
     };
   }
+  unauthorize() {
+    console.log("unauth");
+    this.ref.unauth();
+    this.setState({
+      loggedIn: false,
+      googleUser: {},
+      email: '',
+      users: [],
+      rushees: {},
+      loggedInUserId: -1,
+      showEditModal: false,
+      activeEditRusheeId:  "-1",
+      openEditModal: () => {
+
+      },
+      closeEditModal: () => {
+
+      }
+    });
+    document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
+
+  }
   authDataCallback(authData) {
     if (authData) {
-      if (authData["google"]["email"] != "ziruixiao@gmail.com") {
-        console.log("unauth");
-        this.ref.unauth();
+
+      eventEmitter.on('goodLogin', function() {
+        console.log('event called');
         this.setState({
-          loggedIn: false,
-          googleUser: {},
-          email: '',
-          users: [],
-          rushees: {},
-          loggedInUserId: -1,
-          showEditModal: false,
-          activeEditRusheeId:  "-1",
-          openEditModal: () => {
-
-          },
-          closeEditModal: () => {
-
-          }
-        });
-        document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
-
-      } else { // successful login*/
-        this.setupFirebaseConnections();
-        this.setState({
-          loggedIn: true,
           googleUser: authData["google"],
           email: authData["google"]["email"],
-          loggedInUserId: 1,
           openEditModal: this.openEditModal.bind(this),
           closeEditModal: this.closeEditModal.bind(this),
           activeEditRusheeId:  "-1"
         });
-
-      }
+      }.bind(this));
+      eventEmitter.on('badLogin', this.unauthorize.bind(this));
+      this.setupFirebaseConnections(authData["google"]["email"]);
     } else {
       this.setState({
         loggedIn: false,
@@ -76,19 +81,36 @@ class Main extends React.Component{
       });
     }
   }
-  setupFirebaseConnections() {
+  setupFirebaseConnections(userEmail) {
     var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
     usersRef.once('value', function(dataSnapshot) {
-      this.setState({
-        users: dataSnapshot.val()
-      });
-    }.bind(this));
+      var totalCount = Object.keys(dataSnapshot.val()).length;
+      var loginSuccessful = false;
+      dataSnapshot.val().some(function (val, index) {
+        if (val["email"] == userEmail) {
+          // login successful and validated
+          this.setState({
+            loggedIn: true,
+            users: dataSnapshot.val()
 
-    var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
-    rusheesRef.once('value', function(dataSnapshot) {
-      this.setState({
-        rushees: dataSnapshot.val()
-      });
+          }, function() {
+            var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
+            rusheesRef.once('value', function(dataSnapshot) {
+              this.setState({
+                rushees: dataSnapshot.val()
+              });
+            }.bind(this));
+            firebaseActions.updateUserLastActive(index);
+          });
+          loginSuccessful = true;
+          eventEmitter.emit('goodLogin');
+          return;
+        }
+        totalCount--;
+        if (totalCount==0 && !loginSuccessful) {
+          eventEmitter.emit('badLogin');
+        }
+      }.bind(this));
     }.bind(this));
   }
   init(){
