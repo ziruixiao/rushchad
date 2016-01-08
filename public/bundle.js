@@ -41540,7 +41540,7 @@
 	                  null,
 	                  _react2['default'].createElement(
 	                    _reactBootstrap.Col,
-	                    { xs: 4, sm: 4, md: 4 },
+	                    { xs: 5, sm: 5, md: 5 },
 	                    _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'comment' }),
 	                    ' ',
 	                    _react2['default'].createElement(
@@ -41551,12 +41551,8 @@
 	                  ),
 	                  _react2['default'].createElement(
 	                    _reactBootstrap.Col,
-	                    { xs: 5, sm: 5, md: 5 },
-	                    _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 17, disabled: true, rating: stars, totalStars: 5 })
-	                  ),
-	                  _react2['default'].createElement(
-	                    _reactBootstrap.Col,
-	                    { xs: 2, sm: 2, md: 2 },
+	                    { xs: 7, sm: 7, md: 7 },
+	                    _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 15, disabled: true, rating: stars, totalStars: 5 }),
 	                    _react2['default'].createElement(
 	                      _reactBootstrap.Badge,
 	                      null,
@@ -42203,7 +42199,9 @@
 	                'td',
 	                { className: 'vert-align' },
 	                'Fraternity Vote',
+	                _react2['default'].createElement('br', null),
 	                _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 25, disabled: true, rating: stars, totalStars: 5 }),
+	                _react2['default'].createElement('br', null),
 	                _react2['default'].createElement(
 	                  _reactBootstrap.Badge,
 	                  null,
@@ -42213,12 +42211,18 @@
 	              _react2['default'].createElement(
 	                'td',
 	                { className: 'vert-align' },
-	                'Your Vote',
-	                _react2['default'].createElement(_reactStarRating2['default'], { name: 'userRusheeRating', size: 25, onRatingClick: this.handleVote.bind(this), rating: userStars, totalStars: 5 }),
 	                _react2['default'].createElement(
-	                  _reactBootstrap.Badge,
-	                  null,
-	                  userRating
+	                  _reactBootstrap.Col,
+	                  { xs: 12 },
+	                  'Your Vote',
+	                  _react2['default'].createElement('br', null),
+	                  _react2['default'].createElement(_reactStarRating2['default'], { name: 'userRusheeRating', size: 25, onRatingClick: this.handleVote.bind(this), rating: userStars, totalStars: 5 }),
+	                  _react2['default'].createElement('br', null),
+	                  _react2['default'].createElement(
+	                    _reactBootstrap.Badge,
+	                    null,
+	                    userRating
+	                  )
 	                )
 	              )
 	            )

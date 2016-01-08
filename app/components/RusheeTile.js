@@ -43,16 +43,13 @@ class RusheeTile extends React.Component{
             } footer={
               <div>
               <Row>
-                <Col xs={4} sm={4} md={4}>
+                <Col xs={5} sm={5} md={5}>
                   <Glyphicon glyph='comment' />
                   {' '}
                   <Badge>{numComments}</Badge>
                 </Col>
-                <Col xs={5} sm={5} md={5}>
-                  <StarRating name="rusheeRating" size={17} disabled rating={stars} totalStars={5} />
-
-                </Col>
-                <Col xs={2} sm={2} md={2}>
+                <Col xs={7} sm={7} md={7}>
+                  <StarRating name="rusheeRating" size={15} disabled rating={stars} totalStars={5} />
                   <Badge>{numRatings}</Badge>
                 </Col>
               </Row>

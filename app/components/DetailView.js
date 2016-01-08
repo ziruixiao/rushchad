@@ -109,15 +109,19 @@ class DetailView extends React.Component{
         <Table striped bordered condensed hover>
           <tbody>
           <tr>
+
             <td className="vert-align">
-              Fraternity Vote
+              Fraternity Vote<br />
               <StarRating name="rusheeRating" size={25} disabled rating={stars} totalStars={5} />
+              <br />
               <Badge>{numRatings + ' votes'}</Badge>
             </td>
             <td className="vert-align">
-              Your Vote
+              <Col xs={12}>
+              Your Vote<br />
               <StarRating name="userRusheeRating" size={25} onRatingClick={this.handleVote.bind(this)} rating={userStars} totalStars={5} />
-              <Badge>{userRating}</Badge>
+              <br /><Badge>{userRating}</Badge>
+                </Col>
             </td>
           </tr>
           </tbody>
