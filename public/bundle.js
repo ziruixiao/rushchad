@@ -23059,14 +23059,14 @@
 	    key: 'setupFirebaseConnections',
 	    value: function setupFirebaseConnections() {
 	      var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
-	      usersRef.once('value', (function (dataSnapshot) {
+	      usersRef.on('value', (function (dataSnapshot) {
 	        this.setState({
 	          users: dataSnapshot.val()
 	        });
 	      }).bind(this));
 
 	      var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
-	      rusheesRef.once('value', (function (dataSnapshot) {
+	      rusheesRef.on('value', (function (dataSnapshot) {
 	        this.setState({
 	          rushees: dataSnapshot.val()
 	        });
@@ -41501,7 +41501,7 @@
 	    value: function render() {
 	      var _this = this;
 
-	      var numComments = this.props.rushee["comments"] ? this.props.rushee["comments"].length : 0;
+	      var numComments = this.props.rushee["comments"] ? Object.keys(this.props.rushee["comments"]).length : 0;
 	      var numRatings = this.props.rushee["ratings"] ? Object.keys(this.props.rushee["ratings"]).length : 0;
 	      var blankAvatar = "http://jagc.org/images/avatar.png";
 	      var thumbPhotoUrl = blankAvatar;

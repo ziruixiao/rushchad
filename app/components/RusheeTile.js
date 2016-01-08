@@ -18,7 +18,7 @@ class RusheeTile extends React.Component{
     router.transitionTo('detail', {rusheeId: this.props.rusheeId});
   }
   render(){
-    var numComments = (this.props.rushee["comments"]) ? this.props.rushee["comments"].length : 0;
+    var numComments = (this.props.rushee["comments"]) ? Object.keys(this.props.rushee["comments"]).length : 0;
     var numRatings = (this.props.rushee["ratings"]) ? Object.keys(this.props.rushee["ratings"]).length : 0;
     var blankAvatar = "http://jagc.org/images/avatar.png";
     var thumbPhotoUrl = blankAvatar;
