@@ -51,7 +51,6 @@ class Main extends React.Component{
     if (authData) {
 
       eventEmitter.on('goodLogin', function() {
-        console.log('event called');
         this.setState({
           googleUser: authData["google"],
           email: authData["google"]["email"],
@@ -170,7 +169,7 @@ class Main extends React.Component{
           <Header googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this,-1)} />
 
           <div className="container">
-            <RouteHandler {...this.state} />
+            <RouteHandler {...this.state} openEditModal={this.openEditModal.bind(this)} />
             <EditModalView loggedInUserId={this.state.loggedInUserId} showEditModal={this.state.showEditModal} activeEditRusheeId={this.state.activeEditRusheeId} rushees={this.state.rushees} closeAction={this.closeEditModal.bind(this)} />
           </div>
           <Chatbar />

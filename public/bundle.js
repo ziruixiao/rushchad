@@ -23036,7 +23036,6 @@
 	      if (authData) {
 
 	        eventEmitter.on('goodLogin', (function () {
-	          console.log('event called');
 	          this.setState({
 	            googleUser: authData["google"],
 	            email: authData["google"]["email"],
@@ -23068,7 +23067,6 @@
 	      var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
 	      usersRef.once('value', (function (dataSnapshot) {
 	        var totalCount = Object.keys(dataSnapshot.val()).length;
-	        console.log(dataSnapshot.val());
 	        var loginSuccessful = false;
 	        dataSnapshot.val().some((function (val, index) {
 	          if (val["email"] == userEmail) {
@@ -23091,7 +23089,6 @@
 	            return;
 	          }
 	          totalCount--;
-	          console.log(totalCount);
 	          if (totalCount == 0 && !loginSuccessful) {
 	            eventEmitter.emit('badLogin');
 	          }
@@ -41043,8 +41040,10 @@
 	};
 
 	exports.verifyEmail = verifyEmail;
-	var addNewComment = function addNewComment() {// what happens when a new comment is made
-
+	var addNewComment = function addNewComment(rusheeId, dictionary) {
+	  // what happens when a new comment is made
+	  console.log(dictionary);
+	  console.log(rusheeId);
 	};
 
 	exports.addNewComment = addNewComment;
@@ -42333,6 +42332,16 @@
 	      this.props.openEditModal(editActiveRusheeId);
 	    }
 	  }, {
+	    key: 'openEditModal',
+	    value: function openEditModal() {
+	      this.props.openEditModal();
+	    }
+	  }, {
+	    key: 'closeEditModal',
+	    value: function closeEditModal() {
+	      this.props.closeEditModal();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this = this;
@@ -42545,6 +42554,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -42564,6 +42575,10 @@
 	var _Comment = __webpack_require__(463);
 
 	var _Comment2 = _interopRequireDefault(_Comment);
+
+	var _firebaseActions = __webpack_require__(451);
+
+	var firebaseActions = _interopRequireWildcard(_firebaseActions);
 
 	var CommentList = (function (_React$Component) {
 	  _inherits(CommentList, _React$Component);
@@ -42595,9 +42610,13 @@
 	        this.handleAlertShow();
 	      } else {
 	        // continue with form
-	        // TODO: Firebase!!
-	        console.log(s_comment);
 	        this.handleAlertDismiss();
+	        var dictionary = {
+	          "content": s_comment,
+	          "userId": this.props.loggedInUserId,
+	          "lastUpdated": Math.round(Number(Date.now()) / 1000)
+	        };
+	        firebaseActions.addNewComment(this.props.rusheeId, dictionary);
 	      }
 	    }
 	  }, {

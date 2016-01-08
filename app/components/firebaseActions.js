@@ -26,8 +26,9 @@ export const verifyEmail = (email) => {
 
 }
 
-export const addNewComment = () => { // what happens when a new comment is made
-
+export const addNewComment = (rusheeId, dictionary) => { // what happens when a new comment is made
+  console.log(dictionary);
+  console.log(rusheeId);
 }
 
 export const addOrUpdateRating = () => {

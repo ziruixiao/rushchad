@@ -13,6 +13,7 @@ ButtonInput
 
 import TimeAgo from 'react-timeago';
 import Comment from './Comment';
+import * as firebaseActions from './firebaseActions';
 
 class CommentList extends React.Component{
   constructor(props){
@@ -32,9 +33,13 @@ class CommentList extends React.Component{
     if (s_comment.length < 1) {
       this.handleAlertShow();
     } else { // continue with form
-      // TODO: Firebase!!
-      console.log(s_comment);
       this.handleAlertDismiss();
+      var dictionary = {
+        "content": s_comment,
+        "userId": this.props.loggedInUserId,
+        "lastUpdated":  Math.round(Number(Date.now())/1000)
+      };
+      firebaseActions.addNewComment(this.props.rusheeId, dictionary);
     }
   }
   handleLike() {
