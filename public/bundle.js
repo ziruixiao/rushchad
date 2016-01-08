@@ -41178,6 +41178,7 @@
 	  }, {
 	    key: 'handleSubmit',
 	    value: function handleSubmit(e) {
+	      e.preventDefault();
 	      var s_firstName = this.refs.firstName.getValue();
 	      var s_lastName = this.refs.lastName.getValue();
 	      if (s_firstName.length < 1 || s_lastName.length < 1) {

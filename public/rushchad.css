@@ -1,7 +1,6 @@
 .fixedBottomRight {
     position: fixed;
     bottom: 0px;
-    right: 0px;
     min-width: 320px;
     max-width: 100%;
 

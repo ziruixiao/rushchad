@@ -30,6 +30,7 @@ class CommentList extends React.Component{
     this.setState({errorShowing: true});
   }
   handleSubmit(e) {
+    e.preventDefault();
     var s_comment = this.refs.newComment.getValue();
     if (s_comment.length < 1) {
       this.handleAlertShow();
