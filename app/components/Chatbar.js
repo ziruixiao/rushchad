@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import Rebase from 're-base';
-import {Col, ButtonToolbar, Navbar, Row, Popover, Nav, Button, OverlayTrigger, NavItem, NavDropdown, MenuItem, Well, Panel} from 'react-bootstrap';
+import {Col, ButtonToolbar, Glyphicon, ButtonInput, Input, Navbar, Row, Popover, Nav, Button, OverlayTrigger, NavItem, NavDropdown, MenuItem, Well, Panel} from 'react-bootstrap';
 import * as firebaseActions from './firebaseActions';
 import TimeAgo from 'react-timeago';
 
@@ -11,7 +11,8 @@ class Chatbar extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      messages: []
+      messages: [],
+      timestamp: Number(Date.now())
     };
   }
   init(){
@@ -20,17 +21,29 @@ class Chatbar extends React.Component{
       this.setState({
         messages: dataSnapshot.val()
       });
+
     }.bind(this));
   }
   handleNewMessage() {
-    var s_content = this.refs.newMessage.getValue();
 
-    var dictionary = {
-      content: s_content,
-      lastUpdated: Math.round(Number(Date.now())/1000),
-      userId: this.props.loggedInUserId
-    };
-    firebaseActions.addNewChatMessage(dictionary);
+    var s_content = this.refs.newMessage.getValue();
+    if (s_content.length > 0) {
+      var dictionary = {
+        content: s_content,
+        lastUpdated: Math.round(Number(Date.now()) / 1000),
+        userId: this.props.loggedInUserId
+      };
+      firebaseActions.addNewChatMessage(dictionary, function() {
+        var chatBox = document.getElementById('chatBox');
+        chatBox.scrollTop = chatBox.scrollHeight + 2000;
+      });
+      this.setState({
+        timestamp: Number(Date.now())
+      });
+
+
+
+    }
   }
   componentWillMount(){
     this.router = this.context.router;
@@ -45,14 +58,31 @@ class Chatbar extends React.Component{
   }
   render(){
     var chatMessages;
+    var chatInput = (
+        <div className="top-bottom-space">
+        <form onSubmit={this.handleNewMessage.bind(this)}>
+          <Col xs={10}>
+          <Input key={this.state.timestamp} type="text" ref="newMessage" placeholder="Type new message"/>
+            </Col>
+          <Col xs={2}>
+            <Button bsSize="small" type="submit" bsStyle="primary"><Glyphicon glyph="chevron-right"/></Button>
+          </Col>
+        </form>
+          </div>
+    );
+
     if (Object.keys(this.state.messages).length > 0) {
       chatMessages = Object.keys(this.state.messages).map((key) => {
         var oneMessage = this.state.messages[key];
         var messageOwner = this.props.users[oneMessage["userId"]]["name"];
         var messageContent = oneMessage["content"];
         var messageTime = new Date(Number(oneMessage["lastUpdated"])*1000);
+        var extraColoring = '';
+        if (oneMessage["userId"] == this.props.loggedInUserId) {
+          extraColoring = 'bg-warning';
+        }
         return (
-          <div key={key} className="top-bottom-space chat-scroll">
+          <div key={key} className={'top-bottom-space ' + extraColoring}>
             <Row>
             <Col className="align-left" xs={6}>
               <strong>{messageOwner}</strong>
@@ -73,9 +103,12 @@ class Chatbar extends React.Component{
     return (
       <ButtonToolbar className="fixedBottomRight">
 
-        <OverlayTrigger trigger="click" placement="top" overlay={<Popover className="chat-bar-button" title="9 users online">
-{chatMessages}
-</Popover>}>
+        <OverlayTrigger trigger="click" placement="top" overlay={<Popover id="chatPopOver"  className="chat-bar-button" title="9 users online">
+          <div id="chatBox" className="chat-scroll">
+            {chatMessages}
+           </div>
+           {chatInput}
+           </Popover>}>
           <Button className="chat-bar-button" bsStyle="primary">Live Chat</Button>
         </OverlayTrigger>
 
@@ -86,6 +119,14 @@ class Chatbar extends React.Component{
 
 Chatbar.contextTypes = {
   router: React.PropTypes.func.isRequired
+};
+
+Chatbar.propTypes = {
+  timestamp: React.PropTypes.number
+};
+
+Chatbar.defaultProps = {
+  timestamp: Number(Date.now())
 };
 
 export default Chatbar;

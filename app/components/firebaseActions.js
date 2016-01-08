@@ -111,7 +111,7 @@ export const addOrUpdateRating = (rusheeId, userId, dictionary) => {
   });
 }
 
-export const addNewChatMessage = (dictionary) => {
+export const addNewChatMessage = (dictionary, callback) => {
   var childRef = chatRef.push();
-  childRef.set(dictionary);
+  childRef.set(dictionary, callback);
 }

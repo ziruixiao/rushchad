@@ -41115,9 +41115,9 @@
 	};
 
 	exports.addOrUpdateRating = addOrUpdateRating;
-	var addNewChatMessage = function addNewChatMessage(dictionary) {
+	var addNewChatMessage = function addNewChatMessage(dictionary, callback) {
 	  var childRef = chatRef.push();
-	  childRef.set(dictionary);
+	  childRef.set(dictionary, callback);
 	};
 	exports.addNewChatMessage = addNewChatMessage;
 
@@ -41360,7 +41360,8 @@
 
 	    _get(Object.getPrototypeOf(Chatbar.prototype), 'constructor', this).call(this, props);
 	    this.state = {
-	      messages: []
+	      messages: [],
+	      timestamp: Number(Date.now())
 	    };
 	  }
 
@@ -41377,14 +41378,22 @@
 	  }, {
 	    key: 'handleNewMessage',
 	    value: function handleNewMessage() {
-	      var s_content = this.refs.newMessage.getValue();
 
-	      var dictionary = {
-	        content: s_content,
-	        lastUpdated: Math.round(Number(Date.now()) / 1000),
-	        userId: this.props.loggedInUserId
-	      };
-	      firebaseActions.addNewChatMessage(dictionary);
+	      var s_content = this.refs.newMessage.getValue();
+	      if (s_content.length > 0) {
+	        var dictionary = {
+	          content: s_content,
+	          lastUpdated: Math.round(Number(Date.now()) / 1000),
+	          userId: this.props.loggedInUserId
+	        };
+	        firebaseActions.addNewChatMessage(dictionary, function () {
+	          var chatBox = document.getElementById('chatBox');
+	          chatBox.scrollTop = chatBox.scrollHeight + 2000;
+	        });
+	        this.setState({
+	          timestamp: Number(Date.now())
+	        });
+	      }
 	    }
 	  }, {
 	    key: 'componentWillMount',
@@ -41410,15 +41419,42 @@
 	      var _this = this;
 
 	      var chatMessages;
+	      var chatInput = _react2['default'].createElement(
+	        'div',
+	        { className: 'top-bottom-space' },
+	        _react2['default'].createElement(
+	          'form',
+	          { onSubmit: this.handleNewMessage.bind(this) },
+	          _react2['default'].createElement(
+	            _reactBootstrap.Col,
+	            { xs: 10 },
+	            _react2['default'].createElement(_reactBootstrap.Input, { key: this.state.timestamp, type: 'text', ref: 'newMessage', placeholder: 'Type new message' })
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Col,
+	            { xs: 2 },
+	            _react2['default'].createElement(
+	              _reactBootstrap.Button,
+	              { bsSize: 'small', type: 'submit', bsStyle: 'primary' },
+	              _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'chevron-right' })
+	            )
+	          )
+	        )
+	      );
+
 	      if (Object.keys(this.state.messages).length > 0) {
 	        chatMessages = Object.keys(this.state.messages).map(function (key) {
 	          var oneMessage = _this.state.messages[key];
 	          var messageOwner = _this.props.users[oneMessage["userId"]]["name"];
 	          var messageContent = oneMessage["content"];
 	          var messageTime = new Date(Number(oneMessage["lastUpdated"]) * 1000);
+	          var extraColoring = '';
+	          if (oneMessage["userId"] == _this.props.loggedInUserId) {
+	            extraColoring = 'bg-warning';
+	          }
 	          return _react2['default'].createElement(
 	            'div',
-	            { key: key, className: 'top-bottom-space chat-scroll' },
+	            { key: key, className: 'top-bottom-space ' + extraColoring },
 	            _react2['default'].createElement(
 	              _reactBootstrap.Row,
 	              null,
@@ -41456,8 +41492,13 @@
 	          _reactBootstrap.OverlayTrigger,
 	          { trigger: 'click', placement: 'top', overlay: _react2['default'].createElement(
 	              _reactBootstrap.Popover,
-	              { className: 'chat-bar-button', title: '9 users online' },
-	              chatMessages
+	              { id: 'chatPopOver', className: 'chat-bar-button', title: '9 users online' },
+	              _react2['default'].createElement(
+	                'div',
+	                { id: 'chatBox', className: 'chat-scroll' },
+	                chatMessages
+	              ),
+	              chatInput
 	            ) },
 	          _react2['default'].createElement(
 	            _reactBootstrap.Button,
@@ -41476,6 +41517,14 @@
 
 	Chatbar.contextTypes = {
 	  router: _react2['default'].PropTypes.func.isRequired
+	};
+
+	Chatbar.propTypes = {
+	  timestamp: _react2['default'].PropTypes.number
+	};
+
+	Chatbar.defaultProps = {
+	  timestamp: Number(Date.now())
 	};
 
 	exports['default'] = Chatbar;
