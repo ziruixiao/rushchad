@@ -59,7 +59,7 @@ class CommentList extends React.Component{
       commentsLength = Object.keys(this.props.comments).length;
       comments = Object.keys(this.props.comments).map((key) => {
         var comment = this.props.comments[key];
-        return <Comment commentUser={this.props.users[comment["userId"]]["name"]} loggedInUserId={this.props.loggedInUserId} key={key} commentData={comment}/>
+        return <Comment rusheeId={this.props.rusheeId} commentId={key} commentUser={this.props.users[comment["userId"]]["name"]} loggedInUserId={this.props.loggedInUserId} key={key} commentData={comment}/>
       });
     }
     return (

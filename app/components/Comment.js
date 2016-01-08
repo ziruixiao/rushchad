@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap';
 
 import TimeAgo from 'react-timeago';
+import * as firebaseActions from './firebaseActions';
 
 class Comment extends React.Component{
   constructor(props){
@@ -25,13 +26,16 @@ class Comment extends React.Component{
       liked: true,
       disliked: false
     });
-    // TODO: Firebase!
+    firebaseActions.addOrUpdateCommentLike(this.props.rusheeId, this.props.commentId, this.props.loggedInUserId, 1);
   }
   handleDislike() {
     this.setState({
       liked: false,
       disliked: true
     });
+    firebaseActions.addOrUpdateCommentLike(this.props.rusheeId, this.props.commentId, this.props.loggedInUserId, 0);
+
+    console.log('dislike');
     // TODO: Firebase!
   }
   render(){
@@ -48,8 +52,8 @@ class Comment extends React.Component{
       var numDislikes = 0;
 
       if (comment["likes"]) {
-        Object.keys(comment["likes"]).map((likeUserId, likeValue) => {
-          var numLikeValue = Number(likeValue);
+        Object.keys(comment["likes"]).map((likeUserId) => {
+          var likeValue = Number(comment["likes"][likeUserId]);
           if (likeValue == 1) {
             if (likeUserId == this.props.loggedInUserId) { // current user liked comment
               likeButton =

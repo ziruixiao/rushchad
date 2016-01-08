@@ -41017,35 +41017,6 @@
 	};
 
 	exports.verifyEmail = verifyEmail;
-	var addNewComment = function addNewComment(rusheeId, dictionary) {
-	  // what happens when a new comment is made
-	  var childRef = rusheesRef.child(rusheeId);
-	  childRef.once("value", function (snapshot) {
-	    if (!snapshot.child("comments").exists()) {
-	      // just push a comment
-	      console.log("there is no comments child");
-	      childRef.child('comments').set([], function () {
-	        var commentRef = childRef.child("comments");
-	        var newCommentRef = commentRef.push();
-	        newCommentRef.set(dictionary);
-	      });
-	    } else {
-	      var commentRef = childRef.child("comments");
-	      var newCommentRef = commentRef.push();
-	      newCommentRef.set(dictionary);
-	    }
-	  });
-	  console.log(dictionary);
-	  console.log(rusheeId);
-	};
-
-	exports.addNewComment = addNewComment;
-	var addOrUpdateRating = function addOrUpdateRating() {};
-
-	exports.addOrUpdateRating = addOrUpdateRating;
-	var addOrUpdateCommentLike = function addOrUpdateCommentLike() {};
-
-	exports.addOrUpdateCommentLike = addOrUpdateCommentLike;
 	var updateUserLastActive = function updateUserLastActive(loggedInUserId) {
 	  // sets last active time as now for the user
 	  var childRef = usersRef.child(loggedInUserId);
@@ -41085,7 +41056,51 @@
 	    });
 	  }
 	};
+
 	exports.addOrUpdateRushee = addOrUpdateRushee;
+	var addNewComment = function addNewComment(rusheeId, dictionary) {
+	  // what happens when a new comment is made
+	  var childRef = rusheesRef.child(rusheeId);
+	  childRef.once("value", function (snapshot) {
+	    if (!snapshot.child("comments").exists()) {
+	      // just push a comment
+	      childRef.child('comments').set([], function () {
+	        var commentRef = childRef.child("comments");
+	        var newCommentRef = commentRef.push();
+	        newCommentRef.set(dictionary);
+	      });
+	    } else {
+	      var commentRef = childRef.child("comments");
+	      var newCommentRef = commentRef.push();
+	      newCommentRef.set(dictionary);
+	    }
+	  });
+	};
+
+	exports.addNewComment = addNewComment;
+	var addOrUpdateCommentLike = function addOrUpdateCommentLike(rusheeId, commentId, userId, value) {
+	  console.log(rusheeId);
+	  console.log(commentId);
+	  console.log(userId);
+	  console.log(value);
+	  var childRef = rusheesRef.child(rusheeId).child("comments").child(commentId);
+	  childRef.once("value", function (snapshot) {
+	    if (!snapshot.child("likes").exists()) {
+	      // no likes currently exist
+	      childRef.child('likes').set([], function () {
+	        var likeRef = childRef.child("likes");
+	        likeRef.child(userId).set(value);
+	      });
+	    } else {
+	      var likeRef = childRef.child("likes");
+	      likeRef.child(userId).set(value);
+	    }
+	  });
+	};
+
+	exports.addOrUpdateCommentLike = addOrUpdateCommentLike;
+	var addOrUpdateRating = function addOrUpdateRating() {};
+	exports.addOrUpdateRating = addOrUpdateRating;
 
 /***/ },
 /* 452 */
@@ -42324,7 +42339,7 @@
 	        commentsLength = Object.keys(this.props.comments).length;
 	        comments = Object.keys(this.props.comments).map(function (key) {
 	          var comment = _this.props.comments[key];
-	          return _react2['default'].createElement(_Comment2['default'], { commentUser: _this.props.users[comment["userId"]]["name"], loggedInUserId: _this.props.loggedInUserId, key: key, commentData: comment });
+	          return _react2['default'].createElement(_Comment2['default'], { rusheeId: _this.props.rusheeId, commentId: key, commentUser: _this.props.users[comment["userId"]]["name"], loggedInUserId: _this.props.loggedInUserId, key: key, commentData: comment });
 	        });
 	      }
 	      return _react2['default'].createElement(
@@ -42402,6 +42417,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -42417,6 +42434,10 @@
 	var _reactTimeago = __webpack_require__(459);
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
+
+	var _firebaseActions = __webpack_require__(451);
+
+	var firebaseActions = _interopRequireWildcard(_firebaseActions);
 
 	var Comment = (function (_React$Component) {
 	  _inherits(Comment, _React$Component);
@@ -42438,7 +42459,7 @@
 	        liked: true,
 	        disliked: false
 	      });
-	      // TODO: Firebase!
+	      firebaseActions.addOrUpdateCommentLike(this.props.rusheeId, this.props.commentId, this.props.loggedInUserId, 1);
 	    }
 	  }, {
 	    key: 'handleDislike',
@@ -42447,6 +42468,9 @@
 	        liked: false,
 	        disliked: true
 	      });
+	      firebaseActions.addOrUpdateCommentLike(this.props.rusheeId, this.props.commentId, this.props.loggedInUserId, 0);
+
+	      console.log('dislike');
 	      // TODO: Firebase!
 	    }
 	  }, {
@@ -42475,8 +42499,8 @@
 	        var numDislikes = 0;
 
 	        if (comment["likes"]) {
-	          Object.keys(comment["likes"]).map(function (likeUserId, likeValue) {
-	            var numLikeValue = Number(likeValue);
+	          Object.keys(comment["likes"]).map(function (likeUserId) {
+	            var likeValue = Number(comment["likes"][likeUserId]);
 	            if (likeValue == 1) {
 	              if (likeUserId == _this.props.loggedInUserId) {
 	                // current user liked comment

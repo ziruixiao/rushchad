@@ -26,34 +26,6 @@ export const verifyEmail = (email) => {
 
 }
 
-export const addNewComment = (rusheeId, dictionary) => { // what happens when a new comment is made
-  var childRef = rusheesRef.child(rusheeId);
-  childRef.once("value", function(snapshot) {
-    if (!snapshot.child("comments").exists()) { // just push a comment
-      console.log("there is no comments child");
-      childRef.child('comments').set([], function() {
-        var commentRef = childRef.child("comments");
-        var newCommentRef = commentRef.push();
-        newCommentRef.set(dictionary);
-      });
-    } else {
-      var commentRef = childRef.child("comments");
-      var newCommentRef = commentRef.push();
-      newCommentRef.set(dictionary);
-    }
-  });
-  console.log(dictionary);
-  console.log(rusheeId);
-}
-
-export const addOrUpdateRating = () => {
-
-}
-
-export const addOrUpdateCommentLike = () => {
-
-}
-
 export const updateUserLastActive = (loggedInUserId) => { // sets last active time as now for the user
   var childRef = usersRef.child(loggedInUserId);
   childRef.update({
@@ -88,6 +60,46 @@ export const addOrUpdateRushee = (editRusheeId, dictionary, loggedInUserId) => {
       }
     });
   }
+
+}
+
+export const addNewComment = (rusheeId, dictionary) => { // what happens when a new comment is made
+  var childRef = rusheesRef.child(rusheeId);
+  childRef.once("value", function(snapshot) {
+    if (!snapshot.child("comments").exists()) { // just push a comment
+      childRef.child('comments').set([], function() {
+        var commentRef = childRef.child("comments");
+        var newCommentRef = commentRef.push();
+        newCommentRef.set(dictionary);
+      });
+    } else {
+      var commentRef = childRef.child("comments");
+      var newCommentRef = commentRef.push();
+      newCommentRef.set(dictionary);
+    }
+  });
+}
+
+export const addOrUpdateCommentLike = (rusheeId, commentId, userId, value) => {
+  console.log(rusheeId);
+  console.log(commentId);
+  console.log(userId);
+  console.log(value);
+  var childRef = rusheesRef.child(rusheeId).child("comments").child(commentId);
+  childRef.once("value", function(snapshot) {
+    if (!snapshot.child("likes").exists()) { // no likes currently exist
+      childRef.child('likes').set([], function() {
+        var likeRef = childRef.child("likes");
+        likeRef.child(userId).set(value);
+      });
+    } else {
+      var likeRef = childRef.child("likes");
+      likeRef.child(userId).set(value);
+    }
+  });
+}
+
+export const addOrUpdateRating = () => {
 
 }
 
