@@ -48,6 +48,7 @@ class DetailView extends React.Component{
     var numRatings = 0;
     var stars = 0.1;
     var rusheeComments;
+    var rushingWith;
     var userStars = 0;
     var userRating = 'none';
     var carousel;
@@ -69,6 +70,9 @@ class DetailView extends React.Component{
 
       numRatings = (rushee["ratings"]) ? Object.keys(rushee["ratings"]).length : 0;
 
+      if (rushee["rushingWith"]) {
+        rushingWith = rushee["rushingWith"];
+      }
       if (rushee["ratings"]) {
         var count = 0;
         var sum = 0;
@@ -116,8 +120,13 @@ class DetailView extends React.Component{
         <Col xs={12}>
           {rusheeName}
         </Col>
-        <Col xs={12}>
+
+
+        <Col xs={6}>
           Updated{' '}{lastUpdated}
+        </Col>
+        <Col xs={6}>
+          <strong>Rushing with:</strong>{' '}{rushingWith}
         </Col>
         <Col xs={12}>
           {rusheePhone}

@@ -55,7 +55,8 @@ class EditModalView extends React.Component{
         "phone": this.refs.phone.getValue(),
         "email": this.refs.email.getValue(),
         "photos": photoArray,
-        "facebook": addHttp(this.refs.facebook.getValue())
+        "facebook": addHttp(this.refs.facebook.getValue()),
+        "rushingWith": this.refs.rushingWith.getValue()
       };
       firebaseActions.addOrUpdateRushee(this.props.activeEditRusheeId, dictionary, this.props.loggedInUserId);
       this.props.closeAction();
@@ -73,13 +74,24 @@ class EditModalView extends React.Component{
     var photo1 = <Input type="text" ref="photo1" placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
     var photo2 = <Input type="text" ref="photo2" placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
     var photo3 = <Input type="text" ref="photo3" placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
+
+    var rushingWith = <Input type="text" ref="rushingWith" label="Rushing with:" placeholder="Enter other freshmen names" />;
     var error =
       <Alert bsStyle="danger" onDismiss={this.handleAlertDismiss.bind(this)}>
         <p>Please make sure you enter first and last names.</p>
       </Alert>;
 
     if (this.props.activeEditRusheeId != "-1") {
-      var editingRushee = this.props.rushees[this.props.activeEditRusheeId];
+      var rusheeId = this.props.activeEditRusheeId;
+      var arrayRusheeId = 0;
+      var rushee;
+      var editingRushee;
+      for(var i = 0; i < this.props.rushees.length; i += 1) {
+        if(this.props.rushees[i][0] == rusheeId) {
+          editingRushee = this.props.rushees[i][1];
+          break;
+        }
+      }
       if (editingRushee) {
         firstName = <Input type="text" ref="firstName" label="First Name" defaultValue={editingRushee["firstName"]} placeholder="Enter first name" />;
         lastName = <Input type="text" ref="lastName" label="Last Name" defaultValue={editingRushee["lastName"]} placeholder="Enter last name" />;
@@ -95,6 +107,10 @@ class EditModalView extends React.Component{
         }
         if (editingRushee["photos"] && editingRushee["photos"][2]) {
           photo3 = <Input type="text" ref="photo3"  defaultValue={editingRushee["photos"][2]} placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
+        }
+
+        if (editingRushee["rushingWith"]) {
+          rushingWith = <Input type="text" ref="rushingWith" defaultValue={editingRushee["rushingWith"]} label="Rushing with:" placeholder="Enter other freshmen names" />;
         }
       }
     }
@@ -123,6 +139,7 @@ class EditModalView extends React.Component{
               {photo1}
               {photo2}
               {photo3}
+              {rushingWith}
               <ButtonInput type="submit" value="Save" />
               Click anywhere outside this form to discard changes.
             </form>

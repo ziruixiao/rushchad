@@ -41416,7 +41416,8 @@
 	          "phone": this.refs.phone.getValue(),
 	          "email": this.refs.email.getValue(),
 	          "photos": photoArray,
-	          "facebook": addHttp(this.refs.facebook.getValue())
+	          "facebook": addHttp(this.refs.facebook.getValue()),
+	          "rushingWith": this.refs.rushingWith.getValue()
 	        };
 	        firebaseActions.addOrUpdateRushee(this.props.activeEditRusheeId, dictionary, this.props.loggedInUserId);
 	        this.props.closeAction();
@@ -41435,6 +41436,8 @@
 	      var photo1 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo1', placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
 	      var photo2 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo2', placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
 	      var photo3 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo3', placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
+
+	      var rushingWith = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'rushingWith', label: 'Rushing with:', placeholder: 'Enter other freshmen names' });
 	      var error = _react2['default'].createElement(
 	        _reactBootstrap.Alert,
 	        { bsStyle: 'danger', onDismiss: this.handleAlertDismiss.bind(this) },
@@ -41446,7 +41449,16 @@
 	      );
 
 	      if (this.props.activeEditRusheeId != "-1") {
-	        var editingRushee = this.props.rushees[this.props.activeEditRusheeId];
+	        var rusheeId = this.props.activeEditRusheeId;
+	        var arrayRusheeId = 0;
+	        var rushee;
+	        var editingRushee;
+	        for (var i = 0; i < this.props.rushees.length; i += 1) {
+	          if (this.props.rushees[i][0] == rusheeId) {
+	            editingRushee = this.props.rushees[i][1];
+	            break;
+	          }
+	        }
 	        if (editingRushee) {
 	          firstName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'firstName', label: 'First Name', defaultValue: editingRushee["firstName"], placeholder: 'Enter first name' });
 	          lastName = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'lastName', label: 'Last Name', defaultValue: editingRushee["lastName"], placeholder: 'Enter last name' });
@@ -41462,6 +41474,10 @@
 	          }
 	          if (editingRushee["photos"] && editingRushee["photos"][2]) {
 	            photo3 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo3', defaultValue: editingRushee["photos"][2], placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
+	          }
+
+	          if (editingRushee["rushingWith"]) {
+	            rushingWith = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'rushingWith', defaultValue: editingRushee["rushingWith"], label: 'Rushing with:', placeholder: 'Enter other freshmen names' });
 	          }
 	        }
 	      }
@@ -41512,6 +41528,7 @@
 	              photo1,
 	              photo2,
 	              photo3,
+	              rushingWith,
 	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Save' }),
 	              'Click anywhere outside this form to discard changes.'
 	            )
@@ -42637,6 +42654,7 @@
 	      var numRatings = 0;
 	      var stars = 0.1;
 	      var rusheeComments;
+	      var rushingWith;
 	      var userStars = 0;
 	      var userRating = 'none';
 	      var carousel;
@@ -42704,6 +42722,9 @@
 
 	        numRatings = rushee["ratings"] ? Object.keys(rushee["ratings"]).length : 0;
 
+	        if (rushee["rushingWith"]) {
+	          rushingWith = rushee["rushingWith"];
+	        }
 	        if (rushee["ratings"]) {
 	          var count = 0;
 	          var sum = 0;
@@ -42762,10 +42783,21 @@
 	        ),
 	        _react2['default'].createElement(
 	          _reactBootstrap.Col,
-	          { xs: 12 },
+	          { xs: 6 },
 	          'Updated',
 	          ' ',
 	          lastUpdated
+	        ),
+	        _react2['default'].createElement(
+	          _reactBootstrap.Col,
+	          { xs: 6 },
+	          _react2['default'].createElement(
+	            'strong',
+	            null,
+	            'Rushing with:'
+	          ),
+	          ' ',
+	          rushingWith
 	        ),
 	        _react2['default'].createElement(
 	          _reactBootstrap.Col,
