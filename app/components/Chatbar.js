@@ -21,7 +21,6 @@ class Chatbar extends React.Component{
 
   }
   scrollToBottom() {
-    console.log('yo');
     var chatBox = document.getElementById('chatBox');
     chatBox.scrollTop = chatBox.scrollHeight + 2000;
   }
@@ -49,7 +48,6 @@ class Chatbar extends React.Component{
       .endAt(nowDate)
       .on('value', function(snap) {
         if (snap.val()) {
-          console.log(snap.val());
           this.setState({
             usersOnline: Object.keys(snap.val()).length
           });
