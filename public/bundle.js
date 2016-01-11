@@ -41604,7 +41604,8 @@
 	    _get(Object.getPrototypeOf(Chatbar.prototype), 'constructor', this).call(this, props);
 	    this.state = {
 	      messages: [],
-	      timestamp: Number(Date.now())
+	      timestamp: Number(Date.now()),
+	      usersOnline: 0
 	    };
 	  }
 
@@ -41637,6 +41638,17 @@
 	            }
 	          }
 	        });
+	      }).bind(this));
+
+	      var nowDate = Number(Date.now()) / 1000;
+	      var last10Min = nowDate - 600;
+	      new Firebase("https://rushchad.firebaseio.com/users").orderByChild("lastActive").startAt(last10Min).endAt(nowDate).on('value', (function (snap) {
+	        if (snap.val()) {
+	          console.log(snap.val());
+	          this.setState({
+	            usersOnline: Object.keys(snap.val()).length
+	          });
+	        }
 	      }).bind(this));
 	    }
 	  }, {
@@ -41756,7 +41768,7 @@
 	          _reactBootstrap.OverlayTrigger,
 	          { trigger: 'click', placement: 'top', overlay: _react2['default'].createElement(
 	              _reactBootstrap.Popover,
-	              { id: 'chatPopOver', className: 'chat-bar-button absolute-positioning', title: 'Rushchad Chat' },
+	              { id: 'chatPopOver', className: 'chat-bar-button absolute-positioning', title: this.state.usersOnline + ' users online' },
 	              _react2['default'].createElement(
 	                'div',
 	                { id: 'chatBox', className: 'chat-scroll' },

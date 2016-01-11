@@ -12,7 +12,8 @@ class Chatbar extends React.Component{
     super(props);
     this.state = {
       messages: [],
-      timestamp: Number(Date.now())
+      timestamp: Number(Date.now()),
+      usersOnline: 0
     };
   }
   delayAndScroll() {
@@ -40,6 +41,22 @@ class Chatbar extends React.Component{
       });
 
     }.bind(this));
+
+    var nowDate = Number(Date.now()) / 1000;
+    var last10Min = nowDate - 600;
+    new Firebase("https://rushchad.firebaseio.com/users").orderByChild("lastActive")
+      .startAt(last10Min)
+      .endAt(nowDate)
+      .on('value', function(snap) {
+        if (snap.val()) {
+          console.log(snap.val());
+          this.setState({
+            usersOnline: Object.keys(snap.val()).length
+          });
+
+        }
+      }.bind(this));
+
   }
   handleNewMessage() {
 
@@ -120,7 +137,7 @@ class Chatbar extends React.Component{
     return (
       <ButtonToolbar className="fixedBottomRight">
 
-        <OverlayTrigger trigger="click" placement="top" overlay={<Popover id="chatPopOver"  className="chat-bar-button absolute-positioning" title="Rushchad Chat">
+        <OverlayTrigger trigger="click" placement="top" overlay={<Popover id="chatPopOver"  className="chat-bar-button absolute-positioning" title={this.state.usersOnline + ' users online'}>
           <div id="chatBox" className="chat-scroll">
             {chatMessages}
            </div>
