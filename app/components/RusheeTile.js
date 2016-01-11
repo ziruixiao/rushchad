@@ -18,10 +18,21 @@ class RusheeTile extends React.Component{
     router.transitionTo('detail', {rusheeId: this.props.rusheeId});
   }
   render(){
+
     var numComments = (this.props.rushee["comments"]) ? Object.keys(this.props.rushee["comments"]).length : 0;
     var numRatings = (this.props.rushee["ratings"]) ? Object.keys(this.props.rushee["ratings"]).length : 0;
-    var blankAvatar = "http://jagc.org/images/avatar.png";
-    var thumbPhotoUrl = blankAvatar;
+    var thumbPhotoUrl = "http://jagc.org/images/avatar.png";
+    if (this.props.rushee["photos"]) {
+      if (this.props.rushee["photos"][0]) {
+        thumbPhotoUrl = this.props.rushee["photos"][0];
+      }
+    }
+    var myDoc = document.getElementById('photo' + this.props.rusheeId);
+    if (myDoc) {
+      myDoc.error(function() {
+        console.log('error');
+      });
+    }
     var stars = 0.1;
     if (this.props.rushee["ratings"]) {
       var count = 0;
@@ -36,7 +47,7 @@ class RusheeTile extends React.Component{
     return (
       <div>
 
-          <Col xs={12} sm={4} lg={3}>
+          <Col xs={12} sm={6} md={4} lg={3}>
             <Panel className='fixed-panel' header={
               <div>{this.props.rushee["firstName"]}{' '}{this.props.rushee["lastName"]}</div>
 
@@ -56,7 +67,9 @@ class RusheeTile extends React.Component{
 
               </div>
             } bsStyle="info" onClick={this.showDetailView.bind(this)}>
-              <Image  src={thumbPhotoUrl} responsive className="img-responsive center-block"/>
+              <div className="panel-photo">
+              <Image id={'photo' + this.props.rusheeId} src={thumbPhotoUrl} responsive className="img-responsive center-block"/>
+              </div>
             </Panel>
           </Col>
 

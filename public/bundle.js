@@ -41857,8 +41857,18 @@
 
 	      var numComments = this.props.rushee["comments"] ? Object.keys(this.props.rushee["comments"]).length : 0;
 	      var numRatings = this.props.rushee["ratings"] ? Object.keys(this.props.rushee["ratings"]).length : 0;
-	      var blankAvatar = "http://jagc.org/images/avatar.png";
-	      var thumbPhotoUrl = blankAvatar;
+	      var thumbPhotoUrl = "http://jagc.org/images/avatar.png";
+	      if (this.props.rushee["photos"]) {
+	        if (this.props.rushee["photos"][0]) {
+	          thumbPhotoUrl = this.props.rushee["photos"][0];
+	        }
+	      }
+	      var myDoc = document.getElementById('photo' + this.props.rusheeId);
+	      if (myDoc) {
+	        myDoc.error(function () {
+	          console.log('error');
+	        });
+	      }
 	      var stars = 0.1;
 	      if (this.props.rushee["ratings"]) {
 	        var count = 0;
@@ -41875,7 +41885,7 @@
 	        null,
 	        _react2['default'].createElement(
 	          _reactBootstrap.Col,
-	          { xs: 12, sm: 4, lg: 3 },
+	          { xs: 12, sm: 6, md: 4, lg: 3 },
 	          _react2['default'].createElement(
 	            _reactBootstrap.Panel,
 	            { className: 'fixed-panel', header: _react2['default'].createElement(
@@ -41913,7 +41923,11 @@
 	                  )
 	                )
 	              ), bsStyle: 'info', onClick: this.showDetailView.bind(this) },
-	            _react2['default'].createElement(_reactBootstrap.Image, { src: thumbPhotoUrl, responsive: true, className: 'img-responsive center-block' })
+	            _react2['default'].createElement(
+	              'div',
+	              { className: 'panel-photo' },
+	              _react2['default'].createElement(_reactBootstrap.Image, { id: 'photo' + this.props.rusheeId, src: thumbPhotoUrl, responsive: true, className: 'img-responsive center-block' })
+	            )
 	          )
 	        )
 	      );

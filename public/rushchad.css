@@ -6,6 +6,11 @@
 
 }
 
+.panel-photo {
+    height: 185px;
+    overflow: hidden;
+}
+
 .picture-carousel {
     min-height: 300px;
     max-height: 500px;
