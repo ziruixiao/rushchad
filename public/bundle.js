@@ -23050,10 +23050,29 @@
 
 	      var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
 	      rusheesRef.on('value', (function (dataSnapshot) {
+	        var unsortedRushees = dataSnapshot.val();
+	        var sortedRushees = [];
+
+	        for (var f_rusheeId in unsortedRushees) {
+	          sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
+	        }
+	        sortedRushees.sort(this.compare);
+	        console.log(sortedRushees);
 	        this.setState({
 	          rushees: dataSnapshot.val()
 	        });
 	      }).bind(this));
+	    }
+	  }, {
+	    key: 'compare',
+	    value: function compare(a, b) {
+	      if (a[1]["lastName"] < b[1]["lastName"]) {
+	        return -1;
+	      } else if (a[1]["lastName"] > b[1]["lastName"]) {
+	        return 1;
+	      } else {
+	        return 0;
+	      }
 	    }
 	  }, {
 	    key: 'init',
@@ -41860,7 +41879,8 @@
 	      var thumbPhotoUrl = "http://jagc.org/images/avatar.png";
 	      if (this.props.rushee["photos"]) {
 	        if (this.props.rushee["photos"][0]) {
-	          thumbPhotoUrl = this.props.rushee["photos"][0];
+	          // TODO: Uncomment this line below:
+	          //thumbPhotoUrl = this.props.rushee["photos"][0];
 	        }
 	      }
 	      var myDoc = document.getElementById('photo' + this.props.rusheeId);

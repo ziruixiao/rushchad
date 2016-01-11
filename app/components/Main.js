@@ -72,10 +72,27 @@ class Main extends React.Component{
 
     var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
     rusheesRef.on('value', function(dataSnapshot) {
+      var unsortedRushees = dataSnapshot.val();
+      var sortedRushees = [];
+
+      for (var f_rusheeId in unsortedRushees) {
+        sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
+      }
+      sortedRushees.sort(this.compare);
+      console.log(sortedRushees);
       this.setState({
         rushees: dataSnapshot.val()
       });
     }.bind(this));
+  }
+  compare(a, b) {
+    if (a[1]["lastName"] < b[1]["lastName"]) {
+      return -1;
+    } else if (a[1]["lastName"] > b[1]["lastName"]) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
   init(){
     var storedExpiration = localStorage.getItem('sessionExpiration');

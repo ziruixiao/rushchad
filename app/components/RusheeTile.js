@@ -24,7 +24,8 @@ class RusheeTile extends React.Component{
     var thumbPhotoUrl = "http://jagc.org/images/avatar.png";
     if (this.props.rushee["photos"]) {
       if (this.props.rushee["photos"][0]) {
-        thumbPhotoUrl = this.props.rushee["photos"][0];
+        // TODO: Uncomment this line below:
+        //thumbPhotoUrl = this.props.rushee["photos"][0];
       }
     }
     var myDoc = document.getElementById('photo' + this.props.rusheeId);
