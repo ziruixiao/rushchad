@@ -63,7 +63,6 @@ class Main extends React.Component{
     }
   }
   setupFirebaseConnections() {
-    console.log('called');
     var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
     usersRef.on('value', function(dataSnapshot) {
       this.setState({
@@ -80,7 +79,6 @@ class Main extends React.Component{
         sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
       }
       var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
-      console.log(ordering);
       switch(ordering) {
         case 'first_A_Z':
           sortedRushees.sort(this.compareRusheesFirstAZ);
@@ -149,18 +147,18 @@ class Main extends React.Component{
     var a_count = 0;
     var b_avg = 0;
     var b_count = 0;
-    if (a["ratings"]) {
+    if (a[1]["ratings"]) {
       var a_sum = 0;
-      Object.keys(a["ratings"]).map((key) => {
-        a_sum += Number(a["ratings"][key]["value"]);
+      Object.keys(a[1]["ratings"]).map((key) => {
+        a_sum += Number(a[1]["ratings"][key]["value"]);
         a_count++;
       });
       a_avg = a_sum/a_count;
     }
-    if (b["ratings"]) {
+    if (b[1]["ratings"]) {
       var b_sum = 0;
-      Object.keys(b["ratings"]).map((key) => {
-        b_sum += Number(b["ratings"][key]["value"]);
+      Object.keys(b[1]["ratings"]).map((key) => {
+        b_sum += Number(b[1]["ratings"][key]["value"]);
         b_count++;
       });
       b_avg = b_sum/b_count;
@@ -179,28 +177,28 @@ class Main extends React.Component{
     var a_count = 0;
     var b_avg = 0;
     var b_count = 0;
-    if (a["ratings"]) {
+    if (a[1]["ratings"]) {
       var a_sum = 0;
-      Object.keys(a["ratings"]).map((key) => {
-        a_sum += Number(a["ratings"][key]["value"]);
+      Object.keys(a[1]["ratings"]).map((key) => {
+        a_sum += Number(a[1]["ratings"][key]["value"]);
         a_count++;
       });
       a_avg = a_sum/a_count;
     }
-    if (b["ratings"]) {
+    if (b[1]["ratings"]) {
       var b_sum = 0;
-      Object.keys(b["ratings"]).map((key) => {
-        b_sum += Number(b["ratings"][key]["value"]);
+      Object.keys(b[1]["ratings"]).map((key) => {
+        b_sum += Number(b[1]["ratings"][key]["value"]);
         b_count++;
       });
       b_avg = b_sum/b_count;
     }
 
-    if (a_avg < b_avg) { return -1; }
-    else if (a_avg > b_avg) { return 1; }
+    if (a_avg > b_avg) { return 1; }
+    else if (a_avg < b_avg) { return -1; }
     else {
-      if (a_count < b_count) { return -1; }
-      else if (a_count > b_count) { return 1; }
+      if (a_count > b_count) { return 1; }
+      else if (a_count < b_count) { return -1; }
       else { return 0; }
     }
   }
