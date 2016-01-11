@@ -42919,9 +42919,26 @@
 	      var commentsLength = 0;
 	      if (this.props.comments) {
 	        commentsLength = Object.keys(this.props.comments).length;
-	        comments = Object.keys(this.props.comments).map(function (key) {
-	          var comment = _this.props.comments[key];
-	          return _react2['default'].createElement(_Comment2['default'], { rusheeId: _this.props.rusheeId, commentId: key, commentUser: _this.props.users[comment["userId"]]["name"], loggedInUserId: _this.props.loggedInUserId, key: key, commentData: comment });
+
+	        var unsortedComments = this.props.comments;
+	        var sortedComments = [];
+
+	        for (var u_id in unsortedComments) {
+	          sortedComments.push([u_id, unsortedComments[u_id]]);
+	        }
+	        sortedComments.sort(function (a, b) {
+	          if (a[1]["lastUpdated"] > b[1]["lastUpdated"]) {
+	            return -1;
+	          } else if (a[1]["lastUpdated"] < b[1]["lastUpdated"]) {
+	            return 1;
+	          } else {
+	            return 0;
+	          }
+	        });
+
+	        comments = sortedComments.map(function (value, key) {
+	          var comment = value[1];
+	          return _react2['default'].createElement(_Comment2['default'], { rusheeId: _this.props.rusheeId, commentId: value[0], commentUser: _this.props.users[comment["userId"]]["name"], loggedInUserId: _this.props.loggedInUserId, key: value[0], commentData: comment });
 	        });
 	      }
 	      return _react2['default'].createElement(
