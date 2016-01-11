@@ -12,6 +12,9 @@
 .chat-scroll {
     max-height: 400px;
     overflow-y: scroll;
+    width:100%;
+    max-width: 300px;
+
 }
 .chat-bar-button {
     min-width: 320px;

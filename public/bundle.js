@@ -22986,6 +22986,8 @@
 
 	var _Chatbar2 = _interopRequireDefault(_Chatbar);
 
+	var SESSION_EXPIRE_TIME = 1000 * 60 * 60; // currently set to 1 hour
+
 	var Main = (function (_React$Component) {
 	  _inherits(Main, _React$Component);
 
@@ -23009,37 +23011,18 @@
 	    key: 'authDataCallback',
 	    value: function authDataCallback(authData) {
 	      if (authData) {
-	        if (authData["google"]["email"] != "ziruixiao@gmail.com") {
-	          console.log("unauth");
-	          this.ref.unauth();
-	          this.setState({
-	            loggedIn: false,
-	            googleUser: {},
-	            email: '',
-	            users: [],
-	            rushees: {},
-	            loggedInUserId: -1,
-	            showEditModal: false,
-	            activeEditRusheeId: "-1",
-	            openEditModal: function openEditModal() {},
-	            closeEditModal: function closeEditModal() {}
-	          });
-	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
-	        } else {
-	          // successful login*/
-	          this.setupFirebaseConnections();
-	          this.setState({
-	            loggedIn: true,
-	            googleUser: authData["google"],
-	            email: authData["google"]["email"],
-	            loggedInUserId: 1,
-	            openEditModal: this.openEditModal.bind(this),
-	            closeEditModal: this.closeEditModal.bind(this),
-	            activeEditRusheeId: "-1"
-	          }, function () {
-	            firebaseActions.updateUserLastActive(this.state.loggedInUserId);
-	          });
-	        }
+	        var emailToCheck = authData["google"]["email"];
+
+	        new Firebase("https://rushchad.firebaseio.com/users").orderByChild("email").startAt(emailToCheck).endAt(emailToCheck).once('value', (function (snap) {
+	          if (snap.val() == null) {
+	            console.log("null found");
+
+	            this.linkSessionToFirebase('kill');
+	          } else {
+	            console.log('accounts matching email address');
+	            this.linkSessionToFirebase(emailToCheck, authData["google"]);
+	          }
+	        }).bind(this));
 	      } else {
 	        this.setState({
 	          loggedIn: false,
@@ -23075,8 +23058,66 @@
 	  }, {
 	    key: 'init',
 	    value: function init() {
-	      this.ref = new Firebase('https://rushchad.firebaseio.com/');
-	      this.ref.onAuth(this.authDataCallback.bind(this));
+	      var storedExpiration = localStorage.getItem('sessionExpiration');
+	      var storedKey = localStorage.getItem('sessionKey');
+	      var storedGoogleUser = localStorage.getItem('googleUser');
+	      var currentTime = Number(Date.now());
+	      console.log(storedKey);
+	      console.log(storedGoogleUser);
+	      if (storedExpiration && storedKey && storedGoogleUser) {
+	        if (currentTime - storedExpiration > SESSION_EXPIRE_TIME) {
+	          this.linkSessionToFirebase('kill');
+	        } else {
+	          this.linkSessionToFirebase(storedKey, storedGoogleUser);
+	        }
+	      } else {
+	        this.ref = new Firebase('https://rushchad.firebaseio.com/');
+	        this.ref.onAuth(this.authDataCallback.bind(this));
+	        console.log("need to log in");
+	      }
+	    }
+	  }, {
+	    key: 'linkSessionToFirebase',
+	    value: function linkSessionToFirebase(sessionKey, googleUser) {
+
+	      if (sessionKey == 'kill') {
+	        this.ref.unauth();
+	        localStorage.clear();
+	        this.setState({
+	          loggedIn: false,
+	          googleUser: {},
+	          email: '',
+	          users: [],
+	          rusheese: {},
+	          loggedInUserId: -1,
+	          showEditModal: false,
+	          activeEditRusheeId: "-1",
+	          openEditModal: function openEditModal() {},
+	          closeEditModal: function closeEditModal() {}
+	        }, function () {
+	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
+	        });
+
+	        return;
+	      } else {
+	        localStorage.setItem('sessionKey', sessionKey);
+	        var expireTime = Number(Date.now()) + SESSION_EXPIRE_TIME;
+	        localStorage.setItem('sessionExpiration', expireTime);
+	        localStorage.setItem('googleUser', googleUser);
+	        this.setupFirebaseConnections();
+	        this.setState({
+	          loggedIn: true,
+	          googleUser: googleUser,
+	          email: sessionKey,
+	          loggedInUserId: 1,
+	          openEditModal: this.openEditModal.bind(this),
+	          closeEditModal: this.closeEditModal.bind(this),
+	          activeEditRusheeId: "-1"
+	        }, (function () {
+
+	          firebaseActions.updateUserLastActive(this.state.loggedInUserId);
+	        }).bind(this));
+	      }
 	    }
 	  }, {
 	    key: 'componentWillMount',
@@ -23438,6 +23479,7 @@
 	  var ref = new Firebase('https://rushchad.firebaseio.com/');
 	  console.log(ref.getAuth());
 	  ref.unauth();
+	  localStorage.clear();
 	  document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
 	}
 
@@ -42474,6 +42516,7 @@
 	  }, {
 	    key: 'handleSubmit',
 	    value: function handleSubmit(e) {
+	      e.preventDefault();
 	      var s_comment = this.refs.newComment.getValue();
 	      if (s_comment.length < 1) {
 	        this.handleAlertShow();

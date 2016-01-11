@@ -7,6 +7,9 @@ import * as firebaseActions from './firebaseActions';
 import EditModalView from './EditModalView';
 import Chatbar from './Chatbar';
 
+const SESSION_EXPIRE_TIME = 1000 * 60 * 60; // currently set to 1 hour
+
+
 class Main extends React.Component{
   constructor(props){
     super(props);
@@ -23,42 +26,23 @@ class Main extends React.Component{
   }
   authDataCallback(authData) {
     if (authData) {
-      if (authData["google"]["email"] != "ziruixiao@gmail.com") {
-        console.log("unauth");
-        this.ref.unauth();
-        this.setState({
-          loggedIn: false,
-          googleUser: {},
-          email: '',
-          users: [],
-          rushees: {},
-          loggedInUserId: -1,
-          showEditModal: false,
-          activeEditRusheeId:  "-1",
-          openEditModal: () => {
+      var emailToCheck = authData["google"]["email"];
 
-          },
-          closeEditModal: () => {
+      new Firebase("https://rushchad.firebaseio.com/users").orderByChild("email")
+        .startAt(emailToCheck)
+        .endAt(emailToCheck)
+        .once('value', function(snap) {
+          if (snap.val() == null) {
+            console.log("null found");
 
+            this.linkSessionToFirebase('kill');
+
+          } else {
+            console.log('accounts matching email address');
+            this.linkSessionToFirebase(emailToCheck, authData["google"]);
           }
-        });
-        document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
+        }.bind(this));
 
-      } else { // successful login*/
-        this.setupFirebaseConnections();
-        this.setState({
-          loggedIn: true,
-          googleUser: authData["google"],
-          email: authData["google"]["email"],
-          loggedInUserId: 1,
-          openEditModal: this.openEditModal.bind(this),
-          closeEditModal: this.closeEditModal.bind(this),
-          activeEditRusheeId:  "-1"
-        }, function () {
-          firebaseActions.updateUserLastActive(this.state.loggedInUserId);
-        });
-
-      }
     } else {
       this.setState({
         loggedIn: false,
@@ -94,8 +78,66 @@ class Main extends React.Component{
     }.bind(this));
   }
   init(){
-    this.ref = new Firebase('https://rushchad.firebaseio.com/');
-    this.ref.onAuth(this.authDataCallback.bind(this));
+    var storedExpiration = localStorage.getItem('sessionExpiration');
+    var storedKey = localStorage.getItem('sessionKey');
+    var storedGoogleUser = localStorage.getItem('googleUser');
+    var currentTime = Number(Date.now());
+    if (storedExpiration && storedKey && storedGoogleUser) {
+      if (currentTime - storedExpiration > SESSION_EXPIRE_TIME) {
+        this.linkSessionToFirebase('kill');
+      } else {
+        this.linkSessionToFirebase(storedKey, storedGoogleUser);
+      }
+    } else {
+      this.ref = new Firebase('https://rushchad.firebaseio.com/');
+      this.ref.onAuth(this.authDataCallback.bind(this));
+    }
+  }
+  linkSessionToFirebase(sessionKey, googleUser) {
+
+    if (sessionKey == 'kill') {
+      this.ref.unauth();
+      localStorage.clear();
+      this.setState({
+        loggedIn: false,
+        googleUser: {},
+        email: '',
+        users: [],
+        rusheese: {},
+        loggedInUserId: -1,
+        showEditModal: false,
+        activeEditRusheeId: "-1",
+        openEditModal: () => {
+
+        },
+        closeEditModal: () => {
+
+        }
+      }, function() {
+        document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com"
+
+      });
+
+      return;
+    } else {
+      localStorage.setItem('sessionKey', sessionKey);
+      var expireTime = Number(Date.now()) + SESSION_EXPIRE_TIME;
+      localStorage.setItem('sessionExpiration', expireTime);
+      localStorage.setItem('googleUser', googleUser);
+      this.setupFirebaseConnections();
+      this.setState({
+        loggedIn: true,
+        googleUser: googleUser,
+        email: sessionKey,
+        loggedInUserId: 1,
+        openEditModal: this.openEditModal.bind(this),
+        closeEditModal: this.closeEditModal.bind(this),
+        activeEditRusheeId:  "-1"
+      }, function () {
+
+        firebaseActions.updateUserLastActive(this.state.loggedInUserId);
+      }.bind(this));
+    }
   }
 
   componentWillMount(){
