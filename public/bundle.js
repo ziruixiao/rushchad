@@ -23062,8 +23062,6 @@
 	      var storedKey = localStorage.getItem('sessionKey');
 	      var storedGoogleUser = localStorage.getItem('googleUser');
 	      var currentTime = Number(Date.now());
-	      console.log(storedKey);
-	      console.log(storedGoogleUser);
 	      if (storedExpiration && storedKey && storedGoogleUser) {
 	        if (currentTime - storedExpiration > SESSION_EXPIRE_TIME) {
 	          this.linkSessionToFirebase('kill');
@@ -23073,7 +23071,6 @@
 	      } else {
 	        this.ref = new Firebase('https://rushchad.firebaseio.com/');
 	        this.ref.onAuth(this.authDataCallback.bind(this));
-	        console.log("need to log in");
 	      }
 	    }
 	  }, {
@@ -23414,15 +23411,6 @@
 	                _reactBootstrap.NavItem,
 	                { href: '#', eventKey: 3 },
 	                _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'plus' })
-	              )
-	            ),
-	            _react2['default'].createElement(
-	              _reactBootstrap.Nav,
-	              null,
-	              _react2['default'].createElement(
-	                _reactBootstrap.Navbar.Form,
-	                null,
-	                _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', placeholder: 'Search' })
 	              )
 	            ),
 	            _react2['default'].createElement(
@@ -41229,6 +41217,21 @@
 	        // continue with form
 	        this.handleAlertDismiss();
 
+	        // build photos
+	        var photoArray = [];
+	        var s_photo1 = this.refs.photo1.getValue();
+	        var s_photo2 = this.refs.photo2.getValue();
+	        var s_photo3 = this.refs.photo3.getValue();
+	        if (s_photo1.length > 0) {
+	          photoArray.push(s_photo1);
+	        }
+	        if (s_photo2.length > 0) {
+	          photoArray.push(s_photo2);
+	        }
+	        if (s_photo3.length > 0) {
+	          photoArray.push(s_photo3);
+	        }
+
 	        // 1. Build dictionary
 	        var dictionary = {
 	          "firstName": s_firstName,
@@ -41236,6 +41239,7 @@
 	          "lastUpdated": Math.round(Number(Date.now()) / 1000),
 	          "phone": this.refs.phone.getValue(),
 	          "email": this.refs.email.getValue(),
+	          "photos": photoArray,
 	          "facebook": addHttp(this.refs.facebook.getValue())
 	        };
 	        firebaseActions.addOrUpdateRushee(this.props.activeEditRusheeId, dictionary, this.props.loggedInUserId);
@@ -41252,6 +41256,9 @@
 	      var email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', ref: 'email', label: 'Email Address', placeholder: 'Enter email' });
 	      var phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'phone', label: 'Phone Number', placeholder: 'Enter phone' });
 
+	      var photo1 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo1', placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
+	      var photo2 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo2', placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
+	      var photo3 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo3', placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
 	      var error = _react2['default'].createElement(
 	        _reactBootstrap.Alert,
 	        { bsStyle: 'danger', onDismiss: this.handleAlertDismiss.bind(this) },
@@ -41271,6 +41278,15 @@
 	          facebook = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'facebook', label: 'Facebook Profile', defaultValue: editingRushee["facebook"], placeholder: 'Enter link' });
 	          email = _react2['default'].createElement(_reactBootstrap.Input, { type: 'email', ref: 'email', label: 'Email Address', defaultValue: editingRushee["email"], placeholder: 'Enter email' });
 	          phone = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'phone', label: 'Phone Number', defaultValue: editingRushee["phone"], placeholder: 'Enter phone' });
+	          if (editingRushee["photos"] && editingRushee["photos"][0]) {
+	            photo1 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo1', defaultValue: editingRushee["photos"][0], placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
+	          }
+	          if (editingRushee["photos"] && editingRushee["photos"][1]) {
+	            photo2 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo2', defaultValue: editingRushee["photos"][1], placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
+	          }
+	          if (editingRushee["photos"] && editingRushee["photos"][2]) {
+	            photo3 = _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', ref: 'photo3', defaultValue: editingRushee["photos"][2], placeholder: 'Photo URL (should end in .png, .jpeg, .jpg)' });
+	          }
 	        }
 	      }
 	      return _react2['default'].createElement(
@@ -41312,6 +41328,14 @@
 	              facebook,
 	              phone,
 	              email,
+	              _react2['default'].createElement(
+	                'strong',
+	                null,
+	                'Photos:'
+	              ),
+	              photo1,
+	              photo2,
+	              photo3,
 	              _react2['default'].createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Save' }),
 	              'Click anywhere outside this form to discard changes.'
 	            )

@@ -22,11 +22,6 @@ class Header extends React.Component{
             <Nav onSelect={handleModal.bind(this)}>
               <NavItem href='#' eventKey={3}><Glyphicon glyph='plus' /></NavItem>
             </Nav>
-            <Nav>
-              <Navbar.Form>
-                <Input type='text' placeholder='Search'/>
-              </Navbar.Form>
-            </Nav>
             <Nav onSelect={handleModal.bind(this)} pullRight>
               <NavItem href='#' eventKey={5}><Glyphicon glyph='log-out' /></NavItem>
             </Nav>

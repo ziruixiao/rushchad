@@ -32,6 +32,21 @@ class EditModalView extends React.Component{
     } else { // continue with form
       this.handleAlertDismiss();
 
+      // build photos
+      var photoArray = [];
+      var s_photo1 = this.refs.photo1.getValue();
+      var s_photo2 = this.refs.photo2.getValue();
+      var s_photo3 = this.refs.photo3.getValue();
+      if (s_photo1.length > 0) {
+        photoArray.push(s_photo1);
+      }
+      if (s_photo2.length > 0) {
+        photoArray.push(s_photo2);
+      }
+      if (s_photo3.length > 0) {
+        photoArray.push(s_photo3);
+      }
+
       // 1. Build dictionary
       var dictionary = {
         "firstName": s_firstName,
@@ -39,6 +54,7 @@ class EditModalView extends React.Component{
         "lastUpdated": Math.round(Number(Date.now())/1000),
         "phone": this.refs.phone.getValue(),
         "email": this.refs.email.getValue(),
+        "photos": photoArray,
         "facebook": addHttp(this.refs.facebook.getValue())
       };
       firebaseActions.addOrUpdateRushee(this.props.activeEditRusheeId, dictionary, this.props.loggedInUserId);
@@ -54,6 +70,9 @@ class EditModalView extends React.Component{
     var email = <Input type="email" ref="email" label="Email Address" placeholder="Enter email" />;
     var phone = <Input type="text" ref="phone" label="Phone Number" placeholder="Enter phone" />;
 
+    var photo1 = <Input type="text" ref="photo1" placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
+    var photo2 = <Input type="text" ref="photo2" placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
+    var photo3 = <Input type="text" ref="photo3" placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
     var error =
       <Alert bsStyle="danger" onDismiss={this.handleAlertDismiss.bind(this)}>
         <p>Please make sure you enter first and last names.</p>
@@ -68,6 +87,15 @@ class EditModalView extends React.Component{
         facebook = <Input type="text" ref="facebook" label="Facebook Profile" defaultValue={editingRushee["facebook"]} placeholder="Enter link" />;
         email = <Input type="email" ref="email" label="Email Address" defaultValue={editingRushee["email"]} placeholder="Enter email" />;
         phone = <Input type="text" ref="phone" label="Phone Number" defaultValue={editingRushee["phone"]} placeholder="Enter phone" />;
+        if (editingRushee["photos"] && editingRushee["photos"][0]) {
+          photo1 = <Input type="text" ref="photo1"  defaultValue={editingRushee["photos"][0]} placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
+        }
+        if (editingRushee["photos"] && editingRushee["photos"][1]) {
+          photo2 = <Input type="text" ref="photo2"  defaultValue={editingRushee["photos"][1]} placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
+        }
+        if (editingRushee["photos"] && editingRushee["photos"][2]) {
+          photo3 = <Input type="text" ref="photo3"  defaultValue={editingRushee["photos"][2]} placeholder="Photo URL (should end in .png, .jpeg, .jpg)" />;
+        }
       }
     }
     return (
@@ -91,6 +119,10 @@ class EditModalView extends React.Component{
               {facebook}
               {phone}
               {email}
+              <strong>Photos:</strong>
+              {photo1}
+              {photo2}
+              {photo3}
               <ButtonInput type="submit" value="Save" />
               Click anywhere outside this form to discard changes.
             </form>
