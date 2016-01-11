@@ -12,7 +12,7 @@ class HomeView extends React.Component{
     });
     return (
       <div>
-        <Sortbar />
+        <Sortbar updateFunction={this.props.updateFirebaseConnection}/>
         <div>
           {rusheeTiles}
         </div>

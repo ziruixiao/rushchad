@@ -23041,6 +23041,7 @@
 	  }, {
 	    key: 'setupFirebaseConnections',
 	    value: function setupFirebaseConnections() {
+	      console.log('called');
 	      var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
 	      usersRef.on('value', (function (dataSnapshot) {
 	        this.setState({
@@ -23057,6 +23058,7 @@
 	          sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
 	        }
 	        var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
+	        console.log(ordering);
 	        switch (ordering) {
 	          case 'first_A_Z':
 	            sortedRushees.sort(this.compareRusheesFirstAZ);
@@ -23080,10 +23082,8 @@
 	            sortedRushees.sort(this.compareRusheesPopularityZA);
 	            break;
 	          default:
-	            sortedRushees.sort(this.compareRusheesFirstAZ);
 	            break;
 	        }
-	        sortedRushees.sort(this.compareRusheesFirstAZ);
 	        this.setState({
 	          rushees: sortedRushees
 	        });
@@ -23109,15 +23109,15 @@
 	  }, {
 	    key: 'compareRusheesFirstZA',
 	    value: function compareRusheesFirstZA(a, b) {
-	      if (a[1]["firstName"] > b[1]["firstName"]) {
-	        return -1;
-	      } else if (a[1]["firstName"] < b[1]["firstName"]) {
+	      if (a[1]["firstName"] < b[1]["firstName"]) {
 	        return 1;
+	      } else if (a[1]["firstName"] > b[1]["firstName"]) {
+	        return -1;
 	      } else {
-	        if (a[1]["lastName"] > b[1]["lastName"]) {
-	          return -1;
-	        } else if (a[1]["lastName"] < b[1]["lastName"]) {
+	        if (a[1]["lastName"] < b[1]["lastName"]) {
 	          return 1;
+	        } else if (a[1]["lastName"] > b[1]["lastName"]) {
+	          return -1;
 	        } else {
 	          return 0;
 	        }
@@ -23284,6 +23284,7 @@
 	          loggedInUserId: 1,
 	          openEditModal: this.openEditModal.bind(this),
 	          closeEditModal: this.closeEditModal.bind(this),
+	          updateFirebaseConnection: this.setupFirebaseConnections.bind(this),
 	          activeEditRusheeId: "-1"
 	        }, (function () {
 
@@ -23396,7 +23397,8 @@
 	  showEditModal: _react2['default'].PropTypes.bool,
 	  activeEditRusheeId: _react2['default'].PropTypes.string,
 	  openEditModal: _react2['default'].PropTypes.func,
-	  closeEditModal: _react2['default'].PropTypes.func
+	  closeEditModal: _react2['default'].PropTypes.func,
+	  updateFirebaseConnection: _react2['default'].PropTypes.func
 	};
 
 	Main.defaultProps = {
@@ -23409,7 +23411,8 @@
 	  showEditModal: false,
 	  activeEditRusheeId: "-1",
 	  openEditModal: function openEditModal() {},
-	  closeEditModal: function closeEditModal() {}
+	  closeEditModal: function closeEditModal() {},
+	  updateFirebaseConnection: function updateFirebaseConnection() {}
 	};
 
 	Main.contextTypes = {
@@ -41968,7 +41971,7 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(_Sortbar2['default'], null),
+	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateFirebaseConnection }),
 	        _react2['default'].createElement(
 	          'div',
 	          null,
@@ -42176,12 +42179,14 @@
 	    value: function handleOrderSwitch(newOrder) {
 	      console.log('ordering now', newOrder);
 	      localStorage.setItem('rusheeOrdering', newOrder);
+	      console.log(this.props);
+	      // TODO: Trigger Firebase reordering
+	      this.props.updateFunction();
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
-	      console.log(ordering);
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
@@ -42350,6 +42355,10 @@
 
 	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
+	var _Sortbar = __webpack_require__(458);
+
+	var _Sortbar2 = _interopRequireDefault(_Sortbar);
+
 	var ListView = (function (_React$Component) {
 	  _inherits(ListView, _React$Component);
 
@@ -42430,50 +42439,55 @@
 	        );
 	      });
 	      return _react2['default'].createElement(
-	        _reactBootstrap.Table,
-	        { striped: true, bordered: true, condensed: true, hover: true },
+	        'div',
+	        null,
+	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateFirebaseConnection }),
 	        _react2['default'].createElement(
-	          'thead',
-	          null,
+	          _reactBootstrap.Table,
+	          { striped: true, bordered: true, condensed: true, hover: true },
 	          _react2['default'].createElement(
-	            'tr',
+	            'thead',
 	            null,
 	            _react2['default'].createElement(
-	              'th',
+	              'tr',
 	              null,
-	              'First'
-	            ),
-	            _react2['default'].createElement(
-	              'th',
-	              null,
-	              'Last'
-	            ),
-	            _react2['default'].createElement(
-	              'th',
-	              null,
-	              'Comments'
-	            ),
-	            _react2['default'].createElement(
-	              'th',
-	              null,
-	              'Rating'
-	            ),
-	            _react2['default'].createElement(
-	              'th',
-	              null,
-	              'Votes'
-	            ),
-	            _react2['default'].createElement(
-	              'th',
-	              null,
-	              'Last Updated'
+	              _react2['default'].createElement(
+	                'th',
+	                null,
+	                'First'
+	              ),
+	              _react2['default'].createElement(
+	                'th',
+	                null,
+	                'Last'
+	              ),
+	              _react2['default'].createElement(
+	                'th',
+	                null,
+	                'Comments'
+	              ),
+	              _react2['default'].createElement(
+	                'th',
+	                null,
+	                'Rating'
+	              ),
+	              _react2['default'].createElement(
+	                'th',
+	                null,
+	                'Votes'
+	              ),
+	              _react2['default'].createElement(
+	                'th',
+	                null,
+	                'Last Updated'
+	              )
 	            )
+	          ),
+	          _react2['default'].createElement(
+	            'tbody',
+	            null,
+	            rusheeList
 	          )
-	        ),
-	        _react2['default'].createElement(
-	          'tbody',
-	          null,
-	          rusheeList
 	        )
 	      );
 	    }

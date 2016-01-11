@@ -63,6 +63,7 @@ class Main extends React.Component{
     }
   }
   setupFirebaseConnections() {
+    console.log('called');
     var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
     usersRef.on('value', function(dataSnapshot) {
       this.setState({
@@ -79,6 +80,7 @@ class Main extends React.Component{
         sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
       }
       var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
+      console.log(ordering);
       switch(ordering) {
         case 'first_A_Z':
           sortedRushees.sort(this.compareRusheesFirstAZ);
@@ -102,10 +104,8 @@ class Main extends React.Component{
           sortedRushees.sort(this.compareRusheesPopularityZA);
           break;
         default:
-          sortedRushees.sort(this.compareRusheesFirstAZ);
           break;
       }
-      sortedRushees.sort(this.compareRusheesFirstAZ);
       this.setState({
         rushees: sortedRushees
       });
@@ -121,11 +121,11 @@ class Main extends React.Component{
     }
   }
   compareRusheesFirstZA(a, b) {
-    if (a[1]["firstName"] > b[1]["firstName"]) { return -1; }
-    else if (a[1]["firstName"] < b[1]["firstName"]) { return 1; }
+    if (a[1]["firstName"] < b[1]["firstName"]) { return 1; }
+    else if (a[1]["firstName"] > b[1]["firstName"]) { return -1; }
     else {
-      if (a[1]["lastName"] > b[1]["lastName"]) { return -1; }
-      else if (a[1]["lastName"] < b[1]["lastName"]) { return 1; }
+      if (a[1]["lastName"] < b[1]["lastName"]) { return 1; }
+      else if (a[1]["lastName"] > b[1]["lastName"]) { return -1; }
       else { return 0; }
     }
   }
@@ -260,6 +260,7 @@ class Main extends React.Component{
         loggedInUserId: 1,
         openEditModal: this.openEditModal.bind(this),
         closeEditModal: this.closeEditModal.bind(this),
+        updateFirebaseConnection: this.setupFirebaseConnections.bind(this),
         activeEditRusheeId:  "-1"
       }, function () {
 
@@ -343,7 +344,8 @@ Main.propTypes = {
   showEditModal: React.PropTypes.bool,
   activeEditRusheeId: React.PropTypes.string,
   openEditModal: React.PropTypes.func,
-  closeEditModal: React.PropTypes.func
+  closeEditModal: React.PropTypes.func,
+  updateFirebaseConnection: React.PropTypes.func
 };
 
 Main.defaultProps = {
@@ -359,6 +361,9 @@ Main.defaultProps = {
 
   },
   closeEditModal: () => {
+
+  },
+  updateFirebaseConnection: () => {
 
   }
 }

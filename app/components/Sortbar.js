@@ -13,8 +13,9 @@ class Sortbar extends React.Component{
   handleOrderSwitch(newOrder) {
     console.log('ordering now', newOrder);
     localStorage.setItem('rusheeOrdering', newOrder);
-
+    console.log(this.props);
     // TODO: Trigger Firebase reordering
+    this.props.updateFunction();
   }
   render(){
     var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';

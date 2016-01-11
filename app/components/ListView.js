@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 import TimeAgo from 'react-timeago';
 import StarRating from 'react-star-rating';
+import Sortbar from './Sortbar';
 
 class ListView extends React.Component{
   showDetailView(rusheeId) {
@@ -44,6 +45,8 @@ class ListView extends React.Component{
         </tr>)
     });
     return (
+      <div>
+        <Sortbar updateFunction={this.props.updateFirebaseConnection}/>
       <Table striped bordered condensed hover>
         <thead>
           <tr>
@@ -59,7 +62,7 @@ class ListView extends React.Component{
         {rusheeList}
         </tbody>
       </Table>
-
+      </div>
     )
   }
 };
