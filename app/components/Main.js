@@ -106,7 +106,6 @@ class Main extends React.Component{
           break;
       }
       sortedRushees.sort(this.compareRusheesFirstAZ);
-      console.log(sortedRushees);
       this.setState({
         rushees: sortedRushees
       });

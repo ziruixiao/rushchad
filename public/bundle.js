@@ -42229,7 +42229,7 @@
 	      var _this = this;
 
 	      var rusheeList = Object.keys(this.props.rushees).map(function (key) {
-	        var rushee = _this.props.rushees[key];
+	        var rushee = _this.props.rushees[key][1];
 	        var lastUpdated = new Date(Number(rushee["lastUpdated"]) * 1000);
 	        var numComments = rushee["comments"] ? Object.keys(rushee["comments"]).length : 0;
 	        var numRatings = rushee["ratings"] ? Object.keys(rushee["ratings"]).length : 0;
@@ -42247,7 +42247,7 @@
 
 	        return _react2['default'].createElement(
 	          'tr',
-	          { key: key, onClick: _this.showDetailView.bind(_this, key) },
+	          { key: key, onClick: _this.showDetailView.bind(_this, _this.props.rushees[key][0]) },
 	          _react2['default'].createElement(
 	            'td',
 	            null,
@@ -42423,13 +42423,11 @@
 	    value: function render() {
 	      var _this = this;
 
-	      console.log(this.props);
 	      var rusheeId = this.router.getCurrentParams().rusheeId;
 	      var arrayRusheeId = 0;
 	      var rushee;
 	      for (var i = 0; i < this.props.rushees.length; i += 1) {
 	        if (this.props.rushees[i][0] == rusheeId) {
-	          console.log('found ', i);
 	          rushee = this.props.rushees[i][1];
 	          break;
 	        }
