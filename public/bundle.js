@@ -22910,17 +22910,17 @@
 
 	var _componentsHomeView2 = _interopRequireDefault(_componentsHomeView);
 
-	var _componentsProfileView = __webpack_require__(458);
+	var _componentsProfileView = __webpack_require__(459);
 
 	var _componentsProfileView2 = _interopRequireDefault(_componentsProfileView);
 
 	var _reactRouter = __webpack_require__(158);
 
-	var _componentsListView = __webpack_require__(459);
+	var _componentsListView = __webpack_require__(460);
 
 	var _componentsListView2 = _interopRequireDefault(_componentsListView);
 
-	var _componentsDetailView = __webpack_require__(460);
+	var _componentsDetailView = __webpack_require__(461);
 
 	var _componentsDetailView2 = _interopRequireDefault(_componentsDetailView);
 
@@ -23070,8 +23070,8 @@
 	          case 'last_Z_A':
 	            sortedRushees.sort(this.compareRusheesLastZA);
 	            break;
-	          case 'lastUpdated_A_Z':
-	            sortedRushees.sort(this.compareRusheesLastUpdatedAZ);
+	          case 'lastUpdated_Z_A':
+	            sortedRushees.sort(this.compareRusheesLastUpdatedZA);
 	            break;
 	          case 'popularity_A_Z':
 	            sortedRushees.sort(this.compareRusheesPopularityAZ);
@@ -23084,7 +23084,6 @@
 	            break;
 	        }
 	        sortedRushees.sort(this.compareRusheesFirstAZ);
-	        console.log(sortedRushees);
 	        this.setState({
 	          rushees: sortedRushees
 	        });
@@ -23196,6 +23195,44 @@
 	      }
 	    }
 	  }, {
+	    key: 'compareRusheesPopularityAZ',
+	    value: function compareRusheesPopularityAZ(a, b) {
+	      var a_avg = 0;
+	      var a_count = 0;
+	      var b_avg = 0;
+	      var b_count = 0;
+	      if (a["ratings"]) {
+	        var a_sum = 0;
+	        Object.keys(a["ratings"]).map(function (key) {
+	          a_sum += Number(a["ratings"][key]["value"]);
+	          a_count++;
+	        });
+	        a_avg = a_sum / a_count;
+	      }
+	      if (b["ratings"]) {
+	        var b_sum = 0;
+	        Object.keys(b["ratings"]).map(function (key) {
+	          b_sum += Number(b["ratings"][key]["value"]);
+	          b_count++;
+	        });
+	        b_avg = b_sum / b_count;
+	      }
+
+	      if (a_avg < b_avg) {
+	        return -1;
+	      } else if (a_avg > b_avg) {
+	        return 1;
+	      } else {
+	        if (a_count < b_count) {
+	          return -1;
+	        } else if (a_count > b_count) {
+	          return 1;
+	        } else {
+	          return 0;
+	        }
+	      }
+	    }
+	  }, {
 	    key: 'init',
 	    value: function init() {
 	      var storedExpiration = localStorage.getItem('sessionExpiration');
@@ -23234,8 +23271,6 @@
 	        }, function () {
 	          document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://rushchad.com";
 	        });
-
-	        return;
 	      } else {
 	        localStorage.setItem('sessionKey', sessionKey);
 	        var expireTime = Number(Date.now()) + SESSION_EXPIRE_TIME;
@@ -41909,6 +41944,10 @@
 
 	var _RusheeTile2 = _interopRequireDefault(_RusheeTile);
 
+	var _Sortbar = __webpack_require__(458);
+
+	var _Sortbar2 = _interopRequireDefault(_Sortbar);
+
 	var HomeView = (function (_React$Component) {
 	  _inherits(HomeView, _React$Component);
 
@@ -41929,7 +41968,12 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        rusheeTiles
+	        _react2['default'].createElement(_Sortbar2['default'], null),
+	        _react2['default'].createElement(
+	          'div',
+	          null,
+	          rusheeTiles
+	        )
 	      );
 	    }
 	  }]);
@@ -42093,6 +42137,110 @@
 /* 458 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * Created by Felix on 1/11/16.
+	 */
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(204);
+
+	var Sortbar = (function (_React$Component) {
+	  _inherits(Sortbar, _React$Component);
+
+	  function Sortbar() {
+	    _classCallCheck(this, Sortbar);
+
+	    _get(Object.getPrototypeOf(Sortbar.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(Sortbar, [{
+	    key: 'handleOrderSwitch',
+	    value: function handleOrderSwitch(newOrder) {
+	      console.log('ordering now', newOrder);
+	      localStorage.setItem('rusheeOrdering', newOrder);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
+	      console.log(ordering);
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(
+	          _reactBootstrap.ButtonToolbar,
+	          null,
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleOrderSwitch.bind(this, 'first_A_Z'), bsStyle: ordering == "first_A_Z" ? "primary" : "default" },
+	            'First (A-Z)'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleOrderSwitch.bind(this, 'first_Z_A'), bsStyle: ordering == "first_Z_A" ? "primary" : "default" },
+	            'First (Z-A)'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleOrderSwitch.bind(this, 'last_A_Z'), bsStyle: ordering == "last_A_Z" ? "primary" : "default" },
+	            'Last (A-Z)'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleOrderSwitch.bind(this, 'last_Z_A'), bsStyle: ordering == "last_Z_A" ? "primary" : "default" },
+	            'Last (Z-A)'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleOrderSwitch.bind(this, 'lastUpdated_Z_A'), bsStyle: ordering == "lastUpdated_Z_A" ? "primary" : "default" },
+	            'Last Updated'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleOrderSwitch.bind(this, 'popularity_Z_A'), bsStyle: ordering == "popularity_Z_A" ? "primary" : "default" },
+	            'Most Popular'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleOrderSwitch.bind(this, 'popularity_A_Z'), bsStyle: ordering == "popularity_A_Z" ? "primary" : "default" },
+	            'Least Popular'
+	          )
+	        ),
+	        _react2['default'].createElement('br', null)
+	      );
+	    }
+	  }]);
+
+	  return Sortbar;
+	})(_react2['default'].Component);
+
+	;
+
+	exports['default'] = Sortbar;
+	module.exports = exports['default'];
+
+/***/ },
+/* 459 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -42169,7 +42317,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 459 */
+/* 460 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42344,7 +42492,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 460 */
+/* 461 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42382,7 +42530,7 @@
 
 	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
-	var _CommentList = __webpack_require__(461);
+	var _CommentList = __webpack_require__(462);
 
 	var _CommentList2 = _interopRequireDefault(_CommentList);
 
@@ -42653,7 +42801,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 461 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42684,7 +42832,7 @@
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
-	var _Comment = __webpack_require__(462);
+	var _Comment = __webpack_require__(463);
 
 	var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -42826,7 +42974,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 462 */
+/* 463 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**

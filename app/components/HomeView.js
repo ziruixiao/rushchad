@@ -3,6 +3,7 @@ import {
   Col
 } from 'react-bootstrap';
 import RusheeTile from './RusheeTile';
+import Sortbar from './Sortbar';
 
 class HomeView extends React.Component{
   render(){
@@ -11,7 +12,10 @@ class HomeView extends React.Component{
     });
     return (
       <div>
-        {rusheeTiles}
+        <Sortbar />
+        <div>
+          {rusheeTiles}
+        </div>
       </div>
     )
   }

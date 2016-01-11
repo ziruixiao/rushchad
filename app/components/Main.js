@@ -92,8 +92,8 @@ class Main extends React.Component{
         case 'last_Z_A':
           sortedRushees.sort(this.compareRusheesLastZA);
           break;
-        case 'lastUpdated_A_Z':
-          sortedRushees.sort(this.compareRusheesLastUpdatedAZ);
+        case 'lastUpdated_Z_A':
+          sortedRushees.sort(this.compareRusheesLastUpdatedZA);
           break;
         case 'popularity_A_Z':
           sortedRushees.sort(this.compareRusheesPopularityAZ);
@@ -174,6 +174,36 @@ class Main extends React.Component{
       else { return 0; }
     }
   }
+  compareRusheesPopularityAZ(a, b) {
+    var a_avg = 0;
+    var a_count = 0;
+    var b_avg = 0;
+    var b_count = 0;
+    if (a["ratings"]) {
+      var a_sum = 0;
+      Object.keys(a["ratings"]).map((key) => {
+        a_sum += Number(a["ratings"][key]["value"]);
+        a_count++;
+      });
+      a_avg = a_sum/a_count;
+    }
+    if (b["ratings"]) {
+      var b_sum = 0;
+      Object.keys(b["ratings"]).map((key) => {
+        b_sum += Number(b["ratings"][key]["value"]);
+        b_count++;
+      });
+      b_avg = b_sum/b_count;
+    }
+
+    if (a_avg < b_avg) { return -1; }
+    else if (a_avg > b_avg) { return 1; }
+    else {
+      if (a_count < b_count) { return -1; }
+      else if (a_count > b_count) { return 1; }
+      else { return 0; }
+    }
+  }
 
   init(){
     var storedExpiration = localStorage.getItem('sessionExpiration');
@@ -216,7 +246,7 @@ class Main extends React.Component{
 
       });
 
-      return;
+
     } else {
       localStorage.setItem('sessionKey', sessionKey);
       var expireTime = Number(Date.now()) + SESSION_EXPIRE_TIME;
