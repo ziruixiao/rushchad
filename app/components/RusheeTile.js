@@ -25,7 +25,7 @@ class RusheeTile extends React.Component{
     if (this.props.rushee["photos"]) {
       if (this.props.rushee["photos"][0]) {
         // TODO: Uncomment this line below:
-        //thumbPhotoUrl = this.props.rushee["photos"][0];
+        thumbPhotoUrl = this.props.rushee["photos"][0];
       }
     }
     var myDoc = document.getElementById('photo' + this.props.rusheeId);
@@ -65,7 +65,7 @@ class RusheeTile extends React.Component{
               </div>
             } bsStyle="info" onClick={this.showDetailView.bind(this)}>
               <div className="panel-photo">
-              <Image id={'photo' + this.props.rusheeId} src={thumbPhotoUrl} responsive className="img-responsive center-block"/>
+              <Image id={'photo' + this.props.rusheeId}  src={thumbPhotoUrl} responsive className="img-responsive center-block"/>
               </div>
             </Panel>
           </Col>

@@ -11,9 +11,7 @@ Glyphicon,
 
 class Sortbar extends React.Component{
   handleOrderSwitch(newOrder) {
-    console.log('ordering now', newOrder);
     localStorage.setItem('rusheeOrdering', newOrder);
-    // TODO: Trigger Firebase reordering
     this.props.updateFunction();
   }
   render(){
