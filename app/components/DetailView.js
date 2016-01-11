@@ -41,7 +41,7 @@ class DetailView extends React.Component{
     var rusheeComments;
     var userStars = 0;
     var userRating = 'none';
-
+    var carousel;
     if (rushee) {
       var lastUpdated = <TimeAgo date={new Date(Number(rushee["lastUpdated"])*1000)}/>
       var facebook = rushee["facebook"];
@@ -87,6 +87,19 @@ class DetailView extends React.Component{
       if (rushee["comments"]) {
         rusheeComments = rushee["comments"];
       }
+
+      if(rushee["photos"]) {
+        var carouselItems = Object.keys(rushee["photos"]).map((key) => {
+          console.log(rushee["photos"][key]);
+          return(
+          <CarouselItem key={key} className="picture-carousel">
+            <img width={900} height={500} src={rushee["photos"][key]} />
+          </CarouselItem>)
+
+        });
+
+        carousel = <Carousel>{ carouselItems} </Carousel>;
+      }
     }
 
     return (
@@ -126,6 +139,8 @@ class DetailView extends React.Component{
           </tr>
           </tbody>
         </Table>
+          {carousel}
+
         <CommentList users={this.props.users} loggedInUserId={this.props.loggedInUserId} comments={rusheeComments} rusheeId={rusheeId}/>
 
 

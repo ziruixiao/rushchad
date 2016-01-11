@@ -6,6 +6,11 @@
 
 }
 
+.picture-carousel {
+    min-height: 300px;
+    max-height: 500px;
+    background-color: black;
+}
 .absolute-positioning {
     position: fixed;
 }

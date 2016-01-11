@@ -42280,7 +42280,7 @@
 	      var rusheeComments;
 	      var userStars = 0;
 	      var userRating = 'none';
-
+	      var carousel;
 	      if (rushee) {
 	        var lastUpdated = _react2['default'].createElement(_reactTimeago2['default'], { date: new Date(Number(rushee["lastUpdated"]) * 1000) });
 	        var facebook = rushee["facebook"];
@@ -42373,6 +42373,24 @@
 	        if (rushee["comments"]) {
 	          rusheeComments = rushee["comments"];
 	        }
+
+	        if (rushee["photos"]) {
+	          var carouselItems = Object.keys(rushee["photos"]).map(function (key) {
+	            console.log(rushee["photos"][key]);
+	            return _react2['default'].createElement(
+	              _reactBootstrap.CarouselItem,
+	              { key: key, className: 'picture-carousel' },
+	              _react2['default'].createElement('img', { width: 900, height: 500, src: rushee["photos"][key] })
+	            );
+	          });
+
+	          carousel = _react2['default'].createElement(
+	            _reactBootstrap.Carousel,
+	            null,
+	            carouselItems,
+	            ' '
+	          );
+	        }
 	      }
 
 	      return _react2['default'].createElement(
@@ -42447,6 +42465,7 @@
 	            )
 	          )
 	        ),
+	        carousel,
 	        _react2['default'].createElement(_CommentList2['default'], { users: this.props.users, loggedInUserId: this.props.loggedInUserId, comments: rusheeComments, rusheeId: rusheeId })
 	      );
 	    }
