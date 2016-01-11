@@ -23056,22 +23056,143 @@
 	        for (var f_rusheeId in unsortedRushees) {
 	          sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
 	        }
-	        sortedRushees.sort(this.compare);
+	        var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
+	        switch (ordering) {
+	          case 'first_A_Z':
+	            sortedRushees.sort(this.compareRusheesFirstAZ);
+	            break;
+	          case 'first_Z_A':
+	            sortedRushees.sort(this.compareRusheesFirstZA);
+	            break;
+	          case 'last_A_Z':
+	            sortedRushees.sort(this.compareRusheesLastAZ);
+	            break;
+	          case 'last_Z_A':
+	            sortedRushees.sort(this.compareRusheesLastZA);
+	            break;
+	          case 'lastUpdated_A_Z':
+	            sortedRushees.sort(this.compareRusheesLastUpdatedAZ);
+	            break;
+	          case 'popularity_A_Z':
+	            sortedRushees.sort(this.compareRusheesPopularityAZ);
+	            break;
+	          case 'popularity_Z_A':
+	            sortedRushees.sort(this.compareRusheesPopularityZA);
+	            break;
+	          default:
+	            sortedRushees.sort(this.compareRusheesFirstAZ);
+	            break;
+	        }
+	        sortedRushees.sort(this.compareRusheesFirstAZ);
 	        console.log(sortedRushees);
 	        this.setState({
-	          rushees: dataSnapshot.val()
+	          rushees: sortedRushees
 	        });
 	      }).bind(this));
 	    }
 	  }, {
-	    key: 'compare',
-	    value: function compare(a, b) {
+	    key: 'compareRusheesFirstAZ',
+	    value: function compareRusheesFirstAZ(a, b) {
+	      if (a[1]["firstName"] < b[1]["firstName"]) {
+	        return -1;
+	      } else if (a[1]["firstName"] > b[1]["firstName"]) {
+	        return 1;
+	      } else {
+	        if (a[1]["lastName"] < b[1]["lastName"]) {
+	          return -1;
+	        } else if (a[1]["lastName"] > b[1]["lastName"]) {
+	          return 1;
+	        } else {
+	          return 0;
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'compareRusheesFirstZA',
+	    value: function compareRusheesFirstZA(a, b) {
+	      if (a[1]["firstName"] > b[1]["firstName"]) {
+	        return -1;
+	      } else if (a[1]["firstName"] < b[1]["firstName"]) {
+	        return 1;
+	      } else {
+	        if (a[1]["lastName"] > b[1]["lastName"]) {
+	          return -1;
+	        } else if (a[1]["lastName"] < b[1]["lastName"]) {
+	          return 1;
+	        } else {
+	          return 0;
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'compareRusheesLastZA',
+	    value: function compareRusheesLastZA(a, b) {
+	      if (a[1]["lastName"] > b[1]["lastName"]) {
+	        return -1;
+	      } else if (a[1]["lastName"] < b[1]["lastName"]) {
+	        return 1;
+	      } else {
+	        return 0;
+	      }
+	    }
+	  }, {
+	    key: 'compareRusheesLastAZ',
+	    value: function compareRusheesLastAZ(a, b) {
 	      if (a[1]["lastName"] < b[1]["lastName"]) {
 	        return -1;
 	      } else if (a[1]["lastName"] > b[1]["lastName"]) {
 	        return 1;
 	      } else {
 	        return 0;
+	      }
+	    }
+	  }, {
+	    key: 'compareRusheesLastUpdatedZA',
+	    value: function compareRusheesLastUpdatedZA(a, b) {
+	      if (a[1]["lastUpdated"] > b[1]["lastUpdated"]) {
+	        return -1;
+	      } else if (a[1]["lastUpdated"] < b[1]["lastUpdated"]) {
+	        return 1;
+	      } else {
+	        return 0;
+	      }
+	    }
+	  }, {
+	    key: 'compareRusheesPopularityZA',
+	    value: function compareRusheesPopularityZA(a, b) {
+	      var a_avg = 0;
+	      var a_count = 0;
+	      var b_avg = 0;
+	      var b_count = 0;
+	      if (a["ratings"]) {
+	        var a_sum = 0;
+	        Object.keys(a["ratings"]).map(function (key) {
+	          a_sum += Number(a["ratings"][key]["value"]);
+	          a_count++;
+	        });
+	        a_avg = a_sum / a_count;
+	      }
+	      if (b["ratings"]) {
+	        var b_sum = 0;
+	        Object.keys(b["ratings"]).map(function (key) {
+	          b_sum += Number(b["ratings"][key]["value"]);
+	          b_count++;
+	        });
+	        b_avg = b_sum / b_count;
+	      }
+
+	      if (a_avg > b_avg) {
+	        return -1;
+	      } else if (a_avg < b_avg) {
+	        return 1;
+	      } else {
+	        if (a_count > b_count) {
+	          return -1;
+	        } else if (a_count < b_count) {
+	          return 1;
+	        } else {
+	          return 0;
+	        }
 	      }
 	    }
 	  }, {
@@ -41803,7 +41924,7 @@
 	      var _this = this;
 
 	      var rusheeTiles = Object.keys(this.props.rushees).map(function (key) {
-	        return _react2['default'].createElement(_RusheeTile2['default'], { key: key, rusheeId: key, rushee: _this.props.rushees[key] });
+	        return _react2['default'].createElement(_RusheeTile2['default'], { key: key, rusheeId: _this.props.rushees[key][0], rushee: _this.props.rushees[key][1] });
 	      });
 	      return _react2['default'].createElement(
 	        'div',
@@ -41884,11 +42005,7 @@
 	        }
 	      }
 	      var myDoc = document.getElementById('photo' + this.props.rusheeId);
-	      if (myDoc) {
-	        myDoc.error(function () {
-	          console.log('error');
-	        });
-	      }
+
 	      var stars = 0.1;
 	      if (this.props.rushee["ratings"]) {
 	        var count = 0;
@@ -42306,8 +42423,18 @@
 	    value: function render() {
 	      var _this = this;
 
+	      console.log(this.props);
 	      var rusheeId = this.router.getCurrentParams().rusheeId;
-	      var rushee = this.props.rushees[rusheeId];
+	      var arrayRusheeId = 0;
+	      var rushee;
+	      for (var i = 0; i < this.props.rushees.length; i += 1) {
+	        if (this.props.rushees[i][0] == rusheeId) {
+	          console.log('found ', i);
+	          rushee = this.props.rushees[i][1];
+	          break;
+	        }
+	      }
+
 	      var rusheeName, rusheeFacebook, rusheePhone, rusheeEmail, rusheePhotos;
 	      var numRatings = 0;
 	      var stars = 0.1;

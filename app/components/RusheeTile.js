@@ -29,11 +29,7 @@ class RusheeTile extends React.Component{
       }
     }
     var myDoc = document.getElementById('photo' + this.props.rusheeId);
-    if (myDoc) {
-      myDoc.error(function() {
-        console.log('error');
-      });
-    }
+
     var stars = 0.1;
     if (this.props.rushee["ratings"]) {
       var count = 0;

@@ -78,22 +78,104 @@ class Main extends React.Component{
       for (var f_rusheeId in unsortedRushees) {
         sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
       }
-      sortedRushees.sort(this.compare);
+      var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
+      switch(ordering) {
+        case 'first_A_Z':
+          sortedRushees.sort(this.compareRusheesFirstAZ);
+          break;
+        case 'first_Z_A':
+          sortedRushees.sort(this.compareRusheesFirstZA);
+          break;
+        case 'last_A_Z':
+          sortedRushees.sort(this.compareRusheesLastAZ);
+          break;
+        case 'last_Z_A':
+          sortedRushees.sort(this.compareRusheesLastZA);
+          break;
+        case 'lastUpdated_A_Z':
+          sortedRushees.sort(this.compareRusheesLastUpdatedAZ);
+          break;
+        case 'popularity_A_Z':
+          sortedRushees.sort(this.compareRusheesPopularityAZ);
+          break;
+        case 'popularity_Z_A':
+          sortedRushees.sort(this.compareRusheesPopularityZA);
+          break;
+        default:
+          sortedRushees.sort(this.compareRusheesFirstAZ);
+          break;
+      }
+      sortedRushees.sort(this.compareRusheesFirstAZ);
       console.log(sortedRushees);
       this.setState({
-        rushees: dataSnapshot.val()
+        rushees: sortedRushees
       });
     }.bind(this));
   }
-  compare(a, b) {
-    if (a[1]["lastName"] < b[1]["lastName"]) {
-      return -1;
-    } else if (a[1]["lastName"] > b[1]["lastName"]) {
-      return 1;
-    } else {
-      return 0;
+  compareRusheesFirstAZ(a, b) {
+    if (a[1]["firstName"] < b[1]["firstName"]) { return -1; }
+    else if (a[1]["firstName"] > b[1]["firstName"]) { return 1; }
+    else {
+      if (a[1]["lastName"] < b[1]["lastName"]) { return -1; }
+      else if (a[1]["lastName"] > b[1]["lastName"]) { return 1; }
+      else { return 0; }
     }
   }
+  compareRusheesFirstZA(a, b) {
+    if (a[1]["firstName"] > b[1]["firstName"]) { return -1; }
+    else if (a[1]["firstName"] < b[1]["firstName"]) { return 1; }
+    else {
+      if (a[1]["lastName"] > b[1]["lastName"]) { return -1; }
+      else if (a[1]["lastName"] < b[1]["lastName"]) { return 1; }
+      else { return 0; }
+    }
+  }
+  compareRusheesLastZA(a, b) {
+    if (a[1]["lastName"] > b[1]["lastName"]) { return -1; }
+    else if (a[1]["lastName"] < b[1]["lastName"]) { return 1; }
+    else { return 0; }
+  }
+  compareRusheesLastAZ(a, b) {
+    if (a[1]["lastName"] < b[1]["lastName"]) { return -1; }
+    else if (a[1]["lastName"] > b[1]["lastName"]) { return 1; }
+    else { return 0; }
+  }
+  compareRusheesLastUpdatedZA(a, b) {
+    if (a[1]["lastUpdated"] > b[1]["lastUpdated"]) { return -1; }
+    else if (a[1]["lastUpdated"] < b[1]["lastUpdated"]) { return 1; }
+    else { return 0; }
+  }
+  compareRusheesPopularityZA(a, b) {
+    var a_avg = 0;
+    var a_count = 0;
+    var b_avg = 0;
+    var b_count = 0;
+    if (a["ratings"]) {
+      var a_sum = 0;
+      Object.keys(a["ratings"]).map((key) => {
+        a_sum += Number(a["ratings"][key]["value"]);
+        a_count++;
+      });
+      a_avg = a_sum/a_count;
+    }
+    if (b["ratings"]) {
+      var b_sum = 0;
+      Object.keys(b["ratings"]).map((key) => {
+        b_sum += Number(b["ratings"][key]["value"]);
+        b_count++;
+      });
+      b_avg = b_sum/b_count;
+    }
+
+    if (a_avg > b_avg) { return -1; }
+    else if (a_avg < b_avg) { return 1; }
+    else {
+      if (a_count > b_count) { return -1; }
+      else if (a_count < b_count) { return 1; }
+      else { return 0; }
+    }
+  }
+
   init(){
     var storedExpiration = localStorage.getItem('sessionExpiration');
     var storedKey = localStorage.getItem('sessionKey');

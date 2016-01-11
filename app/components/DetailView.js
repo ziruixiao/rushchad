@@ -34,7 +34,16 @@ class DetailView extends React.Component{
   }
   render(){
     var rusheeId = this.router.getCurrentParams().rusheeId;
-    var rushee = this.props.rushees[rusheeId];
+    var arrayRusheeId = 0;
+    var rushee;
+    for(var i = 0; i < this.props.rushees.length; i += 1) {
+      if(this.props.rushees[i][0] == rusheeId) {
+        rushee = this.props.rushees[i][1];
+        break;
+      }
+    }
+
+
     var rusheeName, rusheeFacebook, rusheePhone, rusheeEmail, rusheePhotos;
     var numRatings = 0;
     var stars = 0.1;
