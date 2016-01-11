@@ -15,6 +15,15 @@ class Chatbar extends React.Component{
       timestamp: Number(Date.now())
     };
   }
+  delayAndScroll() {
+    setTimeout(this.scrollToBottom, 500);
+
+  }
+  scrollToBottom() {
+    console.log('yo');
+    var chatBox = document.getElementById('chatBox');
+    chatBox.scrollTop = chatBox.scrollHeight + 2000;
+  }
   init(){
     var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
     chatRef.on('value', function(dataSnapshot) {
@@ -111,13 +120,13 @@ class Chatbar extends React.Component{
     return (
       <ButtonToolbar className="fixedBottomRight">
 
-        <OverlayTrigger trigger="click" placement="top" overlay={<Popover id="chatPopOver"  className="chat-bar-button absolute-positioning" title="9 users online">
+        <OverlayTrigger trigger="click" placement="top" overlay={<Popover id="chatPopOver"  className="chat-bar-button absolute-positioning" title="Rushchad Chat">
           <div id="chatBox" className="chat-scroll">
             {chatMessages}
            </div>
            {chatInput}
            </Popover>}>
-          <Button className="chat-bar-button" bsStyle="primary">Live Chat</Button>
+          <Button onClick={this.delayAndScroll.bind(this)} className="chat-bar-button" bsStyle="primary">Live Chat</Button>
         </OverlayTrigger>
 
       </ButtonToolbar>

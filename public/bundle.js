@@ -41609,6 +41609,18 @@
 	  }
 
 	  _createClass(Chatbar, [{
+	    key: 'delayAndScroll',
+	    value: function delayAndScroll() {
+	      setTimeout(this.scrollToBottom, 500);
+	    }
+	  }, {
+	    key: 'scrollToBottom',
+	    value: function scrollToBottom() {
+	      console.log('yo');
+	      var chatBox = document.getElementById('chatBox');
+	      chatBox.scrollTop = chatBox.scrollHeight + 2000;
+	    }
+	  }, {
 	    key: 'init',
 	    value: function init() {
 	      var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
@@ -41744,7 +41756,7 @@
 	          _reactBootstrap.OverlayTrigger,
 	          { trigger: 'click', placement: 'top', overlay: _react2['default'].createElement(
 	              _reactBootstrap.Popover,
-	              { id: 'chatPopOver', className: 'chat-bar-button absolute-positioning', title: '9 users online' },
+	              { id: 'chatPopOver', className: 'chat-bar-button absolute-positioning', title: 'Rushchad Chat' },
 	              _react2['default'].createElement(
 	                'div',
 	                { id: 'chatBox', className: 'chat-scroll' },
@@ -41754,7 +41766,7 @@
 	            ) },
 	          _react2['default'].createElement(
 	            _reactBootstrap.Button,
-	            { className: 'chat-bar-button', bsStyle: 'primary' },
+	            { onClick: this.delayAndScroll.bind(this), className: 'chat-bar-button', bsStyle: 'primary' },
 	            'Live Chat'
 	          )
 	        )
@@ -41969,6 +41981,25 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
+	        _react2['default'].createElement(
+	          _reactBootstrap.Alert,
+	          { bsStyle: 'warning' },
+	          'Round 1 Cut Meeting: ',
+	          _react2['default'].createElement('strong', null),
+	          ' at ',
+	          _react2['default'].createElement(
+	            'strong',
+	            null,
+	            '12:00PM'
+	          ),
+	          ' in ',
+	          _react2['default'].createElement(
+	            'strong',
+	            null,
+	            'Soc Psych 130'
+	          ),
+	          '.'
+	        ),
 	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateFirebaseConnection }),
 	        _react2['default'].createElement(
 	          'div',
