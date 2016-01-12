@@ -42083,6 +42083,10 @@
 
 	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
+	var _reactTimeago = __webpack_require__(454);
+
+	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
+
 	var RusheeTile = (function (_React$Component) {
 	  _inherits(RusheeTile, _React$Component);
 
@@ -42103,6 +42107,7 @@
 	    value: function render() {
 	      var _this = this;
 
+	      var lastUpdated = _react2['default'].createElement(_reactTimeago2['default'], { date: new Date(Number(this.props.rushee["lastUpdated"]) * 1000) });
 	      var numComments = this.props.rushee["comments"] ? Object.keys(this.props.rushee["comments"]).length : 0;
 	      var numRatings = this.props.rushee["ratings"] ? Object.keys(this.props.rushee["ratings"]).length : 0;
 	      var thumbPhotoUrl = "http://jagc.org/images/avatar.png";
@@ -42132,46 +42137,65 @@
 	          _reactBootstrap.Col,
 	          { xs: 12, sm: 6, md: 4, lg: 3 },
 	          _react2['default'].createElement(
-	            _reactBootstrap.Panel,
-	            { className: 'fixed-panel', header: _react2['default'].createElement(
-	                'div',
-	                null,
-	                this.props.rushee["firstName"],
-	                ' ',
-	                this.props.rushee["lastName"]
-	              ), footer: _react2['default'].createElement(
-	                'div',
-	                null,
-	                _react2['default'].createElement(
-	                  _reactBootstrap.Row,
+	            _reactBootstrap.Well,
+	            { bsSize: 'small' },
+	            _react2['default'].createElement(
+	              _reactBootstrap.Panel,
+	              { className: 'fixed-panel', header: _react2['default'].createElement(
+	                  'div',
+	                  null,
+	                  this.props.rushee["firstName"],
+	                  ' ',
+	                  this.props.rushee["lastName"]
+	                ), footer: _react2['default'].createElement(
+	                  'div',
 	                  null,
 	                  _react2['default'].createElement(
-	                    _reactBootstrap.Col,
-	                    { xs: 5, sm: 5, md: 5 },
-	                    _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'comment' }),
-	                    ' ',
+	                    _reactBootstrap.Row,
+	                    null,
 	                    _react2['default'].createElement(
-	                      _reactBootstrap.Badge,
-	                      null,
-	                      numComments
+	                      _reactBootstrap.Col,
+	                      { xs: 7, sm: 7, md: 7 },
+	                      _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'comment' }),
+	                      ' ',
+	                      numComments,
+	                      ' ',
+	                      ' comments'
+	                    ),
+	                    _react2['default'].createElement(
+	                      _reactBootstrap.Col,
+	                      { xs: 5, sm: 5, md: 5, className: 'align-right' },
+	                      _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 15, disabled: true, rating: stars, totalStars: 5 })
 	                    )
 	                  ),
 	                  _react2['default'].createElement(
-	                    _reactBootstrap.Col,
-	                    { xs: 7, sm: 7, md: 7 },
-	                    _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 15, disabled: true, rating: stars, totalStars: 5 }),
+	                    _reactBootstrap.Row,
+	                    null,
 	                    _react2['default'].createElement(
-	                      _reactBootstrap.Badge,
-	                      null,
-	                      numRatings
+	                      _reactBootstrap.Col,
+	                      { xs: 7 },
+	                      _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'time' }),
+	                      ' ',
+	                      lastUpdated
+	                    ),
+	                    _react2['default'].createElement(
+	                      _reactBootstrap.Col,
+	                      { xs: 5, className: 'align-right' },
+	                      _react2['default'].createElement(
+	                        _reactBootstrap.Badge,
+	                        null,
+	                        numRatings,
+	                        ' ',
+	                        ' votes'
+	                      )
 	                    )
 	                  )
-	                )
-	              ), bsStyle: 'info', onClick: this.showDetailView.bind(this) },
-	            _react2['default'].createElement(
-	              'div',
-	              { className: 'panel-photo' },
-	              _react2['default'].createElement(_reactBootstrap.Image, { id: 'photo' + this.props.rusheeId, src: thumbPhotoUrl, responsive: true, className: 'img-responsive center-block' })
+	                ), bsStyle: 'info', onClick: this.showDetailView.bind(this) },
+	              _react2['default'].createElement(
+	                'div',
+	                { className: 'panel-photo' },
+	                _react2['default'].createElement(_reactBootstrap.Image, { id: 'photo' + this.props.rusheeId, src: thumbPhotoUrl, responsive: true, className: 'img-responsive center-block' })
+	              )
 	            )
 	          )
 	        )
