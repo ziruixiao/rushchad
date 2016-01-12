@@ -324,7 +324,7 @@ class Main extends React.Component{
           </div>
           <br />
           <br />
-          <Chatbar users={this.state.users} loggedInUserId={this.state.loggedInUserId}/>
+          { /** <Chatbar users={this.state.users} loggedInUserId={this.state.loggedInUserId}/>*/ }
         </div>
       )
     }

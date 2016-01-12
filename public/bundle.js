@@ -41634,7 +41634,6 @@
 	  }, {
 	    key: 'scrollToBottom',
 	    value: function scrollToBottom() {
-	      console.log('yo');
 	      var chatBox = document.getElementById('chatBox');
 	      chatBox.scrollTop = chatBox.scrollHeight + 2000;
 	    }
@@ -41661,7 +41660,6 @@
 	      var last10Min = nowDate - 600;
 	      new Firebase("https://rushchad.firebaseio.com/users").orderByChild("lastActive").startAt(last10Min).endAt(nowDate).on('value', (function (snap) {
 	        if (snap.val()) {
-	          console.log(snap.val());
 	          this.setState({
 	            usersOnline: Object.keys(snap.val()).length
 	          });
