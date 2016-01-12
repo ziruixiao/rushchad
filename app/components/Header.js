@@ -26,7 +26,7 @@ class Header extends React.Component{
               <NavItem href='#' eventKey={5}><Glyphicon glyph='log-out' /></NavItem>
             </Nav>
             <Nav onSelect={handleSelect.bind(this)} pullRight>
-              <NavItem href='#' eventKey={4}>{ this.props.googleUser["displayName"] }</NavItem>
+              <NavItem href='#' eventKey={4}>{ this.props.googleUser }</NavItem>
             </Nav>
 
           </Navbar.Collapse>
@@ -42,9 +42,9 @@ function handleSelect(selectedKey) {
     router.transitionTo('/', {});
   } else if (selectedKey == 2) {
     router.transitionTo('list',{});
-  } else if (selectedKey == 4) {
+  } /*else if (selectedKey == 4) {
     router.transitionTo('profile', {username: "ziruixiao"});
-  }
+  }*/
 }
 
 function handleModal(selectedKey) {

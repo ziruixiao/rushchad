@@ -20,7 +20,7 @@ class RusheeTile extends React.Component{
     router.transitionTo('detail', {rusheeId: this.props.rusheeId});
   }
   render(){
-    var lastUpdated = <TimeAgo date={new Date(Number(this.props.rushee["lastUpdated"])*1000)}/>
+    var lastUpdated = <TimeAgo date={new Date(Number(this.props.rushee["lastUpdated"])*1000)} />
     var numComments = (this.props.rushee["comments"]) ? Object.keys(this.props.rushee["comments"]).length : 0;
     var numRatings = (this.props.rushee["ratings"]) ? Object.keys(this.props.rushee["ratings"]).length : 0;
     var thumbPhotoUrl = "http://jagc.org/images/avatar.png";

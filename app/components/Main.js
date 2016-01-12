@@ -40,7 +40,7 @@ class Main extends React.Component{
           } else {
             console.log('accounts matching email address');
             console.log(Object.keys(snap.val())[0]);
-            this.linkSessionToFirebase(emailToCheck, authData["google"], Object.keys(snap.val())[0]);
+            this.linkSessionToFirebase(emailToCheck, authData["google"]["displayName"], Object.keys(snap.val())[0]);
           }
         }.bind(this));
 
@@ -254,7 +254,8 @@ class Main extends React.Component{
       localStorage.setItem('sessionKey', sessionKey);
       var expireTime = Number(Date.now()) + SESSION_EXPIRE_TIME;
       localStorage.setItem('sessionExpiration', expireTime);
-      localStorage.setItem('googleUser', googleUser);
+      localStorage.setItem('googleUser', googleUser
+      );
       localStorage.setItem('loggedInUserId', loggedInUserId);
       this.setupFirebaseConnections();
       this.setState({

@@ -23021,7 +23021,7 @@
 	          } else {
 	            console.log('accounts matching email address');
 	            console.log(Object.keys(snap.val())[0]);
-	            this.linkSessionToFirebase(emailToCheck, authData["google"], Object.keys(snap.val())[0]);
+	            this.linkSessionToFirebase(emailToCheck, authData["google"]["displayName"], Object.keys(snap.val())[0]);
 	          }
 	        }).bind(this));
 	      } else {
@@ -23616,7 +23616,7 @@
 	              _react2['default'].createElement(
 	                _reactBootstrap.NavItem,
 	                { href: '#', eventKey: 4 },
-	                this.props.googleUser["displayName"]
+	                this.props.googleUser
 	              )
 	            )
 	          )
@@ -23636,9 +23636,9 @@
 	    router.transitionTo('/', {});
 	  } else if (selectedKey == 2) {
 	    router.transitionTo('list', {});
-	  } else if (selectedKey == 4) {
-	    router.transitionTo('profile', { username: "ziruixiao" });
-	  }
+	  } /*else if (selectedKey == 4) {
+	    router.transitionTo('profile', {username: "ziruixiao"});
+	    }*/
 	}
 
 	function handleModal(selectedKey) {
