@@ -19,9 +19,6 @@ class HomeView extends React.Component{
     });
     return (
       <div>
-        <Alert bsStyle="warning">
-          Round 1 Cut Meeting: <strong></strong> at <strong>12:00PM</strong> in <strong>Soc Psych 130</strong>.
-        </Alert>
         <Sortbar updateFunction={this.props.updateStateRushees}/>
 
         <div>
