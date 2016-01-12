@@ -224,7 +224,9 @@ class Main extends React.Component{
   linkSessionToFirebase(sessionKey, googleUser, loggedInUserId) {
 
     if (sessionKey == 'kill') {
-      this.ref.unauth();
+      if (this.ref) {
+        this.ref.unauth();
+      }
       localStorage.clear();
       this.setState({
         loggedIn: false,
