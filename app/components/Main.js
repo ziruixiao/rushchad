@@ -324,7 +324,7 @@ class Main extends React.Component{
     } else {
       return (
         <div className="main-container">
-          <Header googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this,-1)} />
+          <Header rusheeCount={this.state.rushees.length} googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this,-1)} />
 
           <div className="container">
             <RouteHandler {...this.state} />

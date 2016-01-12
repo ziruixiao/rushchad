@@ -23375,7 +23375,7 @@
 	        return _react2['default'].createElement(
 	          'div',
 	          { className: 'main-container' },
-	          _react2['default'].createElement(_Header2['default'], { googleUser: this.state.googleUser, onModalClick: this.openEditModal.bind(this, -1) }),
+	          _react2['default'].createElement(_Header2['default'], { rusheeCount: this.state.rushees.length, googleUser: this.state.googleUser, onModalClick: this.openEditModal.bind(this, -1) }),
 	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
@@ -23617,6 +23617,16 @@
 	                _reactBootstrap.NavItem,
 	                { href: '#', eventKey: 4 },
 	                this.props.googleUser
+	              )
+	            ),
+	            _react2['default'].createElement(
+	              _reactBootstrap.Nav,
+	              { pullRight: true },
+	              _react2['default'].createElement(
+	                _reactBootstrap.NavItem,
+	                null,
+	                this.props.rusheeCount,
+	                ' rushees'
 	              )
 	            )
 	          )

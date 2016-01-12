@@ -25,8 +25,12 @@ class Header extends React.Component{
             <Nav onSelect={handleModal.bind(this)} pullRight>
               <NavItem href='#' eventKey={5}><Glyphicon glyph='log-out' /></NavItem>
             </Nav>
+
             <Nav onSelect={handleSelect.bind(this)} pullRight>
               <NavItem href='#' eventKey={4}>{ this.props.googleUser }</NavItem>
+            </Nav>
+            <Nav pullRight>
+              <NavItem>{ this.props.rusheeCount }{ ' rushees'}</NavItem>
             </Nav>
 
           </Navbar.Collapse>
