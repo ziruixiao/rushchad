@@ -41646,9 +41646,9 @@
 	    key: 'init',
 	    value: function init() {
 	      var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
-	      chatRef.on('value', (function (dataSnapshot) {
+	      chatRef.on('child_added', (function (dataSnapshot) {
 	        this.setState({
-	          messages: dataSnapshot.val()
+	          messages: this.state.messages.push(dataSnapshot.val())
 	        }, function () {
 
 	          var chatBox = document.getElementById('chatBox');
@@ -42759,7 +42759,6 @@
 
 	        if (rushee["photos"]) {
 	          var carouselItems = Object.keys(rushee["photos"]).map(function (key) {
-	            console.log(rushee["photos"][key]);
 	            return _react2['default'].createElement(
 	              _reactBootstrap.CarouselItem,
 	              { key: key, className: 'picture-carousel' },

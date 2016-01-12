@@ -104,7 +104,6 @@ class DetailView extends React.Component{
 
       if(rushee["photos"]) {
         var carouselItems = Object.keys(rushee["photos"]).map((key) => {
-          console.log(rushee["photos"][key]);
           return(
           <CarouselItem  key={key} className="picture-carousel">
             <image className="carousel-photo" src={rushee["photos"][key]} />

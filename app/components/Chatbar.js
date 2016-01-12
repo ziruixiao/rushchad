@@ -26,9 +26,9 @@ class Chatbar extends React.Component{
   }
   init(){
     var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
-    chatRef.on('value', function(dataSnapshot) {
+    chatRef.on('child_added', function(dataSnapshot) {
       this.setState({
-        messages: dataSnapshot.val()
+        messages: this.state.messages.push(dataSnapshot.val())
       }, function() {
 
         var chatBox = document.getElementById('chatBox');
