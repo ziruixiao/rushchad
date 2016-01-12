@@ -56,8 +56,8 @@ class Chatbar extends React.Component{
       }.bind(this));
 
   }
-  handleNewMessage() {
-
+  handleNewMessage(e) {
+    e.preventDefault();
     var s_content = this.refs.newMessage.getValue();
     if (s_content.length > 0) {
       var dictionary = {

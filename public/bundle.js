@@ -41673,8 +41673,8 @@
 	    }
 	  }, {
 	    key: 'handleNewMessage',
-	    value: function handleNewMessage() {
-
+	    value: function handleNewMessage(e) {
+	      e.preventDefault();
 	      var s_content = this.refs.newMessage.getValue();
 	      if (s_content.length > 0) {
 	        var dictionary = {
@@ -42271,7 +42271,7 @@
 	      var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
 	      return _react2['default'].createElement(
 	        'div',
-	        null,
+	        { className: 'align-center' },
 	        _react2['default'].createElement(
 	          _reactBootstrap.ButtonToolbar,
 	          null,

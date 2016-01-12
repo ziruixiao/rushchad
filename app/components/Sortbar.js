@@ -18,7 +18,7 @@ class Sortbar extends React.Component{
     var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
     return (
 
-      <div>
+      <div className="align-center">
         <ButtonToolbar>
           <Button onClick={this.handleOrderSwitch.bind(this,'first_A_Z')} bsStyle={ordering == "first_A_Z" ? "primary" :"default"}>First (A-Z)</Button>
           <Button onClick={this.handleOrderSwitch.bind(this,'first_Z_A')} bsStyle={ordering == "first_Z_A" ? "primary" :"default"}>First (Z-A)</Button>
