@@ -5,6 +5,7 @@ import Header from './Header';
 import Rebase from 're-base';
 import * as firebaseActions from './firebaseActions';
 import EditModalView from './EditModalView';
+import Chatbar from './Chatbar';
 
 const SESSION_EXPIRE_TIME = 1000 * 60 * 60; // currently set to 1 hour
 
@@ -38,7 +39,8 @@ class Main extends React.Component{
 
           } else {
             console.log('accounts matching email address');
-            this.linkSessionToFirebase(emailToCheck, authData["google"]);
+            console.log(Object.keys(snap.val())[0]);
+            this.linkSessionToFirebase(emailToCheck, authData["google"], Object.keys(snap.val())[0]);
           }
         }.bind(this));
 
@@ -206,19 +208,20 @@ class Main extends React.Component{
     var storedExpiration = localStorage.getItem('sessionExpiration');
     var storedKey = localStorage.getItem('sessionKey');
     var storedGoogleUser = localStorage.getItem('googleUser');
+    var storedLoggedInUserId = localStorage.getItem('loggedInUserId');
     var currentTime = Number(Date.now());
-    if (storedExpiration && storedKey && storedGoogleUser) {
+    if (storedExpiration && storedKey && storedGoogleUser && storedLoggedInUserId) {
       if (currentTime - storedExpiration > SESSION_EXPIRE_TIME) {
         this.linkSessionToFirebase('kill');
       } else {
-        this.linkSessionToFirebase(storedKey, storedGoogleUser);
+        this.linkSessionToFirebase(storedKey, storedGoogleUser, storedLoggedInUserId);
       }
     } else {
       this.ref = new Firebase('https://rushchad.firebaseio.com/');
       this.ref.onAuth(this.authDataCallback.bind(this));
     }
   }
-  linkSessionToFirebase(sessionKey, googleUser) {
+  linkSessionToFirebase(sessionKey, googleUser, loggedInUserId) {
 
     if (sessionKey == 'kill') {
       this.ref.unauth();
@@ -249,12 +252,13 @@ class Main extends React.Component{
       var expireTime = Number(Date.now()) + SESSION_EXPIRE_TIME;
       localStorage.setItem('sessionExpiration', expireTime);
       localStorage.setItem('googleUser', googleUser);
+      localStorage.setItem('loggedInUserId', loggedInUserId);
       this.setupFirebaseConnections();
       this.setState({
         loggedIn: true,
         googleUser: googleUser,
         email: sessionKey,
-        loggedInUserId: 1,
+        loggedInUserId: loggedInUserId,
         openEditModal: this.openEditModal.bind(this),
         closeEditModal: this.closeEditModal.bind(this),
         updateFirebaseConnection: this.setupFirebaseConnections.bind(this),
@@ -322,7 +326,9 @@ class Main extends React.Component{
             <EditModalView loggedInUserId={this.state.loggedInUserId} showEditModal={this.state.showEditModal} activeEditRusheeId={this.state.activeEditRusheeId} rushees={this.state.rushees} closeAction={this.closeEditModal.bind(this)} />
           </div>
           <br />
+
           <br />
+          <Chatbar users={this.state.users} loggedInUserId={this.state.loggedInUserId}/>
         </div>
       )
     }
