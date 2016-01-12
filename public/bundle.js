@@ -42045,25 +42045,6 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(
-	          _reactBootstrap.Alert,
-	          { bsStyle: 'warning' },
-	          'Round 1 Cut Meeting: ',
-	          _react2['default'].createElement('strong', null),
-	          ' at ',
-	          _react2['default'].createElement(
-	            'strong',
-	            null,
-	            '12:00PM'
-	          ),
-	          ' in ',
-	          _react2['default'].createElement(
-	            'strong',
-	            null,
-	            'Soc Psych 130'
-	          ),
-	          '.'
-	        ),
 	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateStateRushees }),
 	        _react2['default'].createElement(
 	          'div',
