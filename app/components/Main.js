@@ -5,7 +5,6 @@ import Header from './Header';
 import Rebase from 're-base';
 import * as firebaseActions from './firebaseActions';
 import EditModalView from './EditModalView';
-import Chatbar from './Chatbar';
 
 const SESSION_EXPIRE_TIME = 1000 * 60 * 60; // currently set to 1 hour
 

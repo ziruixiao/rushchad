@@ -22906,21 +22906,21 @@
 
 	var _componentsMain2 = _interopRequireDefault(_componentsMain);
 
-	var _componentsHomeView = __webpack_require__(455);
+	var _componentsHomeView = __webpack_require__(453);
 
 	var _componentsHomeView2 = _interopRequireDefault(_componentsHomeView);
 
-	var _componentsProfileView = __webpack_require__(459);
+	var _componentsProfileView = __webpack_require__(457);
 
 	var _componentsProfileView2 = _interopRequireDefault(_componentsProfileView);
 
 	var _reactRouter = __webpack_require__(158);
 
-	var _componentsListView = __webpack_require__(460);
+	var _componentsListView = __webpack_require__(458);
 
 	var _componentsListView2 = _interopRequireDefault(_componentsListView);
 
-	var _componentsDetailView = __webpack_require__(461);
+	var _componentsDetailView = __webpack_require__(460);
 
 	var _componentsDetailView2 = _interopRequireDefault(_componentsDetailView);
 
@@ -22981,10 +22981,6 @@
 	var _EditModalView = __webpack_require__(452);
 
 	var _EditModalView2 = _interopRequireDefault(_EditModalView);
-
-	var _Chatbar = __webpack_require__(453);
-
-	var _Chatbar2 = _interopRequireDefault(_Chatbar);
 
 	var SESSION_EXPIRE_TIME = 1000 * 60 * 60; // currently set to 1 hour
 
@@ -23373,8 +23369,7 @@
 	            _react2['default'].createElement(_EditModalView2['default'], { loggedInUserId: this.state.loggedInUserId, showEditModal: this.state.showEditModal, activeEditRusheeId: this.state.activeEditRusheeId, rushees: this.state.rushees, closeAction: this.closeEditModal.bind(this) })
 	          ),
 	          _react2['default'].createElement('br', null),
-	          _react2['default'].createElement('br', null),
-	          _react2['default'].createElement(_Chatbar2['default'], { users: this.state.users, loggedInUserId: this.state.loggedInUserId })
+	          _react2['default'].createElement('br', null)
 	        );
 	      }
 	    }
@@ -41573,391 +41568,6 @@
 /* 453 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 * Created by Felix on 1/7/16.
-	 */
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reBase = __webpack_require__(448);
-
-	var _reBase2 = _interopRequireDefault(_reBase);
-
-	var _reactBootstrap = __webpack_require__(204);
-
-	var _firebaseActions = __webpack_require__(451);
-
-	var firebaseActions = _interopRequireWildcard(_firebaseActions);
-
-	var _reactTimeago = __webpack_require__(454);
-
-	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
-
-	var Chatbar = (function (_React$Component) {
-	  _inherits(Chatbar, _React$Component);
-
-	  function Chatbar(props) {
-	    _classCallCheck(this, Chatbar);
-
-	    _get(Object.getPrototypeOf(Chatbar.prototype), 'constructor', this).call(this, props);
-	    this.state = {
-	      messages: [],
-	      timestamp: Number(Date.now()),
-	      usersOnline: 0
-	    };
-	  }
-
-	  _createClass(Chatbar, [{
-	    key: 'delayAndScroll',
-	    value: function delayAndScroll() {
-	      setTimeout(this.scrollToBottom, 500);
-	    }
-	  }, {
-	    key: 'scrollToBottom',
-	    value: function scrollToBottom() {
-	      var chatBox = document.getElementById('chatBox');
-	      chatBox.scrollTop = chatBox.scrollHeight + 2000;
-	    }
-	  }, {
-	    key: 'init',
-	    value: function init() {
-	      var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
-	      chatRef.on('value', (function (dataSnapshot) {
-	        this.setState({
-	          messages: dataSnapshot.val()
-	        }, function () {
-
-	          var chatBox = document.getElementById('chatBox');
-	          if (chatBox) {
-	            if (chatBox.scrollHeight - chatBox.scrollTop < 800) {
-	              // scroll to bottom
-	              chatBox.scrollTop = chatBox.scrollHeight + 2000;
-	            }
-	          }
-	        });
-	      }).bind(this));
-
-	      var nowDate = Number(Date.now()) / 1000;
-	      var last10Min = nowDate - 600;
-	      new Firebase("https://rushchad.firebaseio.com/users").orderByChild("lastActive").startAt(last10Min).endAt(nowDate).on('value', (function (snap) {
-	        if (snap.val()) {
-	          this.setState({
-	            usersOnline: Object.keys(snap.val()).length
-	          });
-	        }
-	      }).bind(this));
-	    }
-	  }, {
-	    key: 'handleNewMessage',
-	    value: function handleNewMessage() {
-
-	      var s_content = this.refs.newMessage.getValue();
-	      if (s_content.length > 0) {
-	        var dictionary = {
-	          content: s_content,
-	          lastUpdated: Math.round(Number(Date.now()) / 1000),
-	          userId: this.props.loggedInUserId
-	        };
-	        firebaseActions.addNewChatMessage(dictionary, function () {
-	          var chatBox = document.getElementById('chatBox');
-	          chatBox.scrollTop = chatBox.scrollHeight + 2000;
-	        });
-	        this.setState({
-	          timestamp: Number(Date.now())
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      this.router = this.context.router;
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.init();
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {}
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps() {
-	      this.init();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this = this;
-
-	      var chatMessages;
-	      var chatInput = _react2['default'].createElement(
-	        'div',
-	        { className: 'top-bottom-space' },
-	        _react2['default'].createElement(
-	          'form',
-	          { onSubmit: this.handleNewMessage.bind(this) },
-	          _react2['default'].createElement(
-	            _reactBootstrap.Col,
-	            { xs: 10 },
-	            _react2['default'].createElement(_reactBootstrap.Input, { key: this.state.timestamp, type: 'text', ref: 'newMessage', placeholder: 'Type new message' })
-	          ),
-	          _react2['default'].createElement(
-	            _reactBootstrap.Col,
-	            { xs: 2 },
-	            _react2['default'].createElement(
-	              _reactBootstrap.Button,
-	              { bsSize: 'small', type: 'submit', bsStyle: 'primary' },
-	              _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'chevron-right' })
-	            )
-	          )
-	        )
-	      );
-
-	      if (Object.keys(this.state.messages).length > 0) {
-	        chatMessages = Object.keys(this.state.messages).map(function (key) {
-	          var oneMessage = _this.state.messages[key];
-	          var messageOwner = _this.props.users[oneMessage["userId"]]["name"];
-	          var messageContent = oneMessage["content"];
-	          var messageTime = new Date(Number(oneMessage["lastUpdated"]) * 1000);
-	          var extraColoring = '';
-	          if (oneMessage["userId"] == _this.props.loggedInUserId) {
-	            extraColoring = 'bg-warning';
-	          }
-	          return _react2['default'].createElement(
-	            'div',
-	            { key: key, className: 'top-bottom-space ' + extraColoring },
-	            _react2['default'].createElement(
-	              _reactBootstrap.Row,
-	              null,
-	              _react2['default'].createElement(
-	                _reactBootstrap.Col,
-	                { className: 'align-left', xs: 6 },
-	                _react2['default'].createElement(
-	                  'strong',
-	                  null,
-	                  messageOwner
-	                )
-	              ),
-	              _react2['default'].createElement(
-	                _reactBootstrap.Col,
-	                { className: 'align-right', xs: 6 },
-	                _react2['default'].createElement(_reactTimeago2['default'], { date: messageTime })
-	              )
-	            ),
-	            _react2['default'].createElement(
-	              _reactBootstrap.Row,
-	              null,
-	              _react2['default'].createElement(
-	                _reactBootstrap.Col,
-	                { xs: 12 },
-	                messageContent
-	              )
-	            )
-	          );
-	        });
-	      }
-	      return _react2['default'].createElement(
-	        _reactBootstrap.ButtonToolbar,
-	        { className: 'fixedBottomRight' },
-	        _react2['default'].createElement(
-	          _reactBootstrap.OverlayTrigger,
-	          { trigger: 'click', placement: 'top', overlay: _react2['default'].createElement(
-	              _reactBootstrap.Popover,
-	              { id: 'chatPopOver', className: 'chat-bar-button absolute-positioning', title: this.state.usersOnline + ' users online' },
-	              _react2['default'].createElement(
-	                'div',
-	                { id: 'chatBox', className: 'chat-scroll' },
-	                chatMessages
-	              ),
-	              chatInput
-	            ) },
-	          _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { onClick: this.delayAndScroll.bind(this), className: 'chat-bar-button', bsStyle: 'primary' },
-	            'Live Chat'
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Chatbar;
-	})(_react2['default'].Component);
-
-	;
-
-	Chatbar.contextTypes = {
-	  router: _react2['default'].PropTypes.func.isRequired
-	};
-
-	Chatbar.propTypes = {
-	  timestamp: _react2['default'].PropTypes.number
-	};
-
-	Chatbar.defaultProps = {
-	  timestamp: Number(Date.now())
-	};
-
-	exports['default'] = Chatbar;
-	module.exports = exports['default'];
-
-/***/ },
-/* 454 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var React = __webpack_require__(1)
-	var assign = __webpack_require__(39)
-
-	module.exports = React.createClass(
-	  { displayName: 'Time-Ago'
-	  , timeoutId: 0
-	  , getDefaultProps: function(){
-	      return { live: true
-	             , component: 'span'
-	             , minPeriod: 0
-	             , maxPeriod: Infinity
-	             , formatter: function (value, unit, suffix) {
-	                 if(value !== 1){
-	                   unit += 's'
-	                 }
-	                 return value + ' ' + unit + ' ' + suffix
-	               }
-	             }
-	    }
-	  , propTypes:
-	      { live: React.PropTypes.bool.isRequired
-	      , minPeriod: React.PropTypes.number.isRequired
-	      , maxPeriod: React.PropTypes.number.isRequired
-	      , component: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]).isRequired
-	      , formatter: React.PropTypes.func.isRequired
-	      , date: React.PropTypes.oneOfType(
-	          [ React.PropTypes.string
-	          , React.PropTypes.number
-	          , React.PropTypes.instanceOf(Date)
-	          ]
-	        ).isRequired
-	      }
-	  , componentDidMount: function(){
-	      if(this.props.live) {
-	        this.tick(true)
-	      }
-	    }
-	  , componentDidUpdate: function(lastProps){
-	      if(this.props.live !== lastProps.live || this.props.date !== lastProps.date){
-	        if(!this.props.live && this.timeoutId){
-	          clearTimeout(this.timeoutId);
-	          this.timeoutId = undefined;
-	        }
-	        this.tick()
-	      }
-	    }
-	  , componentWillUnmount: function() {
-	    if(this.timeoutId) {
-	      clearTimeout(this.timeoutId);
-	      this.timeoutId = undefined;
-	    }
-	  }
-	  , tick: function(refresh){
-	      if(!this.isMounted() || !this.props.live){
-	        return
-	      }
-
-	      var period = 1000
-
-	      var then = (new Date(this.props.date)).valueOf()
-	      var now = Date.now()
-	      var seconds = Math.round(Math.abs(now-then)/1000)
-
-	      if(seconds < 60){
-	        period = 1000
-	      } else if(seconds < 60*60) {
-	        period = 1000 * 60
-	      } else if(seconds < 60*60*24) {
-	        period = 1000 * 60 * 60
-	      } else {
-	        period = 0
-	      }
-
-	      period = Math.min(Math.max(period, this.props.minPeriod), this.props.maxPeriod)
-
-	      if(!!period){
-	        this.timeoutId = setTimeout(this.tick, period)
-	      }
-
-	      if(!refresh){
-	        this.forceUpdate()
-	      }
-	    }
-	  , render: function(){
-	      var then = (new Date(this.props.date)).valueOf()
-	      var now = Date.now()
-	      var seconds = Math.round(Math.abs(now-then)/1000)
-
-	      var suffix = then < now ? 'ago' : 'from now'
-
-	      var value, unit
-
-	      if(seconds < 60){
-	        value = Math.round(seconds)
-	        unit = 'second'
-	      } else if(seconds < 60*60) {
-	        value = Math.round(seconds/60)
-	        unit = 'minute'
-	      } else if(seconds < 60*60*24) {
-	        value = Math.round(seconds/(60*60))
-	        unit = 'hour'
-	      } else if(seconds < 60*60*24*7) {
-	        value = Math.round(seconds/(60*60*24))
-	        unit = 'day'
-	      } else if(seconds < 60*60*24*30) {
-	        value = Math.round(seconds/(60*60*24*7))
-	        unit = 'week'
-	      } else if(seconds < 60*60*24*365) {
-	        value = Math.round(seconds/(60*60*24*30))
-	        unit = 'month'
-	      } else {
-	        value = Math.round(seconds/(60*60*24*365))
-	        unit = 'year'
-	      }
-
-	      var props = assign({}, this.props)
-
-	      delete props.date
-	      delete props.formatter
-	      delete props.component
-
-	      return React.createElement( this.props.component, props, this.props.formatter(value, unit, suffix, then) )
-	    }
-	  }
-	)
-
-
-/***/ },
-/* 455 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -41980,11 +41590,11 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _RusheeTile = __webpack_require__(456);
+	var _RusheeTile = __webpack_require__(454);
 
 	var _RusheeTile2 = _interopRequireDefault(_RusheeTile);
 
-	var _Sortbar = __webpack_require__(458);
+	var _Sortbar = __webpack_require__(456);
 
 	var _Sortbar2 = _interopRequireDefault(_Sortbar);
 
@@ -42046,7 +41656,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 456 */
+/* 454 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42074,7 +41684,7 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactStarRating = __webpack_require__(457);
+	var _reactStarRating = __webpack_require__(455);
 
 	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
@@ -42187,13 +41797,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 457 */
+/* 455 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";function _interopRequireDefault(t){return t&&t.__esModule?t:{"default":t}}function _classCallCheck(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function _possibleConstructorReturn(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function _inherits(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function isFloat(t){return t===Number(t)&&t%1!==0}var _extends=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var a=arguments[e];for(var n in a)Object.prototype.hasOwnProperty.call(a,n)&&(t[n]=a[n])}return t},_createClass=function(){function t(t,e){for(var a=0;a<e.length;a++){var n=e[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}return function(e,a,n){return a&&t(e.prototype,a),n&&t(e,n),e}}();Object.defineProperty(exports,"__esModule",{value:!0});var _react=__webpack_require__(1),_react2=_interopRequireDefault(_react),_reactDom=__webpack_require__(265),_reactDom2=_interopRequireDefault(_reactDom),_classnames=__webpack_require__(239),_classnames2=_interopRequireDefault(_classnames),StarRating=function(t){function e(t){_classCallCheck(this,e);var a=_possibleConstructorReturn(this,Object.getPrototypeOf(e).call(this,t));return a.state={currentRatingVal:t.rating,currentRatingPos:a.getStarRatingPosition(t.rating),editing:t.editing||!0,rating:t.rating,pos:a.getStarRatingPosition(t.rating),glyph:a.getStars(),size:t.size},a}return _inherits(e,t),_createClass(e,[{key:"componentWillMount",value:function(){this.min=0,this.max=this.props.totalStars||5,this.props.rating&&(this.state.editing=this.props.editing||!1)}},{key:"componentDidMount",value:function(){this.root=_reactDom2["default"].findDOMNode(this.refs.root),this.ratingContainer=_reactDom2["default"].findDOMNode(this.refs.ratingContainer)}},{key:"componentWillUnmount",value:function(){delete this.root,delete this.ratingContainer}},{key:"getStars",value:function(){for(var t="",e=this.props.totalStars,a=0;e>a;a++)t+="★";return t}},{key:"getPosition",value:function(t){return t.clientX-this.root.getBoundingClientRect().left}},{key:"getWidthFromValue",value:function(t){var e=this.min,a=this.max;return e>=t||e===a?0:t>=a?100:100*(t-e)/(a-e)}},{key:"applyPrecision",value:function(t,e){return parseFloat(t.toFixed(e))}},{key:"getDecimalPlaces",value:function(t){var e=(""+t).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);return e?Math.max(0,(e[1]?e[1].length:0)-(e[2]?+e[2]:0)):0}},{key:"getValueFromPosition",value:function(t){var e=this.getDecimalPlaces(this.props.step),a=this.ratingContainer.offsetWidth,n=this.max-this.min,r=n*t/(a*this.props.step);r=Math.ceil(r);var i=this.applyPrecision(parseFloat(this.min+r*this.props.step),e);return i=Math.max(Math.min(i,this.max),this.min)}},{key:"calculate",value:function(t){var e=this.getValueFromPosition(t),a=this.getWidthFromValue(e);return a+="%",{width:a,val:e}}},{key:"getStarRatingPosition",value:function(t){return this.getWidthFromValue(t)+"%"}},{key:"getRatingEvent",value:function(t){var e=this.getPosition(t);return this.calculate(e)}},{key:"getSvg",value:function(t){for(var e=[],a=0;a<this.props.totalStars;a++){var n={};n.transform="translate("+50*a+", 0)",n.fill=a+this.props.step<=t?"#FFA91B":"#C6C6C6",e.push(_react2["default"].createElement("path",_extends({},n,{key:"star-"+a,mask:"url(#half-star-mask)",d:"m0,18.1l19.1,0l5.9,-18.1l5.9,18.1l19.1,0l-15.4,11.2l5.9,18.1l-15.4,-11.2l-15.4,11.2l5.9,-18.1l-15.4,-11.2l0,0z"})))}var r={width:e.length*this.props.size+"px",height:this.props.size+"px"};return _react2["default"].createElement("svg",{className:"rsr__star",style:r,viewBox:"0 0 "+e.length+" 50",preserveAspectRatio:"xMinYMin meet",version:"1.1",xmlns:"http://www.w3.org/2000/svg"},_react2["default"].createElement("g",null,e.map(function(t){return t})))}},{key:"updateRating",value:function(t,e){this.setState({pos:t,rating:e})}},{key:"shouldComponentUpdate",value:function(t,e){return t!==this.props?(this.updateRating(this.getStarRatingPosition(t.rating),t.rating),!0):e.currentRatingVal!==this.state.currentRatingVal||e.rating!==this.state.rating}},{key:"handleMouseLeave",value:function(){this.setState({pos:this.state.currentRatingPos,rating:this.state.currentRatingVal})}},{key:"handleMouseMove",value:function(t){var e=this.getRatingEvent(t);this.updateRating(e.width,e.val)}},{key:"handleClick",value:function(t){if(this.props.disabled)return t.stopPropagation(),t.preventDefault(),!1;var e={currentRatingPos:this.state.pos,currentRatingVal:this.state.rating,caption:this.props.caption,name:this.props.name};this.setState(e),this.props.onRatingClick(t,{rating:this.state.rating,position:this.state.pos,caption:this.props.caption,name:this.props.name})}},{key:"treatName",value:function(t){return"string"==typeof t?t.toLowerCase().split(" ").join("_"):void 0}},{key:"getClasses",value:function(){return(0,_classnames2["default"])({"rsr-root":!0,"rsr--disabled":this.props.disabled,"rsr--editing":this.state.editing})}},{key:"getCaption",value:function(){return this.props.caption?_react2["default"].createElement("span",{className:"rsr__caption"},this.props.caption):null}},{key:"setAttrs",value:function(){var t={};return this.state.editing&&(t.onMouseMove=this.handleMouseMove.bind(this),t.onMouseLeave=this.handleMouseLeave.bind(this),t.onClick=this.handleClick.bind(this)),t}},{key:"render",value:function(){var t=this.getClasses(),e=this.getCaption(),a=this.setAttrs();return _react2["default"].createElement("span",{className:"rsr-container"},e,_react2["default"].createElement("div",{ref:"root",className:t},_react2["default"].createElement("div",_extends({ref:"ratingContainer",className:"rsr rating-gly-star","data-content":this.state.glyph},a),this.getSvg(this.state.rating),_react2["default"].createElement("input",{type:"number",name:this.props.name,value:this.state.currentRatingVal,style:{display:"none !important"},min:this.min,max:this.max,readOnly:!0}))))}}]),e}(_react2["default"].Component);StarRating.propTypes={name:_react2["default"].PropTypes.string.isRequired,caption:_react2["default"].PropTypes.string,totalStars:_react2["default"].PropTypes.number.isRequired,rating:_react2["default"].PropTypes.number,onRatingClick:_react2["default"].PropTypes.func,disabled:_react2["default"].PropTypes.bool,editing:_react2["default"].PropTypes.bool,size:_react2["default"].PropTypes.number},StarRating.defaultProps={step:1,totalStars:5,onRatingClick:function(){},disabled:!1,size:50,rating:0},exports["default"]=StarRating;
 
 /***/ },
-/* 458 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42296,7 +41906,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 459 */
+/* 457 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42375,7 +41985,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 460 */
+/* 458 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42400,15 +42010,15 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactTimeago = __webpack_require__(454);
+	var _reactTimeago = __webpack_require__(459);
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
-	var _reactStarRating = __webpack_require__(457);
+	var _reactStarRating = __webpack_require__(455);
 
 	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
-	var _Sortbar = __webpack_require__(458);
+	var _Sortbar = __webpack_require__(456);
 
 	var _Sortbar2 = _interopRequireDefault(_Sortbar);
 
@@ -42559,7 +42169,140 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 461 */
+/* 459 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict'
+
+	var React = __webpack_require__(1)
+	var assign = __webpack_require__(39)
+
+	module.exports = React.createClass(
+	  { displayName: 'Time-Ago'
+	  , timeoutId: 0
+	  , getDefaultProps: function(){
+	      return { live: true
+	             , component: 'span'
+	             , minPeriod: 0
+	             , maxPeriod: Infinity
+	             , formatter: function (value, unit, suffix) {
+	                 if(value !== 1){
+	                   unit += 's'
+	                 }
+	                 return value + ' ' + unit + ' ' + suffix
+	               }
+	             }
+	    }
+	  , propTypes:
+	      { live: React.PropTypes.bool.isRequired
+	      , minPeriod: React.PropTypes.number.isRequired
+	      , maxPeriod: React.PropTypes.number.isRequired
+	      , component: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]).isRequired
+	      , formatter: React.PropTypes.func.isRequired
+	      , date: React.PropTypes.oneOfType(
+	          [ React.PropTypes.string
+	          , React.PropTypes.number
+	          , React.PropTypes.instanceOf(Date)
+	          ]
+	        ).isRequired
+	      }
+	  , componentDidMount: function(){
+	      if(this.props.live) {
+	        this.tick(true)
+	      }
+	    }
+	  , componentDidUpdate: function(lastProps){
+	      if(this.props.live !== lastProps.live || this.props.date !== lastProps.date){
+	        if(!this.props.live && this.timeoutId){
+	          clearTimeout(this.timeoutId);
+	          this.timeoutId = undefined;
+	        }
+	        this.tick()
+	      }
+	    }
+	  , componentWillUnmount: function() {
+	    if(this.timeoutId) {
+	      clearTimeout(this.timeoutId);
+	      this.timeoutId = undefined;
+	    }
+	  }
+	  , tick: function(refresh){
+	      if(!this.isMounted() || !this.props.live){
+	        return
+	      }
+
+	      var period = 1000
+
+	      var then = (new Date(this.props.date)).valueOf()
+	      var now = Date.now()
+	      var seconds = Math.round(Math.abs(now-then)/1000)
+
+	      if(seconds < 60){
+	        period = 1000
+	      } else if(seconds < 60*60) {
+	        period = 1000 * 60
+	      } else if(seconds < 60*60*24) {
+	        period = 1000 * 60 * 60
+	      } else {
+	        period = 0
+	      }
+
+	      period = Math.min(Math.max(period, this.props.minPeriod), this.props.maxPeriod)
+
+	      if(!!period){
+	        this.timeoutId = setTimeout(this.tick, period)
+	      }
+
+	      if(!refresh){
+	        this.forceUpdate()
+	      }
+	    }
+	  , render: function(){
+	      var then = (new Date(this.props.date)).valueOf()
+	      var now = Date.now()
+	      var seconds = Math.round(Math.abs(now-then)/1000)
+
+	      var suffix = then < now ? 'ago' : 'from now'
+
+	      var value, unit
+
+	      if(seconds < 60){
+	        value = Math.round(seconds)
+	        unit = 'second'
+	      } else if(seconds < 60*60) {
+	        value = Math.round(seconds/60)
+	        unit = 'minute'
+	      } else if(seconds < 60*60*24) {
+	        value = Math.round(seconds/(60*60))
+	        unit = 'hour'
+	      } else if(seconds < 60*60*24*7) {
+	        value = Math.round(seconds/(60*60*24))
+	        unit = 'day'
+	      } else if(seconds < 60*60*24*30) {
+	        value = Math.round(seconds/(60*60*24*7))
+	        unit = 'week'
+	      } else if(seconds < 60*60*24*365) {
+	        value = Math.round(seconds/(60*60*24*30))
+	        unit = 'month'
+	      } else {
+	        value = Math.round(seconds/(60*60*24*365))
+	        unit = 'year'
+	      }
+
+	      var props = assign({}, this.props)
+
+	      delete props.date
+	      delete props.formatter
+	      delete props.component
+
+	      return React.createElement( this.props.component, props, this.props.formatter(value, unit, suffix, then) )
+	    }
+	  }
+	)
+
+
+/***/ },
+/* 460 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42589,15 +42332,15 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactTimeago = __webpack_require__(454);
+	var _reactTimeago = __webpack_require__(459);
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
-	var _reactStarRating = __webpack_require__(457);
+	var _reactStarRating = __webpack_require__(455);
 
 	var _reactStarRating2 = _interopRequireDefault(_reactStarRating);
 
-	var _CommentList = __webpack_require__(462);
+	var _CommentList = __webpack_require__(461);
 
 	var _CommentList2 = _interopRequireDefault(_CommentList);
 
@@ -42883,7 +42626,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 462 */
+/* 461 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42910,11 +42653,11 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactTimeago = __webpack_require__(454);
+	var _reactTimeago = __webpack_require__(459);
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
-	var _Comment = __webpack_require__(463);
+	var _Comment = __webpack_require__(462);
 
 	var _Comment2 = _interopRequireDefault(_Comment);
 
@@ -43073,7 +42816,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 463 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -43103,7 +42846,7 @@
 
 	var _reactBootstrap = __webpack_require__(204);
 
-	var _reactTimeago = __webpack_require__(454);
+	var _reactTimeago = __webpack_require__(459);
 
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
