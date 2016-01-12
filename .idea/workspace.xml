@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f42ab02e-b64c-4a64-a6c0-dc5f199085d0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/Chatbar.js" afterPath="$PROJECT_DIR$/app/components/Chatbar.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/DetailView.js" afterPath="$PROJECT_DIR$/app/components/DetailView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/HomeView.js" afterPath="$PROJECT_DIR$/app/components/HomeView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/ListView.js" afterPath="$PROJECT_DIR$/app/components/ListView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/Main.js" afterPath="$PROJECT_DIR$/app/components/Main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/RusheeTile.js" afterPath="$PROJECT_DIR$/app/components/RusheeTile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/CommentList.js" afterPath="$PROJECT_DIR$/app/components/CommentList.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/bundle.js" afterPath="$PROJECT_DIR$/public/bundle.js" />
     </list>
     <ignored path="Rushchad.iws" />
@@ -50,11 +44,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DetailView.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DetailView.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/components/DetailView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.4651163">
-              <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="33" column="2" selection-start-line="33" selection-start-column="2" selection-end-line="38" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommentList.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/components/CommentList.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6511628">
+              <caret line="110" column="80" selection-start-line="110" selection-start-column="80" selection-end-line="110" selection-end-column="80" />
               <folding />
             </state>
           </provider>
@@ -93,7 +97,6 @@
         <option value="$PROJECT_DIR$/app/components/firebaseActions.js" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/app/components/Header.js" />
-        <option value="$PROJECT_DIR$/app/components/CommentList.js" />
         <option value="$PROJECT_DIR$/app/components/EditModalView.js" />
         <option value="$PROJECT_DIR$/public/rushchad.css" />
         <option value="$PROJECT_DIR$/app/components/Sortbar.js" />
@@ -103,6 +106,7 @@
         <option value="$PROJECT_DIR$/app/components/Main.js" />
         <option value="$PROJECT_DIR$/app/components/ListView.js" />
         <option value="$PROJECT_DIR$/app/components/DetailView.js" />
+        <option value="$PROJECT_DIR$/app/components/CommentList.js" />
       </list>
     </option>
   </component>
@@ -596,13 +600,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/components/Comment.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43994415">
-          <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
@@ -645,22 +642,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/components/Chatbar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="95" column="21" selection-start-line="95" selection-start-column="21" selection-end-line="95" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/components/Main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2961165">
-          <caret line="83" column="75" selection-start-line="83" selection-start-column="75" selection-end-line="83" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/components/ListView.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.41860464">
@@ -677,14 +658,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/components/Sortbar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/components/HomeView.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.20930232">
@@ -693,18 +666,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/components/CommentList.js">
+    <entry file="file://$PROJECT_DIR$/app/components/Comment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41860464">
-          <caret line="18" column="2" selection-start-line="18" selection-start-column="2" selection-end-line="24" selection-end-column="3" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/components/Chatbar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="95" column="21" selection-start-line="95" selection-start-column="21" selection-end-line="95" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/components/DetailView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.4651163">
-          <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="2" selection-start-line="33" selection-start-column="2" selection-end-line="38" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/components/Main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.38914728">
+          <caret line="67" column="26" selection-start-line="67" selection-start-column="26" selection-end-line="67" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/components/Sortbar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/components/CommentList.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6511628">
+          <caret line="110" column="80" selection-start-line="110" selection-start-column="80" selection-end-line="110" selection-end-column="80" />
           <folding />
         </state>
       </provider>

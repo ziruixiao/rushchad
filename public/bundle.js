@@ -43119,6 +43119,29 @@
 	      }
 	    }
 	  }, {
+	    key: 'connectToCommentsRef',
+	    value: function connectToCommentsRef() {
+	      if (this.props.rusheeId) {
+	        var commentsRef = new Firebase('https://rushchad.firebaseio.com/rushees/' + this.props.rusheeId + '/comments');
+	        commentsRef.on('value', (function (dataSnapshot) {
+	          this.setState({
+	            comments: dataSnapshot.val()
+	          });
+	          console.log("FIREBASE ONCE CALL MADE FOR USERS VALUE");
+	        }).bind(this));
+	      }
+	    }
+	  }, {
+	    key: 'init',
+	    value: function init() {
+	      this.connectToCommentsRef();
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.init();
+	    }
+	  }, {
 	    key: 'handleLike',
 	    value: function handleLike() {}
 	  }, {
@@ -43140,10 +43163,10 @@
 	        )
 	      );
 	      var commentsLength = 0;
-	      if (this.props.comments) {
-	        commentsLength = Object.keys(this.props.comments).length;
+	      if (this.state.comments) {
+	        commentsLength = Object.keys(this.state.comments).length;
 
-	        var unsortedComments = this.props.comments;
+	        var unsortedComments = this.state.comments;
 	        var sortedComments = [];
 
 	        for (var u_id in unsortedComments) {
