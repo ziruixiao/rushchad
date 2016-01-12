@@ -8,6 +8,7 @@ import {
   Carousel,
   CarouselItem,
   Col,
+Image,
   Glyphicon,
   Row,
   Table,
@@ -58,7 +59,7 @@ class DetailView extends React.Component{
       var name = rushee["firstName"] + ' ' + rushee["lastName"];
       var email = rushee["email"];
       var phone = rushee["phone"];
-      if (facebook) {
+      if (facebook && facebook!="http://") {
         facebook = addHttp(facebook);
         rusheeName = <h1><a href={facebook} target="_blank">{name}{' '}</a><Button onClick={this.editButton.bind(this,rusheeId)}>Edit</Button></h1>
         rusheeFacebook = <div><Glyphicon bsSize="small" glyph="facebook" />{' '}<a href={facebook} target="_blank">Facebook</a></div>;
@@ -105,13 +106,13 @@ class DetailView extends React.Component{
         var carouselItems = Object.keys(rushee["photos"]).map((key) => {
           console.log(rushee["photos"][key]);
           return(
-          <CarouselItem key={key} className="picture-carousel">
-            <img width={900} height={500} src={rushee["photos"][key]} />
+          <CarouselItem  key={key} className="picture-carousel">
+            <image className="carousel-photo" src={rushee["photos"][key]} />
           </CarouselItem>)
 
         });
 
-        carousel = <Carousel>{ carouselItems} </Carousel>;
+        carousel = <Carousel className="carousel-container">{ carouselItems} </Carousel>;
       }
     }
 

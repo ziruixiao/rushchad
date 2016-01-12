@@ -42667,7 +42667,7 @@
 	        var name = rushee["firstName"] + ' ' + rushee["lastName"];
 	        var email = rushee["email"];
 	        var phone = rushee["phone"];
-	        if (facebook) {
+	        if (facebook && facebook != "http://") {
 	          facebook = addHttp(facebook);
 	          rusheeName = _react2['default'].createElement(
 	            'h1',
@@ -42763,13 +42763,13 @@
 	            return _react2['default'].createElement(
 	              _reactBootstrap.CarouselItem,
 	              { key: key, className: 'picture-carousel' },
-	              _react2['default'].createElement('img', { width: 900, height: 500, src: rushee["photos"][key] })
+	              _react2['default'].createElement('image', { className: 'carousel-photo', src: rushee["photos"][key] })
 	            );
 	          });
 
 	          carousel = _react2['default'].createElement(
 	            _reactBootstrap.Carousel,
-	            null,
+	            { className: 'carousel-container' },
 	            carouselItems,
 	            ' '
 	          );
