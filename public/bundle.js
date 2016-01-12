@@ -23253,7 +23253,7 @@
 	  }, {
 	    key: 'linkSessionToFirebase',
 	    value: function linkSessionToFirebase(sessionKey, googleUser, loggedInUserId) {
-
+	      console.log('link');
 	      if (sessionKey == 'kill') {
 	        if (this.ref) {
 	          this.ref.unauth();
@@ -41646,9 +41646,9 @@
 	    key: 'init',
 	    value: function init() {
 	      var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
-	      chatRef.on('child_added', (function (dataSnapshot) {
+	      chatRef.on('value', (function (dataSnapshot) {
 	        this.setState({
-	          messages: this.state.messages.push(dataSnapshot.val())
+	          messages: dataSnapshot.val()
 	        }, function () {
 
 	          var chatBox = document.getElementById('chatBox');

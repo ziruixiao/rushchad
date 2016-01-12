@@ -222,7 +222,7 @@ class Main extends React.Component{
     }
   }
   linkSessionToFirebase(sessionKey, googleUser, loggedInUserId) {
-
+    console.log('link');
     if (sessionKey == 'kill') {
       if (this.ref) {
         this.ref.unauth();
