@@ -23,6 +23,14 @@ class DetailView extends React.Component{
   componentWillMount(){
     this.router = this.context.router;
   }
+  showPrev(prevId) {
+    var router = this.context.router;
+    router.transitionTo('detail', {rusheeId: prevId});
+  }
+  showNext(nextId) {
+    var router = this.context.router;
+    router.transitionTo('detail', {rusheeId: nextId});
+  }
   editButton(editActiveRusheeId) {
     this.props.openEditModal(editActiveRusheeId);
   }
@@ -37,8 +45,17 @@ class DetailView extends React.Component{
     var rusheeId = this.router.getCurrentParams().rusheeId;
     var arrayRusheeId = 0;
     var rushee;
+    var prevButton;
+    var nextButton;
     for(var i = 0; i < this.props.rushees.length; i += 1) {
       if(this.props.rushees[i][0] == rusheeId) {
+        if (i-1 >= 0) {
+          prevButton = <Button
+            onClick={this.showPrev.bind(this,this.props.rushees[i-1][0])}><Glyphicon glyph="chevron-left" /></Button>;
+        }
+        if (i+1 < this.props.rushees.length - 1) {
+          nextButton = <Button onClick={this.showPrev.bind(this,this.props.rushees[i+1][0])}><Glyphicon glyph="chevron-right" /></Button>;
+        }
         rushee = this.props.rushees[i][1];
         break;
       }
@@ -117,6 +134,12 @@ class DetailView extends React.Component{
 
     return (
       <div>
+        <Col className="align-right" xs={6}>
+          {prevButton}
+        </Col>
+        <Col xs={6}>
+          {nextButton}
+        </Col>
         <Col xs={12}>
           {rusheeName}
         </Col>

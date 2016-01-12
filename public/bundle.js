@@ -42625,6 +42625,18 @@
 	      this.router = this.context.router;
 	    }
 	  }, {
+	    key: 'showPrev',
+	    value: function showPrev(prevId) {
+	      var router = this.context.router;
+	      router.transitionTo('detail', { rusheeId: prevId });
+	    }
+	  }, {
+	    key: 'showNext',
+	    value: function showNext(nextId) {
+	      var router = this.context.router;
+	      router.transitionTo('detail', { rusheeId: nextId });
+	    }
+	  }, {
 	    key: 'editButton',
 	    value: function editButton(editActiveRusheeId) {
 	      this.props.openEditModal(editActiveRusheeId);
@@ -42646,8 +42658,25 @@
 	      var rusheeId = this.router.getCurrentParams().rusheeId;
 	      var arrayRusheeId = 0;
 	      var rushee;
+	      var prevButton;
+	      var nextButton;
 	      for (var i = 0; i < this.props.rushees.length; i += 1) {
 	        if (this.props.rushees[i][0] == rusheeId) {
+	          if (i - 1 >= 0) {
+	            prevButton = _react2['default'].createElement(
+	              _reactBootstrap.Button,
+	              {
+	                onClick: this.showPrev.bind(this, this.props.rushees[i - 1][0]) },
+	              _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'chevron-left' })
+	            );
+	          }
+	          if (i + 1 < this.props.rushees.length - 1) {
+	            nextButton = _react2['default'].createElement(
+	              _reactBootstrap.Button,
+	              { onClick: this.showPrev.bind(this, this.props.rushees[i + 1][0]) },
+	              _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'chevron-right' })
+	            );
+	          }
 	          rushee = this.props.rushees[i][1];
 	          break;
 	        }
@@ -42778,6 +42807,16 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
+	        _react2['default'].createElement(
+	          _reactBootstrap.Col,
+	          { className: 'align-right', xs: 6 },
+	          prevButton
+	        ),
+	        _react2['default'].createElement(
+	          _reactBootstrap.Col,
+	          { xs: 6 },
+	          nextButton
+	        ),
 	        _react2['default'].createElement(
 	          _reactBootstrap.Col,
 	          { xs: 12 },
