@@ -23042,6 +23042,7 @@
 	  }, {
 	    key: 'setupFirebaseConnections',
 	    value: function setupFirebaseConnections() {
+	      console.log('link');
 	      var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
 	      usersRef.on('value', (function (dataSnapshot) {
 	        this.setState({
@@ -23253,7 +23254,6 @@
 	  }, {
 	    key: 'linkSessionToFirebase',
 	    value: function linkSessionToFirebase(sessionKey, googleUser, loggedInUserId) {
-	      console.log('link');
 	      if (sessionKey == 'kill') {
 	        if (this.ref) {
 	          this.ref.unauth();
@@ -42665,7 +42665,7 @@
 	          if (i - 1 >= 0) {
 	            prevButton = _react2['default'].createElement(
 	              _reactBootstrap.Button,
-	              {
+	              { bsStyle: 'primary',
 	                onClick: this.showPrev.bind(this, this.props.rushees[i - 1][0]) },
 	              _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'chevron-left' })
 	            );
@@ -42673,7 +42673,7 @@
 	          if (i + 1 < this.props.rushees.length - 1) {
 	            nextButton = _react2['default'].createElement(
 	              _reactBootstrap.Button,
-	              { onClick: this.showPrev.bind(this, this.props.rushees[i + 1][0]) },
+	              { bsStyle: 'primary', onClick: this.showPrev.bind(this, this.props.rushees[i + 1][0]) },
 	              _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'chevron-right' })
 	            );
 	          }
@@ -42690,6 +42690,11 @@
 	      var userStars = 0;
 	      var userRating = 'none';
 	      var carousel;
+	      var tooltip = _react2['default'].createElement(
+	        _reactBootstrap.Tooltip,
+	        { id: 'allVoteToolTip' },
+	        'No votes.'
+	      );
 	      if (rushee) {
 	        var lastUpdated = _react2['default'].createElement(_reactTimeago2['default'], { date: new Date(Number(rushee["lastUpdated"]) * 1000) });
 	        var facebook = rushee["facebook"];
@@ -42760,15 +42765,46 @@
 	        if (rushee["ratings"]) {
 	          var count = 0;
 	          var sum = 0;
-	          Object.keys(rushee["ratings"]).map(function (key) {
+	          var toolTipContent = Object.keys(rushee["ratings"]).map(function (key) {
 	            sum += Number(rushee["ratings"][key]["value"]);
 	            if (key == _this.props.loggedInUserId) {
 	              //this is our user's vote
 	              userStars = Number(rushee["ratings"][key]["value"]);
 	              userRating = userStars + ' ' + ' stars';
 	            }
+
 	            count++;
+	            return _react2['default'].createElement(
+	              'tr',
+	              { key: key },
+	              _react2['default'].createElement(
+	                'td',
+	                null,
+	                _this.props.users[key]["name"]
+	              ),
+	              _react2['default'].createElement(
+	                'td',
+	                null,
+	                rushee["ratings"][key]["value"],
+	                ' ',
+	                ' stars'
+	              )
+	            );
+	            console.log(toolTipContent);
 	          });
+	          tooltip = _react2['default'].createElement(
+	            _reactBootstrap.Tooltip,
+	            { id: 'allVoteToolTip' },
+	            _react2['default'].createElement(
+	              'table',
+	              null,
+	              _react2['default'].createElement(
+	                'tbody',
+	                null,
+	                toolTipContent
+	              )
+	            )
+	          );
 	          stars = Math.round(sum / count);
 	        }
 
@@ -42865,16 +42901,20 @@
 	              'tr',
 	              null,
 	              _react2['default'].createElement(
-	                'td',
-	                { className: 'vert-align' },
-	                'Fraternity Vote',
-	                _react2['default'].createElement('br', null),
-	                _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 25, disabled: true, rating: stars, totalStars: 5 }),
-	                _react2['default'].createElement('br', null),
+	                _reactBootstrap.OverlayTrigger,
+	                { placement: 'bottom', overlay: tooltip },
 	                _react2['default'].createElement(
-	                  _reactBootstrap.Badge,
-	                  null,
-	                  numRatings + ' votes'
+	                  'td',
+	                  { className: 'vert-align' },
+	                  'Fraternity Vote',
+	                  _react2['default'].createElement('br', null),
+	                  _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 25, disabled: true, rating: stars, totalStars: 5 }),
+	                  _react2['default'].createElement('br', null),
+	                  _react2['default'].createElement(
+	                    _reactBootstrap.Badge,
+	                    null,
+	                    numRatings + ' votes'
+	                  )
 	                )
 	              ),
 	              _react2['default'].createElement(

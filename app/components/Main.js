@@ -64,6 +64,7 @@ class Main extends React.Component{
     }
   }
   setupFirebaseConnections() {
+    console.log('link');
     var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
     usersRef.on('value', function(dataSnapshot) {
       this.setState({
@@ -222,7 +223,6 @@ class Main extends React.Component{
     }
   }
   linkSessionToFirebase(sessionKey, googleUser, loggedInUserId) {
-    console.log('link');
     if (sessionKey == 'kill') {
       if (this.ref) {
         this.ref.unauth();

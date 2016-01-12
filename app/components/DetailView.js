@@ -10,6 +10,8 @@ import {
   Col,
 Image,
   Glyphicon,
+  OverlayTrigger,
+Tooltip,
   Row,
   Table,
   Well
@@ -50,11 +52,11 @@ class DetailView extends React.Component{
     for(var i = 0; i < this.props.rushees.length; i += 1) {
       if(this.props.rushees[i][0] == rusheeId) {
         if (i-1 >= 0) {
-          prevButton = <Button
-            onClick={this.showPrev.bind(this,this.props.rushees[i-1][0])}><Glyphicon glyph="chevron-left" /></Button>;
+          prevButton = <Button bsStyle="primary"
+                               onClick={this.showPrev.bind(this,this.props.rushees[i-1][0])}><Glyphicon glyph="chevron-left" /></Button>;
         }
         if (i+1 < this.props.rushees.length - 1) {
-          nextButton = <Button onClick={this.showPrev.bind(this,this.props.rushees[i+1][0])}><Glyphicon glyph="chevron-right" /></Button>;
+          nextButton = <Button bsStyle="primary" onClick={this.showPrev.bind(this,this.props.rushees[i+1][0])}><Glyphicon glyph="chevron-right" /></Button>;
         }
         rushee = this.props.rushees[i][1];
         break;
@@ -70,6 +72,7 @@ class DetailView extends React.Component{
     var userStars = 0;
     var userRating = 'none';
     var carousel;
+    var tooltip =  <Tooltip id="allVoteToolTip">No votes.</Tooltip>;
     if (rushee) {
       var lastUpdated = <TimeAgo date={new Date(Number(rushee["lastUpdated"])*1000)}/>
       var facebook = rushee["facebook"];
@@ -94,14 +97,18 @@ class DetailView extends React.Component{
       if (rushee["ratings"]) {
         var count = 0;
         var sum = 0;
-        Object.keys(rushee["ratings"]).map((key) => {
+        var toolTipContent = Object.keys(rushee["ratings"]).map((key) => {
           sum += Number(rushee["ratings"][key]["value"]);
           if (key == this.props.loggedInUserId) { //this is our user's vote
             userStars = Number(rushee["ratings"][key]["value"]);
             userRating = userStars + ' ' + ' stars';
           }
+
           count++;
+          return (<tr key={key}><td>{this.props.users[key]["name"]}</td><td>{rushee["ratings"][key]["value"]} {' stars'}</td></tr>);
+          console.log(toolTipContent);
         });
+        tooltip = <Tooltip id="allVoteToolTip"><table><tbody>{toolTipContent}</tbody></table></Tooltip>;
         stars = Math.round(sum/count);
       }
 
@@ -163,13 +170,14 @@ class DetailView extends React.Component{
         <Table striped bordered condensed hover>
           <tbody>
           <tr>
-
+            <OverlayTrigger placement="bottom" overlay={tooltip}>
             <td className="vert-align">
               Fraternity Vote<br />
               <StarRating name="rusheeRating" size={25} disabled rating={stars} totalStars={5} />
               <br />
               <Badge>{numRatings + ' votes'}</Badge>
             </td>
+              </OverlayTrigger>
             <td className="vert-align">
               <Col xs={12}>
               Your Vote<br />
