@@ -34,7 +34,7 @@ class DetailView extends React.Component{
   init() {
     this.connectToRusheesRef();
   }
-  componentDidMount(){
+  componentWillReceiveProps(){
     this.init();
   }
   showPrev(prevId) {
@@ -57,6 +57,7 @@ class DetailView extends React.Component{
   }
   render(){
     var rusheeId = this.router.getCurrentParams().rusheeId;
+    console.log('rushee id is',rusheeId);
     var arrayRusheeId = 0;
     var rushee;
     var prevButton;
@@ -201,7 +202,7 @@ class DetailView extends React.Component{
         </Table>
           {carousel}
 
-        <CommentList users={this.props.users} loggedInUserId={this.props.loggedInUserId} comments={rusheeComments} rusheeId={rusheeId}/>
+        <CommentList users={this.props.users} loggedInUserId={this.props.loggedInUserId} rusheeId={rusheeId}/>
 
 
       </div>

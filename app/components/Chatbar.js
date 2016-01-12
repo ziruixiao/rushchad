@@ -32,6 +32,7 @@ class Chatbar extends React.Component{
       this.setState({
         messages: dataSnapshot.val()
       }, function() {
+
         var chatBox = document.getElementById('chatBox');
         if (chatBox) {
           if (chatBox.scrollHeight - chatBox.scrollTop < 800) { // scroll to bottom
@@ -93,6 +94,7 @@ class Chatbar extends React.Component{
   }
   render(){
     var chatMessages;
+    console.log('render');
     var chatInput = (
         <div className="top-bottom-space">
         <form onSubmit={this.handleNewMessage.bind(this)}>
@@ -123,7 +125,7 @@ class Chatbar extends React.Component{
               <strong>{messageOwner}</strong>
             </Col>
             <Col className="align-right" xs={6}>
-              <TimeAgo date={messageTime}/>
+              <TimeAgo date={messageTime} live={false}/>
             </Col>
               </Row>
             <Row>

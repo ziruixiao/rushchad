@@ -41670,6 +41670,7 @@
 	        this.setState({
 	          messages: dataSnapshot.val()
 	        }, function () {
+
 	          var chatBox = document.getElementById('chatBox');
 	          if (chatBox) {
 	            if (chatBox.scrollHeight - chatBox.scrollTop < 800) {
@@ -41735,6 +41736,7 @@
 	      var _this = this;
 
 	      var chatMessages;
+	      console.log('render');
 	      var chatInput = _react2['default'].createElement(
 	        'div',
 	        { className: 'top-bottom-space' },
@@ -41786,7 +41788,7 @@
 	              _react2['default'].createElement(
 	                _reactBootstrap.Col,
 	                { className: 'align-right', xs: 6 },
-	                _react2['default'].createElement(_reactTimeago2['default'], { date: messageTime })
+	                _react2['default'].createElement(_reactTimeago2['default'], { date: messageTime, live: false })
 	              )
 	            ),
 	            _react2['default'].createElement(
@@ -42739,8 +42741,8 @@
 	      this.connectToRusheesRef();
 	    }
 	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps() {
 	      this.init();
 	    }
 	  }, {
@@ -42775,6 +42777,7 @@
 	      var _this = this;
 
 	      var rusheeId = this.router.getCurrentParams().rusheeId;
+	      console.log('rushee id is', rusheeId);
 	      var arrayRusheeId = 0;
 	      var rushee;
 	      var prevButton;
@@ -43056,7 +43059,7 @@
 	          )
 	        ),
 	        carousel,
-	        _react2['default'].createElement(_CommentList2['default'], { users: this.props.users, loggedInUserId: this.props.loggedInUserId, comments: rusheeComments, rusheeId: rusheeId })
+	        _react2['default'].createElement(_CommentList2['default'], { users: this.props.users, loggedInUserId: this.props.loggedInUserId, rusheeId: rusheeId })
 	      );
 	    }
 	  }]);
@@ -43181,14 +43184,9 @@
 	      }
 	    }
 	  }, {
-	    key: 'init',
-	    value: function init() {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps() {
 	      this.connectToCommentsRef();
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.init();
 	    }
 	  }, {
 	    key: 'handleLike',

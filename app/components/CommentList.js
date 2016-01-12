@@ -58,12 +58,10 @@ class CommentList extends React.Component{
       }.bind(this));
     }
   }
-  init() {
+  componentWillReceiveProps() {
     this.connectToCommentsRef();
   }
-  componentDidMount(){
-    this.init();
-  }
+
   handleLike() {
 
   }
