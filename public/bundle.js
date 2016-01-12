@@ -41296,6 +41296,7 @@
 	      newCommentRef.set(dictionary);
 	    }
 	  });
+	  addOrUpdateRushee(rusheeId, { "lastUpdated": dictionary["lastUpdated"] });
 	};
 
 	exports.addNewComment = addNewComment;
@@ -41330,6 +41331,7 @@
 	      likeRef.child(userId).set(dictionary);
 	    }
 	  });
+	  addOrUpdateRushee(rusheeId, { "lastUpdated": dictionary["lastUpdated"] });
 	};
 
 	exports.addOrUpdateRating = addOrUpdateRating;

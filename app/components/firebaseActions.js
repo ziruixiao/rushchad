@@ -79,6 +79,7 @@ export const addNewComment = (rusheeId, dictionary) => { // what happens when a 
       newCommentRef.set(dictionary);
     }
   });
+  addOrUpdateRushee(rusheeId, {"lastUpdated": dictionary["lastUpdated"]});
 }
 
 export const addOrUpdateCommentLike = (rusheeId, commentId, userId, value) => {
@@ -109,6 +110,7 @@ export const addOrUpdateRating = (rusheeId, userId, dictionary) => {
       likeRef.child(userId).set(dictionary);
     }
   });
+  addOrUpdateRushee(rusheeId, {"lastUpdated": dictionary["lastUpdated"]});
 }
 
 export const addNewChatMessage = (dictionary, callback) => {
