@@ -64,16 +64,17 @@ class Main extends React.Component{
     }
   }
   setupFirebaseConnections() {
-    console.log('link');
     var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
-    usersRef.on('value', function(dataSnapshot) {
+    usersRef.once('value', function(dataSnapshot) {
       this.setState({
         users: dataSnapshot.val()
       });
+      console.log("FIREBASE ONCE CALL MADE FOR USERS VALUE");
     }.bind(this));
-
+  }
+  updateStateRushees() {
     var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
-    rusheesRef.on('value', function(dataSnapshot) {
+    rusheesRef.once('value', function(dataSnapshot) {
       var unsortedRushees = dataSnapshot.val();
       var sortedRushees = [];
 
@@ -106,6 +107,7 @@ class Main extends React.Component{
         default:
           break;
       }
+      console.log("FIREBASE ONCE CALL MADE FOR RUSHEES VALUE");
       this.setState({
         rushees: sortedRushees
       });
@@ -204,7 +206,6 @@ class Main extends React.Component{
       else { return 0; }
     }
   }
-
   init(){
     var storedExpiration = localStorage.getItem('sessionExpiration');
     var storedKey = localStorage.getItem('sessionKey');
@@ -264,7 +265,8 @@ class Main extends React.Component{
         openEditModal: this.openEditModal.bind(this),
         closeEditModal: this.closeEditModal.bind(this),
         updateFirebaseConnection: this.setupFirebaseConnections.bind(this),
-        activeEditRusheeId:  "-1"
+        activeEditRusheeId:  "-1",
+        updateStateRushees: this.updateStateRushees.bind(this)
       }, function () {
 
         firebaseActions.updateUserLastActive(this.state.loggedInUserId);
@@ -349,7 +351,8 @@ Main.propTypes = {
   activeEditRusheeId: React.PropTypes.string,
   openEditModal: React.PropTypes.func,
   closeEditModal: React.PropTypes.func,
-  updateFirebaseConnection: React.PropTypes.func
+  updateFirebaseConnection: React.PropTypes.func,
+  updateStateRushees: React.PropTypes.func
 };
 
 Main.defaultProps = {
@@ -361,6 +364,9 @@ Main.defaultProps = {
   loggedInUserId: -1,
   showEditModal: false,
   activeEditRusheeId:  "-1",
+  updateStateRushees: () => {
+
+  },
   openEditModal: () => {
 
   },

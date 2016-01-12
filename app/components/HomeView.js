@@ -7,6 +7,12 @@ import RusheeTile from './RusheeTile';
 import Sortbar from './Sortbar';
 
 class HomeView extends React.Component{
+  init() {
+    this.props.updateStateRushees();
+  }
+  componentDidMount(){
+    this.init();
+  }
   render(){
     var rusheeTiles = Object.keys(this.props.rushees).map((key) => {
       return <RusheeTile key={key} rusheeId={this.props.rushees[key][0]} rushee={this.props.rushees[key][1]}/>
@@ -16,7 +22,7 @@ class HomeView extends React.Component{
         <Alert bsStyle="warning">
           Round 1 Cut Meeting: <strong></strong> at <strong>12:00PM</strong> in <strong>Soc Psych 130</strong>.
         </Alert>
-        <Sortbar updateFunction={this.props.updateFirebaseConnection}/>
+        <Sortbar updateFunction={this.props.updateStateRushees}/>
 
         <div>
           {rusheeTiles}

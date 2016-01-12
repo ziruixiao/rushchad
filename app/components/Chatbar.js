@@ -22,7 +22,9 @@ class Chatbar extends React.Component{
   }
   scrollToBottom() {
     var chatBox = document.getElementById('chatBox');
-    chatBox.scrollTop = chatBox.scrollHeight + 2000;
+    if (chatBox) {
+      chatBox.scrollTop = chatBox.scrollHeight + 2000;
+    }
   }
   init(){
     var chatRef = new Firebase('https://rushchad.firebaseio.com/chat');
@@ -30,7 +32,6 @@ class Chatbar extends React.Component{
       this.setState({
         messages: dataSnapshot.val()
       }, function() {
-
         var chatBox = document.getElementById('chatBox');
         if (chatBox) {
           if (chatBox.scrollHeight - chatBox.scrollTop < 800) { // scroll to bottom
@@ -48,6 +49,7 @@ class Chatbar extends React.Component{
       .endAt(nowDate)
       .on('value', function(snap) {
         if (snap.val()) {
+
           this.setState({
             usersOnline: Object.keys(snap.val()).length
           });
@@ -84,6 +86,7 @@ class Chatbar extends React.Component{
     this.init();
   }
   componentWillUnmount(){
+
   }
   componentWillReceiveProps(){
     this.init();

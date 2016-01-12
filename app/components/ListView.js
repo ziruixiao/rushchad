@@ -15,6 +15,12 @@ class ListView extends React.Component{
   componentWillMount(){
     this.router = this.context.router;
   }
+  init() {
+    this.props.updateStateRushees();
+  }
+  componentDidMount(){
+    this.init();
+  }
   render(){
     var rusheeList = Object.keys(this.props.rushees).map((key) => {
       var rushee = this.props.rushees[key][1];
@@ -46,7 +52,7 @@ class ListView extends React.Component{
     });
     return (
       <div>
-        <Sortbar updateFunction={this.props.updateFirebaseConnection}/>
+        <Sortbar updateFunction={this.props.updateStateRushees}/>
       <Table striped bordered condensed hover>
         <thead>
           <tr>

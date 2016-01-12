@@ -47,7 +47,7 @@ class RusheeTile extends React.Component{
       <div>
 
           <Col xs={12} sm={6} md={4} lg={3}>
-            <Well bsSize="small">
+            <Well onClick={this.showDetailView.bind(this)} bsSize="small">
             <Panel className='fixed-panel' header={
               <div>{this.props.rushee["firstName"]}{' '}{this.props.rushee["lastName"]}</div>
 
@@ -76,7 +76,7 @@ class RusheeTile extends React.Component{
               </Row>
 
               </div>
-            } bsStyle="info" onClick={this.showDetailView.bind(this)}>
+            } bsStyle="info">
               <div className="panel-photo">
               <Image id={'photo' + this.props.rusheeId}  src={thumbPhotoUrl} responsive className="img-responsive center-block"/>
               </div>

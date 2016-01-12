@@ -23042,16 +23042,19 @@
 	  }, {
 	    key: 'setupFirebaseConnections',
 	    value: function setupFirebaseConnections() {
-	      console.log('link');
 	      var usersRef = new Firebase('https://rushchad.firebaseio.com/users').orderByChild('access').equalTo('normal');
-	      usersRef.on('value', (function (dataSnapshot) {
+	      usersRef.once('value', (function (dataSnapshot) {
 	        this.setState({
 	          users: dataSnapshot.val()
 	        });
+	        console.log("FIREBASE ONCE CALL MADE FOR USERS VALUE");
 	      }).bind(this));
-
+	    }
+	  }, {
+	    key: 'updateStateRushees',
+	    value: function updateStateRushees() {
 	      var rusheesRef = new Firebase('https://rushchad.firebaseio.com/rushees').orderByChild('active').equalTo('yes');
-	      rusheesRef.on('value', (function (dataSnapshot) {
+	      rusheesRef.once('value', (function (dataSnapshot) {
 	        var unsortedRushees = dataSnapshot.val();
 	        var sortedRushees = [];
 
@@ -23084,6 +23087,7 @@
 	          default:
 	            break;
 	        }
+	        console.log("FIREBASE ONCE CALL MADE FOR RUSHEES VALUE");
 	        this.setState({
 	          rushees: sortedRushees
 	        });
@@ -23288,7 +23292,8 @@
 	          openEditModal: this.openEditModal.bind(this),
 	          closeEditModal: this.closeEditModal.bind(this),
 	          updateFirebaseConnection: this.setupFirebaseConnections.bind(this),
-	          activeEditRusheeId: "-1"
+	          activeEditRusheeId: "-1",
+	          updateStateRushees: this.updateStateRushees.bind(this)
 	        }, (function () {
 
 	          firebaseActions.updateUserLastActive(this.state.loggedInUserId);
@@ -23401,7 +23406,8 @@
 	  activeEditRusheeId: _react2['default'].PropTypes.string,
 	  openEditModal: _react2['default'].PropTypes.func,
 	  closeEditModal: _react2['default'].PropTypes.func,
-	  updateFirebaseConnection: _react2['default'].PropTypes.func
+	  updateFirebaseConnection: _react2['default'].PropTypes.func,
+	  updateStateRushees: _react2['default'].PropTypes.func
 	};
 
 	Main.defaultProps = {
@@ -23413,6 +23419,7 @@
 	  loggedInUserId: -1,
 	  showEditModal: false,
 	  activeEditRusheeId: "-1",
+	  updateStateRushees: function updateStateRushees() {},
 	  openEditModal: function openEditModal() {},
 	  closeEditModal: function closeEditModal() {},
 	  updateFirebaseConnection: function updateFirebaseConnection() {}
@@ -41640,7 +41647,9 @@
 	    key: 'scrollToBottom',
 	    value: function scrollToBottom() {
 	      var chatBox = document.getElementById('chatBox');
-	      chatBox.scrollTop = chatBox.scrollHeight + 2000;
+	      if (chatBox) {
+	        chatBox.scrollTop = chatBox.scrollHeight + 2000;
+	      }
 	    }
 	  }, {
 	    key: 'init',
@@ -41650,7 +41659,6 @@
 	        this.setState({
 	          messages: dataSnapshot.val()
 	        }, function () {
-
 	          var chatBox = document.getElementById('chatBox');
 	          if (chatBox) {
 	            if (chatBox.scrollHeight - chatBox.scrollTop < 800) {
@@ -41665,6 +41673,7 @@
 	      var last10Min = nowDate - 600;
 	      new Firebase("https://rushchad.firebaseio.com/users").orderByChild("lastActive").startAt(last10Min).endAt(nowDate).on('value', (function (snap) {
 	        if (snap.val()) {
+
 	          this.setState({
 	            usersOnline: Object.keys(snap.val()).length
 	          });
@@ -42003,6 +42012,16 @@
 	  }
 
 	  _createClass(HomeView, [{
+	    key: 'init',
+	    value: function init() {
+	      this.props.updateStateRushees();
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.init();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this = this;
@@ -42032,7 +42051,7 @@
 	          ),
 	          '.'
 	        ),
-	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateFirebaseConnection }),
+	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateStateRushees }),
 	        _react2['default'].createElement(
 	          'div',
 	          null,
@@ -42138,7 +42157,7 @@
 	          { xs: 12, sm: 6, md: 4, lg: 3 },
 	          _react2['default'].createElement(
 	            _reactBootstrap.Well,
-	            { bsSize: 'small' },
+	            { onClick: this.showDetailView.bind(this), bsSize: 'small' },
 	            _react2['default'].createElement(
 	              _reactBootstrap.Panel,
 	              { className: 'fixed-panel', header: _react2['default'].createElement(
@@ -42190,7 +42209,7 @@
 	                      )
 	                    )
 	                  )
-	                ), bsStyle: 'info', onClick: this.showDetailView.bind(this) },
+	                ), bsStyle: 'info' },
 	              _react2['default'].createElement(
 	                'div',
 	                { className: 'panel-photo' },
@@ -42463,6 +42482,16 @@
 	      this.router = this.context.router;
 	    }
 	  }, {
+	    key: 'init',
+	    value: function init() {
+	      this.props.updateStateRushees();
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.init();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this = this;
@@ -42523,7 +42552,7 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateFirebaseConnection }),
+	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateStateRushees }),
 	        _react2['default'].createElement(
 	          _reactBootstrap.Table,
 	          { striped: true, bordered: true, condensed: true, hover: true },
@@ -42647,6 +42676,23 @@
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      this.router = this.context.router;
+	    }
+	  }, {
+	    key: 'connectToRusheesRef',
+	    value: function connectToRusheesRef() {
+	      if (!this.props.rushees || !this.props.rushees.length) {
+	        this.props.updateStateRushees();
+	      }
+	    }
+	  }, {
+	    key: 'init',
+	    value: function init() {
+	      this.connectToRusheesRef();
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.init();
 	    }
 	  }, {
 	    key: 'showPrev',
@@ -42814,7 +42860,6 @@
 	                ' stars'
 	              )
 	            );
-	            console.log(toolTipContent);
 	          });
 	          tooltip = _react2['default'].createElement(
 	            _reactBootstrap.Tooltip,

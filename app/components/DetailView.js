@@ -25,6 +25,18 @@ class DetailView extends React.Component{
   componentWillMount(){
     this.router = this.context.router;
   }
+  connectToRusheesRef() {
+    if (!this.props.rushees || !this.props.rushees.length) {
+      this.props.updateStateRushees();
+    }
+
+  }
+  init() {
+    this.connectToRusheesRef();
+  }
+  componentDidMount(){
+    this.init();
+  }
   showPrev(prevId) {
     var router = this.context.router;
     router.transitionTo('detail', {rusheeId: prevId});
@@ -106,7 +118,6 @@ class DetailView extends React.Component{
 
           count++;
           return (<tr key={key}><td>{this.props.users[key]["name"]}</td><td>{rushee["ratings"][key]["value"]} {' stars'}</td></tr>);
-          console.log(toolTipContent);
         });
         tooltip = <Tooltip id="allVoteToolTip"><table><tbody>{toolTipContent}</tbody></table></Tooltip>;
         stars = Math.round(sum/count);
