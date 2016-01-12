@@ -30,7 +30,7 @@ class Header extends React.Component{
               <NavItem href='#' eventKey={4}>{ this.props.googleUser }</NavItem>
             </Nav>
             <Nav pullRight>
-              <NavItem>{ this.props.rusheeCount }{ ' rushees'}</NavItem>
+              <NavItem>{ this.props.rusheeCount ? this.props.rusheeCount + ' rushees' : ''}</NavItem>
             </Nav>
 
           </Navbar.Collapse>
@@ -46,9 +46,9 @@ function handleSelect(selectedKey) {
     router.transitionTo('/', {});
   } else if (selectedKey == 2) {
     router.transitionTo('list',{});
-  } /*else if (selectedKey == 4) {
+  } else if (selectedKey == 4) {
     router.transitionTo('profile', {username: "ziruixiao"});
-  }*/
+  }
 }
 
 function handleModal(selectedKey) {

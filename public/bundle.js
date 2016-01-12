@@ -23625,8 +23625,7 @@
 	              _react2['default'].createElement(
 	                _reactBootstrap.NavItem,
 	                null,
-	                this.props.rusheeCount,
-	                ' rushees'
+	                this.props.rusheeCount ? this.props.rusheeCount + ' rushees' : ''
 	              )
 	            )
 	          )
@@ -23646,9 +23645,9 @@
 	    router.transitionTo('/', {});
 	  } else if (selectedKey == 2) {
 	    router.transitionTo('list', {});
-	  } /*else if (selectedKey == 4) {
-	    router.transitionTo('profile', {username: "ziruixiao"});
-	    }*/
+	  } else if (selectedKey == 4) {
+	    router.transitionTo('profile', { username: "ziruixiao" });
+	  }
 	}
 
 	function handleModal(selectedKey) {
@@ -42379,46 +42378,84 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reBase = __webpack_require__(448);
+	var _reactBootstrap = __webpack_require__(204);
 
-	var _reBase2 = _interopRequireDefault(_reBase);
+	var _reactTimeago = __webpack_require__(454);
+
+	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 
 	var ProfileView = (function (_React$Component) {
 	  _inherits(ProfileView, _React$Component);
 
-	  function ProfileView(props) {
+	  function ProfileView() {
 	    _classCallCheck(this, ProfileView);
 
-	    _get(Object.getPrototypeOf(ProfileView.prototype), 'constructor', this).call(this, props);
-	    this.state = {};
+	    _get(Object.getPrototypeOf(ProfileView.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
 	  _createClass(ProfileView, [{
-	    key: 'init',
-	    value: function init() {}
-	  }, {
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      this.router = this.context.router;
 	    }
 	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.init();
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {}
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps() {
-	      this.init();
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var username = this.router.getCurrentParams().username;
-	      return _react2['default'].createElement('div', null);
+	      var _this = this;
+
+	      console.log(this.props);
+	      var usersList = Object.keys(this.props.users).map(function (key) {
+	        var user = _this.props.users[key];
+	        console.log(key);
+	        console.log(user);
+	        var lastActive = new Date(Number(user["lastActive"]) * 1000);
+
+	        return _react2['default'].createElement(
+	          'tr',
+	          { key: key },
+	          _react2['default'].createElement(
+	            'td',
+	            null,
+	            user["name"]
+	          ),
+	          _react2['default'].createElement(
+	            'td',
+	            null,
+	            _react2['default'].createElement(_reactTimeago2['default'], { date: lastActive })
+	          )
+	        );
+	      });
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(
+	          _reactBootstrap.Table,
+	          { striped: true, bordered: true, condensed: true, hover: true },
+	          _react2['default'].createElement(
+	            'thead',
+	            null,
+	            _react2['default'].createElement(
+	              'tr',
+	              null,
+	              _react2['default'].createElement(
+	                'th',
+	                null,
+	                'Name'
+	              ),
+	              _react2['default'].createElement(
+	                'th',
+	                null,
+	                'Last Active'
+	              )
+	            )
+	          ),
+	          _react2['default'].createElement(
+	            'tbody',
+	            null,
+	            usersList
+	          )
+	        )
+	      );
 	    }
 	  }]);
 
