@@ -1,10 +1,13 @@
 import React from 'react';
 import {
-  Table
+  Table,
+Glyphicon,
+Button
 } from 'react-bootstrap';
 import TimeAgo from 'react-timeago';
 import StarRating from 'react-star-rating';
 import Sortbar from './Sortbar';
+import * as firebaseActions from './firebaseActions';
 
 class ListView extends React.Component{
   showDetailView(rusheeId) {
@@ -21,7 +24,15 @@ class ListView extends React.Component{
   componentDidMount(){
     this.init();
   }
+  deleteClicked(value) {
+    // 1. Build dictionary
+    var dictionary = {
+      "active": "round1CutAfter"
+    };
+    firebaseActions.addOrUpdateRushee(value, dictionary, this.props.loggedInUserId);
+  }
   render(){
+    var deleteButton;
     var rusheeList = Object.keys(this.props.rushees).map((key) => {
       var rushee = this.props.rushees[key][1];
       var lastUpdated = new Date(Number(rushee["lastUpdated"])*1000);
@@ -38,16 +49,20 @@ class ListView extends React.Component{
         });
         stars = Math.round(sum/count);
       }
+      if (this.props.loggedInUserId == 1) {
+        deleteButton = <Button onClick={this.deleteClicked.bind(this,this.props.rushees[key][0])}><Glyphicon glyph="trash" /></Button>;
+      }
 
       return (
-        <tr key={key} onClick={this.showDetailView.bind(this, this.props.rushees[key][0])}>
-          <td>{rushee["firstName"]}</td>
-          <td>{rushee["lastName"]}</td>
-          <td>{numComments}</td>
-          <td> <StarRating name="rusheeRating" size={17} disabled rating={stars} totalStars={5} />
+        <tr key={key} >
+          <td onClick={this.showDetailView.bind(this, this.props.rushees[key][0])}>{rushee["firstName"]}</td>
+          <td onClick={this.showDetailView.bind(this, this.props.rushees[key][0])}>{rushee["lastName"]}</td>
+          <td onClick={this.showDetailView.bind(this, this.props.rushees[key][0])}>{numComments}</td>
+          <td onClick={this.showDetailView.bind(this, this.props.rushees[key][0])}> <StarRating name="rusheeRating" size={17} disabled rating={stars} totalStars={5} />
           </td>
-          <td>{numRatings}</td>
-          <td><TimeAgo date={lastUpdated}/></td>
+          <td onClick={this.showDetailView.bind(this, this.props.rushees[key][0])}>{numRatings}</td>
+          <td onClick={this.showDetailView.bind(this, this.props.rushees[key][0])}><TimeAgo date={lastUpdated}/></td>
+          <td>{deleteButton}</td>
         </tr>)
     });
     return (
@@ -62,6 +77,7 @@ class ListView extends React.Component{
             <th>Rating</th>
             <th>Votes</th>
             <th>Last Updated</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>

@@ -23594,15 +23594,6 @@
 	            ),
 	            _react2['default'].createElement(
 	              _reactBootstrap.Nav,
-	              { onSelect: handleModal.bind(this) },
-	              _react2['default'].createElement(
-	                _reactBootstrap.NavItem,
-	                { href: '#', eventKey: 3 },
-	                _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'plus' })
-	              )
-	            ),
-	            _react2['default'].createElement(
-	              _reactBootstrap.Nav,
 	              { onSelect: handleModal.bind(this), pullRight: true },
 	              _react2['default'].createElement(
 	                _reactBootstrap.NavItem,
@@ -42468,6 +42459,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -42491,6 +42484,10 @@
 	var _Sortbar = __webpack_require__(458);
 
 	var _Sortbar2 = _interopRequireDefault(_Sortbar);
+
+	var _firebaseActions = __webpack_require__(451);
+
+	var firebaseActions = _interopRequireWildcard(_firebaseActions);
 
 	var ListView = (function (_React$Component) {
 	  _inherits(ListView, _React$Component);
@@ -42524,10 +42521,20 @@
 	      this.init();
 	    }
 	  }, {
+	    key: 'deleteClicked',
+	    value: function deleteClicked(value) {
+	      // 1. Build dictionary
+	      var dictionary = {
+	        "active": "round1CutAfter"
+	      };
+	      firebaseActions.addOrUpdateRushee(value, dictionary, this.props.loggedInUserId);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this = this;
 
+	      var deleteButton;
 	      var rusheeList = Object.keys(this.props.rushees).map(function (key) {
 	        var rushee = _this.props.rushees[key][1];
 	        var lastUpdated = new Date(Number(rushee["lastUpdated"]) * 1000);
@@ -42544,40 +42551,52 @@
 	          });
 	          stars = Math.round(sum / count);
 	        }
+	        if (_this.props.loggedInUserId == 1) {
+	          deleteButton = _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: _this.deleteClicked.bind(_this, _this.props.rushees[key][0]) },
+	            _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'trash' })
+	          );
+	        }
 
 	        return _react2['default'].createElement(
 	          'tr',
-	          { key: key, onClick: _this.showDetailView.bind(_this, _this.props.rushees[key][0]) },
+	          { key: key },
 	          _react2['default'].createElement(
 	            'td',
-	            null,
+	            { onClick: _this.showDetailView.bind(_this, _this.props.rushees[key][0]) },
 	            rushee["firstName"]
 	          ),
 	          _react2['default'].createElement(
 	            'td',
-	            null,
+	            { onClick: _this.showDetailView.bind(_this, _this.props.rushees[key][0]) },
 	            rushee["lastName"]
 	          ),
 	          _react2['default'].createElement(
 	            'td',
-	            null,
+	            { onClick: _this.showDetailView.bind(_this, _this.props.rushees[key][0]) },
 	            numComments
 	          ),
 	          _react2['default'].createElement(
 	            'td',
-	            null,
+	            { onClick: _this.showDetailView.bind(_this, _this.props.rushees[key][0]) },
 	            ' ',
 	            _react2['default'].createElement(_reactStarRating2['default'], { name: 'rusheeRating', size: 17, disabled: true, rating: stars, totalStars: 5 })
 	          ),
 	          _react2['default'].createElement(
 	            'td',
-	            null,
+	            { onClick: _this.showDetailView.bind(_this, _this.props.rushees[key][0]) },
 	            numRatings
 	          ),
 	          _react2['default'].createElement(
 	            'td',
-	            null,
+	            { onClick: _this.showDetailView.bind(_this, _this.props.rushees[key][0]) },
 	            _react2['default'].createElement(_reactTimeago2['default'], { date: lastUpdated })
+	          ),
+	          _react2['default'].createElement(
+	            'td',
+	            null,
+	            deleteButton
 	          )
 	        );
 	      });
@@ -42623,7 +42642,8 @@
 	                'th',
 	                null,
 	                'Last Updated'
-	              )
+	              ),
+	              _react2['default'].createElement('th', null)
 	            )
 	          ),
 	          _react2['default'].createElement(
