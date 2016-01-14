@@ -11,7 +11,6 @@ import * as firebaseActions from './firebaseActions';
 
 class ListView extends React.Component{
   showDetailView(rusheeId) {
-    console.log(rusheeId);
     var router = this.context.router;
     router.transitionTo('detail', {rusheeId: rusheeId});
   }

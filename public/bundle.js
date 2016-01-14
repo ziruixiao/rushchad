@@ -23020,7 +23020,6 @@
 	            this.linkSessionToFirebase('kill');
 	          } else {
 	            console.log('accounts matching email address');
-	            console.log(Object.keys(snap.val())[0]);
 	            this.linkSessionToFirebase(emailToCheck, authData["google"]["displayName"], Object.keys(snap.val())[0]);
 	          }
 	        }).bind(this));
@@ -23061,7 +23060,7 @@
 	        for (var f_rusheeId in unsortedRushees) {
 	          sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
 	        }
-	        var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
+	        var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
 	        switch (ordering) {
 	          case 'first_A_Z':
 	            sortedRushees.sort(this.compareRusheesFirstAZ);
@@ -23088,8 +23087,22 @@
 	            break;
 	        }
 	        console.log("FIREBASE ONCE CALL MADE FOR RUSHEES VALUE");
+	        var commentCount = 0;
+	        var ratingCount = 0;
+	        Object.keys(sortedRushees).map(function (key) {
+	          if (sortedRushees[key][1]["comments"]) {
+	            commentCount = commentCount + Object.keys(sortedRushees[key][1]["comments"]).length;
+	          }
+
+	          if (sortedRushees[key][1]["ratings"]) {
+	            ratingCount = ratingCount + Object.keys(sortedRushees[key][1]["ratings"]).length;
+	          }
+	        });
+
 	        this.setState({
-	          rushees: sortedRushees
+	          rushees: sortedRushees,
+	          commentCount: commentCount,
+	          ratingCount: ratingCount
 	        });
 	      }).bind(this));
 	    }
@@ -23375,7 +23388,7 @@
 	        return _react2['default'].createElement(
 	          'div',
 	          { className: 'main-container' },
-	          _react2['default'].createElement(_Header2['default'], { rusheeCount: this.state.rushees.length, googleUser: this.state.googleUser, onModalClick: this.openEditModal.bind(this, -1) }),
+	          _react2['default'].createElement(_Header2['default'], { rusheeCount: this.state.rushees.length, commentCount: this.state.commentCount || 0, ratingCount: this.state.ratingCount || 0, googleUser: this.state.googleUser, onModalClick: this.openEditModal.bind(this, -1) }),
 	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
@@ -23608,6 +23621,24 @@
 	                _reactBootstrap.NavItem,
 	                { href: '#', eventKey: 4 },
 	                this.props.googleUser
+	              )
+	            ),
+	            _react2['default'].createElement(
+	              _reactBootstrap.Nav,
+	              { pullRight: true },
+	              _react2['default'].createElement(
+	                _reactBootstrap.NavItem,
+	                null,
+	                this.props.commentCount ? this.props.commentCount + ' comments' : ''
+	              )
+	            ),
+	            _react2['default'].createElement(
+	              _reactBootstrap.Nav,
+	              { pullRight: true },
+	              _react2['default'].createElement(
+	                _reactBootstrap.NavItem,
+	                null,
+	                this.props.ratingCount ? this.props.ratingCount + ' votes' : ''
 	              )
 	            ),
 	            _react2['default'].createElement(
@@ -42031,11 +42062,29 @@
 	      var _this = this;
 
 	      var rusheeTiles = Object.keys(this.props.rushees).map(function (key) {
+
 	        return _react2['default'].createElement(_RusheeTile2['default'], { key: key, rusheeId: _this.props.rushees[key][0], rushee: _this.props.rushees[key][1] });
 	      });
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
+	        _react2['default'].createElement(
+	          _reactBootstrap.Alert,
+	          { bsStyle: 'warning' },
+	          'Saturday 1/16: ',
+	          _react2['default'].createElement(
+	            'strong',
+	            null,
+	            '4:00pm'
+	          ),
+	          ' in ',
+	          _react2['default'].createElement(
+	            'strong',
+	            null,
+	            'Hudson Hall 125'
+	          ),
+	          ': Mid-Round Cut Meeting'
+	        ),
 	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateStateRushees }),
 	        _react2['default'].createElement(
 	          'div',
@@ -42272,7 +42321,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
+	      var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'align-center' },
@@ -42377,11 +42426,8 @@
 	    value: function render() {
 	      var _this = this;
 
-	      console.log(this.props);
 	      var usersList = Object.keys(this.props.users).map(function (key) {
 	        var user = _this.props.users[key];
-	        console.log(key);
-	        console.log(user);
 	        var lastActive = new Date(Number(user["lastActive"]) * 1000);
 
 	        return _react2['default'].createElement(
@@ -42501,7 +42547,6 @@
 	  _createClass(ListView, [{
 	    key: 'showDetailView',
 	    value: function showDetailView(rusheeId) {
-	      console.log(rusheeId);
 	      var router = this.context.router;
 	      router.transitionTo('detail', { rusheeId: rusheeId });
 	    }

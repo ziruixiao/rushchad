@@ -15,7 +15,7 @@ class Sortbar extends React.Component{
     this.props.updateFunction();
   }
   render(){
-    var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
+    var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
     return (
 
       <div className="align-center">

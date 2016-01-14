@@ -9,11 +9,8 @@ class ProfileView extends React.Component{
     this.router = this.context.router;
   }
   render(){
-    console.log(this.props);
     var usersList = Object.keys(this.props.users).map((key) => {
       var user = this.props.users[key];
-      console.log(key);
-      console.log(user);
       var lastActive = new Date(Number(user["lastActive"])*1000);
 
       return (

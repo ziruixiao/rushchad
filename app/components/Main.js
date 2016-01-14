@@ -39,7 +39,6 @@ class Main extends React.Component{
 
           } else {
             console.log('accounts matching email address');
-            console.log(Object.keys(snap.val())[0]);
             this.linkSessionToFirebase(emailToCheck, authData["google"]["displayName"], Object.keys(snap.val())[0]);
           }
         }.bind(this));
@@ -81,7 +80,7 @@ class Main extends React.Component{
       for (var f_rusheeId in unsortedRushees) {
         sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
       }
-      var ordering = localStorage.getItem('rusheeOrdering') || 'first_A_Z';
+      var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
       switch(ordering) {
         case 'first_A_Z':
           sortedRushees.sort(this.compareRusheesFirstAZ);
@@ -108,8 +107,23 @@ class Main extends React.Component{
           break;
       }
       console.log("FIREBASE ONCE CALL MADE FOR RUSHEES VALUE");
+      var commentCount = 0;
+      var ratingCount = 0;
+      Object.keys(sortedRushees).map((key) => {
+        if (sortedRushees[key][1]["comments"]) {
+          commentCount = commentCount + Object.keys(sortedRushees[key][1]["comments"]).length;
+        }
+
+        if (sortedRushees[key][1]["ratings"]) {
+          ratingCount = ratingCount + Object.keys(sortedRushees[key][1]["ratings"]).length;
+        }
+
+      });
+
       this.setState({
-        rushees: sortedRushees
+        rushees: sortedRushees,
+        commentCount: commentCount,
+        ratingCount: ratingCount
       });
     }.bind(this));
   }
@@ -324,7 +338,7 @@ class Main extends React.Component{
     } else {
       return (
         <div className="main-container">
-          <Header rusheeCount={this.state.rushees.length} googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this,-1)} />
+          <Header rusheeCount={this.state.rushees.length} commentCount={this.state.commentCount || 0} ratingCount={this.state.ratingCount || 0} googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this,-1)} />
 
           <div className="container">
             <RouteHandler {...this.state} />

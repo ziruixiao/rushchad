@@ -27,6 +27,12 @@ class Header extends React.Component{
               <NavItem href='#' eventKey={4}>{ this.props.googleUser }</NavItem>
             </Nav>
             <Nav pullRight>
+              <NavItem>{ this.props.commentCount ? this.props.commentCount + ' comments' : ''}</NavItem>
+            </Nav>
+            <Nav pullRight>
+              <NavItem>{ this.props.ratingCount ? this.props.ratingCount + ' votes' : ''}</NavItem>
+            </Nav>
+            <Nav pullRight>
               <NavItem>{ this.props.rusheeCount ? this.props.rusheeCount + ' rushees' : ''}</NavItem>
             </Nav>
 
