@@ -41758,7 +41758,7 @@
 	      var _this = this;
 
 	      var chatMessages;
-	      console.log('render');
+	      //console.log('render');
 	      var chatInput = _react2['default'].createElement(
 	        'div',
 	        { className: 'top-bottom-space' },
@@ -43277,9 +43277,9 @@
 
 	        comments = sortedComments.map(function (value, key) {
 	          var comment = value[1];
-	          console.log(_this.props.users);
+	          //console.log(this.props.users);
 	          if (_this.props.users[comment["userId"]]) {
-	            console.log(comment);
+	            //console.log(comment);
 	            return _react2['default'].createElement(_Comment2['default'], { rusheeId: _this.props.rusheeId, commentId: value[0],
 	              commentUser: _this.props.users[comment["userId"]]["name"],
 	              loggedInUserId: _this.props.loggedInUserId,

@@ -94,7 +94,7 @@ class Chatbar extends React.Component{
   }
   render(){
     var chatMessages;
-    console.log('render');
+    //console.log('render');
     var chatInput = (
         <div className="top-bottom-space">
         <form onSubmit={this.handleNewMessage.bind(this)}>

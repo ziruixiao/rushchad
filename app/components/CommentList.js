@@ -94,9 +94,9 @@ class CommentList extends React.Component{
 
       comments = sortedComments.map((value, key) => {
         var comment = value[1];
-        console.log(this.props.users);
+        //console.log(this.props.users);
         if (this.props.users[comment["userId"]]) {
-          console.log(comment);
+          //console.log(comment);
           return <Comment rusheeId={this.props.rusheeId} commentId={value[0]}
                           commentUser={this.props.users[comment["userId"]]["name"]}
                           loggedInUserId={this.props.loggedInUserId}
