@@ -43277,7 +43277,14 @@
 
 	        comments = sortedComments.map(function (value, key) {
 	          var comment = value[1];
-	          return _react2['default'].createElement(_Comment2['default'], { rusheeId: _this.props.rusheeId, commentId: value[0], commentUser: _this.props.users[comment["userId"]]["name"], loggedInUserId: _this.props.loggedInUserId, key: value[0], commentData: comment });
+	          console.log(_this.props.users);
+	          if (_this.props.users[comment["userId"]]) {
+	            console.log(comment);
+	            return _react2['default'].createElement(_Comment2['default'], { rusheeId: _this.props.rusheeId, commentId: value[0],
+	              commentUser: _this.props.users[comment["userId"]]["name"],
+	              loggedInUserId: _this.props.loggedInUserId,
+	              key: value[0], commentData: comment });
+	          }
 	        });
 	      }
 	      return _react2['default'].createElement(
