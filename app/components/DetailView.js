@@ -6,6 +6,7 @@ import {
   Badge,
   Button,
   Carousel,
+ButtonToolbar,
   CarouselItem,
   Col,
 Image,
@@ -22,6 +23,12 @@ import CommentList from './CommentList';
 import * as firebaseActions from './firebaseActions';
 
 class DetailView extends React.Component{
+  makeDecision(choice) {
+    var dictionary = {
+      "cutParameter": choice
+    };
+    firebaseActions.addOrUpdateRushee(this.router.getCurrentParams().rusheeId, dictionary, this.props.loggedInUserId);
+  }
   componentWillMount(){
     this.router = this.context.router;
   }
@@ -75,7 +82,7 @@ class DetailView extends React.Component{
         break;
       }
     }
-
+    var cutDecision;
 
     var rusheeName, rusheeFacebook, rusheePhone, rusheeEmail, rusheePhotos;
     var numRatings = 0;
@@ -134,6 +141,14 @@ class DetailView extends React.Component{
         });
       }
 
+      if (this.props.loggedInUserId == 1) {
+        cutDecision = (<ButtonToolbar>
+          <Button onClick={this.makeDecision.bind(this, 'round3yes')}>Yes</Button>
+          <Button onClick={this.makeDecision.bind(this, 'round3maybe')}>Maybe</Button>
+          <Button onClick={this.makeDecision.bind(this, 'round3no')}>No</Button>
+
+        </ButtonToolbar>);
+      }
       if (rushee["comments"]) {
         rusheeComments = rushee["comments"];
       }
@@ -162,7 +177,9 @@ class DetailView extends React.Component{
         <Col xs={12}>
           {rusheeName}
         </Col>
-
+        <Col xs={12}>
+          {cutDecision}
+        </Col>
 
         <Col xs={6}>
           Updated{' '}{lastUpdated}

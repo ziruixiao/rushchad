@@ -11,6 +11,7 @@ export default (
     <Route name="list" path="list" handler={ListView} />
     <Route name="profile" path="profile/:username" handler={ProfileView} />
     <Route name="detail" path="detail/:rusheeId" handler={DetailView} />
+    <Route name="home" path="home/:status" handler={HomeView} />
     <DefaultRoute handler={HomeView} />
   </Route>
 );

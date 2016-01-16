@@ -22930,6 +22930,7 @@
 	  _react2['default'].createElement(_reactRouter.Route, { name: 'list', path: 'list', handler: _componentsListView2['default'] }),
 	  _react2['default'].createElement(_reactRouter.Route, { name: 'profile', path: 'profile/:username', handler: _componentsProfileView2['default'] }),
 	  _react2['default'].createElement(_reactRouter.Route, { name: 'detail', path: 'detail/:rusheeId', handler: _componentsDetailView2['default'] }),
+	  _react2['default'].createElement(_reactRouter.Route, { name: 'home', path: 'home/:status', handler: _componentsHomeView2['default'] }),
 	  _react2['default'].createElement(_reactRouter.DefaultRoute, { handler: _componentsHomeView2['default'] })
 	);
 	module.exports = exports['default'];
@@ -23388,7 +23389,7 @@
 	        return _react2['default'].createElement(
 	          'div',
 	          { className: 'main-container' },
-	          _react2['default'].createElement(_Header2['default'], { rusheeCount: this.state.rushees.length, commentCount: this.state.commentCount || 0, ratingCount: this.state.ratingCount || 0, googleUser: this.state.googleUser, onModalClick: this.openEditModal.bind(this, -1) }),
+	          _react2['default'].createElement(_Header2['default'], { googleUser: this.state.googleUser, onModalClick: this.openEditModal.bind(this, -1) }),
 	          _react2['default'].createElement(
 	            'div',
 	            { className: 'container' },
@@ -23397,7 +23398,7 @@
 	          ),
 	          _react2['default'].createElement('br', null),
 	          _react2['default'].createElement('br', null),
-	          _react2['default'].createElement(_Chatbar2['default'], { users: this.state.users, loggedInUserId: this.state.loggedInUserId })
+	          _react2['default'].createElement(_Chatbar2['default'], { rusheeCount: this.state.rushees.length, commentCount: this.state.commentCount || 0, ratingCount: this.state.ratingCount || 0, users: this.state.users, loggedInUserId: this.state.loggedInUserId })
 	        );
 	      }
 	    }
@@ -23621,33 +23622,6 @@
 	                _reactBootstrap.NavItem,
 	                { href: '#', eventKey: 4 },
 	                this.props.googleUser
-	              )
-	            ),
-	            _react2['default'].createElement(
-	              _reactBootstrap.Nav,
-	              { pullRight: true },
-	              _react2['default'].createElement(
-	                _reactBootstrap.NavItem,
-	                null,
-	                this.props.commentCount ? this.props.commentCount + ' comments' : ''
-	              )
-	            ),
-	            _react2['default'].createElement(
-	              _reactBootstrap.Nav,
-	              { pullRight: true },
-	              _react2['default'].createElement(
-	                _reactBootstrap.NavItem,
-	                null,
-	                this.props.ratingCount ? this.props.ratingCount + ' votes' : ''
-	              )
-	            ),
-	            _react2['default'].createElement(
-	              _reactBootstrap.Nav,
-	              { pullRight: true },
-	              _react2['default'].createElement(
-	                _reactBootstrap.NavItem,
-	                null,
-	                this.props.rusheeCount ? this.props.rusheeCount + ' rushees' : ''
 	              )
 	            )
 	          )
@@ -41826,24 +41800,59 @@
 	        });
 	      }
 	      return _react2['default'].createElement(
-	        _reactBootstrap.ButtonToolbar,
-	        { className: 'fixedBottomRight' },
+	        _reactBootstrap.Navbar,
+	        { fixedBottom: true },
 	        _react2['default'].createElement(
-	          _reactBootstrap.OverlayTrigger,
-	          { trigger: 'click', placement: 'top', overlay: _react2['default'].createElement(
-	              _reactBootstrap.Popover,
-	              { id: 'chatPopOver', className: 'chat-bar-button absolute-positioning', title: this.state.usersOnline + ' users online' },
-	              _react2['default'].createElement(
-	                'div',
-	                { id: 'chatBox', className: 'chat-scroll' },
-	                chatMessages
-	              ),
-	              chatInput
-	            ) },
+	          _reactBootstrap.Nav,
+	          null,
 	          _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { onClick: this.delayAndScroll.bind(this), className: 'chat-bar-button', bsStyle: 'primary' },
-	            'Live Chat'
+	            _reactBootstrap.NavItem,
+	            null,
+	            _react2['default'].createElement(
+	              _reactBootstrap.OverlayTrigger,
+	              { trigger: 'click', placement: 'top', overlay: _react2['default'].createElement(
+	                  _reactBootstrap.Popover,
+	                  { id: 'chatPopOver', className: 'chat-bar-button absolute-positioning', title: this.state.usersOnline + ' users online' },
+	                  _react2['default'].createElement(
+	                    'div',
+	                    { id: 'chatBox', className: 'chat-scroll' },
+	                    chatMessages
+	                  ),
+	                  chatInput
+	                ) },
+	              _react2['default'].createElement(
+	                _reactBootstrap.Button,
+	                { bsSize: 'small', onClick: this.delayAndScroll.bind(this), className: 'chat-bar-button', bsStyle: 'primary' },
+	                'Live Chat'
+	              )
+	            )
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Nav,
+	            null,
+	            _react2['default'].createElement(
+	              _reactBootstrap.NavItem,
+	              null,
+	              this.props.rusheeCount ? this.props.rusheeCount + ' rushees' : ''
+	            )
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Nav,
+	            null,
+	            _react2['default'].createElement(
+	              _reactBootstrap.NavItem,
+	              null,
+	              this.props.commentCount ? this.props.commentCount + ' comments' : ''
+	            )
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Nav,
+	            null,
+	            _react2['default'].createElement(
+	              _reactBootstrap.NavItem,
+	              null,
+	              this.props.ratingCount ? this.props.ratingCount + ' votes' : ''
+	            )
 	          )
 	        )
 	      );
@@ -42047,6 +42056,11 @@
 	  }
 
 	  _createClass(HomeView, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.router = this.context.router;
+	    }
+	  }, {
 	    key: 'init',
 	    value: function init() {
 	      this.props.updateStateRushees();
@@ -42061,9 +42075,20 @@
 	    value: function render() {
 	      var _this = this;
 
-	      var rusheeTiles = Object.keys(this.props.rushees).map(function (key) {
+	      var cutParameter = this.router.getCurrentParams().status;
 
-	        return _react2['default'].createElement(_RusheeTile2['default'], { key: key, rusheeId: _this.props.rushees[key][0], rushee: _this.props.rushees[key][1] });
+	      var rusheeTiles = Object.keys(this.props.rushees).map(function (key) {
+	        if (cutParameter) {
+	          if (_this.props.rushees[key][1]["cutParameter"]) {
+	            if (cutParameter == _this.props.rushees[key][1]["cutParameter"]) {
+	              return _react2['default'].createElement(_RusheeTile2['default'], { key: key, rusheeId: _this.props.rushees[key][0],
+	                rushee: _this.props.rushees[key][1] });
+	            }
+	          }
+	        } else {
+	          return _react2['default'].createElement(_RusheeTile2['default'], { key: key, rusheeId: _this.props.rushees[key][0],
+	            rushee: _this.props.rushees[key][1] });
+	        }
 	      });
 	      return _react2['default'].createElement(
 	        'div',
@@ -42071,19 +42096,33 @@
 	        _react2['default'].createElement(
 	          _reactBootstrap.Alert,
 	          { bsStyle: 'warning' },
-	          'Saturday 1/16: ',
+	          'Sunday 1/17: ',
 	          _react2['default'].createElement(
 	            'strong',
 	            null,
-	            '4:00pm'
+	            '2:00pm'
 	          ),
 	          ' in ',
 	          _react2['default'].createElement(
 	            'strong',
 	            null,
-	            'Hudson Hall 125'
+	            'White Lecture Hall'
 	          ),
-	          ': Mid-Round Cut Meeting'
+	          ': Presentation, Sports, Service ',
+	          _react2['default'].createElement('br', null),
+	          'Sunday 1/17: ',
+	          _react2['default'].createElement(
+	            'strong',
+	            null,
+	            '5:00pm'
+	          ),
+	          ' in ',
+	          _react2['default'].createElement(
+	            'strong',
+	            null,
+	            'Soc Psych 130'
+	          ),
+	          ': Round 2 Cut Meeting'
 	        ),
 	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateStateRushees }),
 	        _react2['default'].createElement(
@@ -42099,6 +42138,10 @@
 	})(_react2['default'].Component);
 
 	;
+
+	HomeView.contextTypes = {
+	  router: _react2['default'].PropTypes.func.isRequired
+	};
 
 	exports['default'] = HomeView;
 	module.exports = exports['default'];
@@ -42770,6 +42813,14 @@
 	  }
 
 	  _createClass(DetailView, [{
+	    key: 'makeDecision',
+	    value: function makeDecision(choice) {
+	      var dictionary = {
+	        "cutParameter": choice
+	      };
+	      firebaseActions.addOrUpdateRushee(this.router.getCurrentParams().rusheeId, dictionary, this.props.loggedInUserId);
+	    }
+	  }, {
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      this.router = this.context.router;
@@ -42849,6 +42900,7 @@
 	          break;
 	        }
 	      }
+	      var cutDecision;
 
 	      var rusheeName, rusheeFacebook, rusheePhone, rusheeEmail, rusheePhotos;
 	      var numRatings = 0;
@@ -42985,6 +43037,27 @@
 	          });
 	        }
 
+	        if (this.props.loggedInUserId == 1) {
+	          cutDecision = _react2['default'].createElement(
+	            _reactBootstrap.ButtonToolbar,
+	            null,
+	            _react2['default'].createElement(
+	              _reactBootstrap.Button,
+	              { onClick: this.makeDecision.bind(this, 'round3yes') },
+	              'Yes'
+	            ),
+	            _react2['default'].createElement(
+	              _reactBootstrap.Button,
+	              { onClick: this.makeDecision.bind(this, 'round3maybe') },
+	              'Maybe'
+	            ),
+	            _react2['default'].createElement(
+	              _reactBootstrap.Button,
+	              { onClick: this.makeDecision.bind(this, 'round3no') },
+	              'No'
+	            )
+	          );
+	        }
 	        if (rushee["comments"]) {
 	          rusheeComments = rushee["comments"];
 	        }
@@ -43024,6 +43097,11 @@
 	          _reactBootstrap.Col,
 	          { xs: 12 },
 	          rusheeName
+	        ),
+	        _react2['default'].createElement(
+	          _reactBootstrap.Col,
+	          { xs: 12 },
+	          cutDecision
 	        ),
 	        _react2['default'].createElement(
 	          _reactBootstrap.Col,

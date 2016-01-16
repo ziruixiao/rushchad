@@ -138,18 +138,28 @@ class Chatbar extends React.Component{
       });
     }
     return (
-      <ButtonToolbar className="fixedBottomRight">
-
-        <OverlayTrigger trigger="click" placement="top" overlay={<Popover id="chatPopOver"  className="chat-bar-button absolute-positioning" title={this.state.usersOnline + ' users online'}>
+    <Navbar fixedBottom>
+      <Nav>
+        <NavItem><OverlayTrigger trigger="click" placement="top" overlay={<Popover id="chatPopOver"  className="chat-bar-button absolute-positioning" title={this.state.usersOnline + ' users online'}>
           <div id="chatBox" className="chat-scroll">
             {chatMessages}
            </div>
            {chatInput}
            </Popover>}>
-          <Button onClick={this.delayAndScroll.bind(this)} className="chat-bar-button" bsStyle="primary">Live Chat</Button>
-        </OverlayTrigger>
+          <Button bsSize="small" onClick={this.delayAndScroll.bind(this)} className="chat-bar-button" bsStyle="primary">Live Chat</Button>
+        </OverlayTrigger></NavItem>
+        <Nav>
+          <NavItem>{ this.props.rusheeCount ? this.props.rusheeCount + ' rushees' : ''}</NavItem>
+        </Nav>
+        <Nav>
+          <NavItem>{ this.props.commentCount ? this.props.commentCount + ' comments' : ''}</NavItem>
+        </Nav>
+        <Nav>
+          <NavItem>{ this.props.ratingCount ? this.props.ratingCount + ' votes' : ''}</NavItem>
+        </Nav>
 
-      </ButtonToolbar>
+      </Nav>
+    </Navbar>
     )
   }
 };

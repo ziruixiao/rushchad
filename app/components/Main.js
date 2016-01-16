@@ -338,7 +338,7 @@ class Main extends React.Component{
     } else {
       return (
         <div className="main-container">
-          <Header rusheeCount={this.state.rushees.length} commentCount={this.state.commentCount || 0} ratingCount={this.state.ratingCount || 0} googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this,-1)} />
+          <Header  googleUser={this.state.googleUser} onModalClick={this.openEditModal.bind(this,-1)} />
 
           <div className="container">
             <RouteHandler {...this.state} />
@@ -347,7 +347,7 @@ class Main extends React.Component{
           <br />
 
           <br />
-          <Chatbar users={this.state.users} loggedInUserId={this.state.loggedInUserId}/>
+          <Chatbar rusheeCount={this.state.rushees.length} commentCount={this.state.commentCount || 0} ratingCount={this.state.ratingCount || 0} users={this.state.users} loggedInUserId={this.state.loggedInUserId}/>
         </div>
       )
     }
