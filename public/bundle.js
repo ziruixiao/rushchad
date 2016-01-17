@@ -42233,6 +42233,14 @@
 	        stars = Math.round(sum / count);
 	      }
 
+	      var panelColor = "info";
+	      if (this.props.rushee["cutParameter"] == "round3yes") {
+	        panelColor = "success";
+	      } else if (this.props.rushee["cutParameter"] == "round3maybe") {
+	        panelColor = "warning";
+	      } else if (this.props.rushee["cutParameter"] == "round3no") {
+	        panelColor = "danger";
+	      }
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
@@ -42244,7 +42252,7 @@
 	            { onClick: this.showDetailView.bind(this), bsSize: 'small' },
 	            _react2['default'].createElement(
 	              _reactBootstrap.Panel,
-	              { className: 'fixed-panel', header: _react2['default'].createElement(
+	              { bsStyle: panelColor, className: 'fixed-panel', header: _react2['default'].createElement(
 	                  'div',
 	                  null,
 	                  this.props.rushee["firstName"],
@@ -42293,7 +42301,7 @@
 	                      )
 	                    )
 	                  )
-	                ), bsStyle: 'info' },
+	                ) },
 	              _react2['default'].createElement(
 	                'div',
 	                { className: 'panel-photo' },

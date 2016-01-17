@@ -43,12 +43,20 @@ class RusheeTile extends React.Component{
       stars = Math.round(sum/count);
     }
 
+    var panelColor = "info";
+    if (this.props.rushee["cutParameter"] == "round3yes") {
+      panelColor = "success";
+    } else if (this.props.rushee["cutParameter"] == "round3maybe") {
+      panelColor = "warning";
+    } else if (this.props.rushee["cutParameter"] == "round3no") {
+      panelColor = "danger";
+    }
     return (
       <div>
 
           <Col xs={12} sm={6} md={4} lg={3}>
             <Well onClick={this.showDetailView.bind(this)} bsSize="small">
-            <Panel className='fixed-panel' header={
+            <Panel bsStyle={panelColor} className='fixed-panel' header={
               <div>{this.props.rushee["firstName"]}{' '}{this.props.rushee["lastName"]}</div>
 
             } footer={
@@ -76,7 +84,7 @@ class RusheeTile extends React.Component{
               </Row>
 
               </div>
-            } bsStyle="info">
+            }>
               <div className="panel-photo">
               <Image id={'photo' + this.props.rusheeId}  src={thumbPhotoUrl} responsive className="img-responsive center-block"/>
               </div>
