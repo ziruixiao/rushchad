@@ -23058,7 +23058,13 @@
 	        var unsortedRushees = dataSnapshot.val();
 	        var sortedRushees = [];
 
+	        var showCutList = localStorage.getItem('showCutList') || 'all';
 	        for (var f_rusheeId in unsortedRushees) {
+	          if (showCutList != 'all' && showCutList != unsortedRushees[f_rusheeId]["cutParameter"]) {
+	            if (!unsortedRushees[f_rusheeId]["cutParameter"] && showCutList == 'unsorted') {} else {
+	              continue;
+	            }
+	          }
 	          sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
 	        }
 	        var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
@@ -42362,12 +42368,49 @@
 	      this.props.updateFunction();
 	    }
 	  }, {
+	    key: 'handleCutSwitch',
+	    value: function handleCutSwitch(newOrder) {
+	      localStorage.setItem('showCutList', newOrder);
+	      this.props.updateFunction();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
+	      var showCutList = localStorage.getItem('showCutList') || 'all';
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'align-center' },
+	        _react2['default'].createElement(
+	          _reactBootstrap.ButtonToolbar,
+	          null,
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleCutSwitch.bind(this, 'all'), bsStyle: showCutList == "all" ? "primary" : "default" },
+	            'All'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleCutSwitch.bind(this, 'round3yes'), bsStyle: showCutList == "round3yes" ? "primary" : "default" },
+	            'YES'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleCutSwitch.bind(this, 'round3maybe'), bsStyle: showCutList == "round3maybe" ? "primary" : "default" },
+	            'MAYBE'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleCutSwitch.bind(this, 'round3no'), bsStyle: showCutList == "round3no" ? "primary" : "default" },
+	            'NO'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleCutSwitch.bind(this, 'unsorted'), bsStyle: showCutList == "unsorted" ? "primary" : "default" },
+	            'UNKNOWN'
+	          )
+	        ),
+	        _react2['default'].createElement('br', null),
 	        _react2['default'].createElement(
 	          _reactBootstrap.ButtonToolbar,
 	          null,
