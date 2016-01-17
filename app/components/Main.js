@@ -355,6 +355,7 @@ class Main extends React.Component{
           <br />
 
           <br />
+          <br />
           <Chatbar rusheeCount={this.state.rushees.length} commentCount={this.state.commentCount || 0} ratingCount={this.state.ratingCount || 0} users={this.state.users} loggedInUserId={this.state.loggedInUserId}/>
         </div>
       )

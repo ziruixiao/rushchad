@@ -23404,6 +23404,7 @@
 	          ),
 	          _react2['default'].createElement('br', null),
 	          _react2['default'].createElement('br', null),
+	          _react2['default'].createElement('br', null),
 	          _react2['default'].createElement(_Chatbar2['default'], { rusheeCount: this.state.rushees.length, commentCount: this.state.commentCount || 0, ratingCount: this.state.ratingCount || 0, users: this.state.users, loggedInUserId: this.state.loggedInUserId })
 	        );
 	      }
@@ -42403,11 +42404,6 @@
 	            _reactBootstrap.Button,
 	            { onClick: this.handleCutSwitch.bind(this, 'round3no'), bsStyle: showCutList == "round3no" ? "primary" : "default" },
 	            'NO'
-	          ),
-	          _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { onClick: this.handleCutSwitch.bind(this, 'unsorted'), bsStyle: showCutList == "unsorted" ? "primary" : "default" },
-	            'UNKNOWN'
 	          )
 	        ),
 	        _react2['default'].createElement('br', null),
@@ -42932,7 +42928,7 @@
 	              _react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'chevron-left' })
 	            );
 	          }
-	          if (i + 1 < this.props.rushees.length - 1) {
+	          if (i + 1 < this.props.rushees.length) {
 	            nextButton = _react2['default'].createElement(
 	              _reactBootstrap.Button,
 	              { bsStyle: 'primary', onClick: this.showPrev.bind(this, this.props.rushees[i + 1][0]) },

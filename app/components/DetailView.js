@@ -75,7 +75,7 @@ class DetailView extends React.Component{
           prevButton = <Button bsStyle="primary"
                                onClick={this.showPrev.bind(this,this.props.rushees[i-1][0])}><Glyphicon glyph="chevron-left" /></Button>;
         }
-        if (i+1 < this.props.rushees.length - 1) {
+        if (i+1 < this.props.rushees.length) {
           nextButton = <Button bsStyle="primary" onClick={this.showPrev.bind(this,this.props.rushees[i+1][0])}><Glyphicon glyph="chevron-right" /></Button>;
         }
         rushee = this.props.rushees[i][1];
