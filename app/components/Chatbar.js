@@ -146,7 +146,7 @@ class Chatbar extends React.Component{
            </div>
            {chatInput}
            </Popover>}>
-          <Button bsSize="small" onClick={this.delayAndScroll.bind(this)} className="chat-bar-button" bsStyle="primary">Live Chat</Button>
+          <Button bsSize="small" onClick={this.delayAndScroll.bind(this)} className="chat-bar-button" bsStyle="success">Live Chat</Button>
         </OverlayTrigger></NavItem>
         <Nav>
           <NavItem>{ this.props.rusheeCount ? this.props.rusheeCount + ' rushees' : ''}</NavItem>

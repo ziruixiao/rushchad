@@ -26,7 +26,7 @@ class ListView extends React.Component{
   deleteClicked(value) {
     // 1. Build dictionary
     var dictionary = {
-      "active": "round1CutAfter"
+      "active": "round2Cut"
     };
     firebaseActions.addOrUpdateRushee(value, dictionary, this.props.loggedInUserId);
   }

@@ -23057,16 +23057,19 @@
 	      rusheesRef.once('value', (function (dataSnapshot) {
 	        var unsortedRushees = dataSnapshot.val();
 	        var sortedRushees = [];
-
+	        /*
 	        var showCutList = localStorage.getItem('showCutList') || 'all';
+	        */
 	        for (var f_rusheeId in unsortedRushees) {
-	          if (showCutList != 'all' && showCutList != unsortedRushees[f_rusheeId]["cutParameter"]) {
-	            if (!unsortedRushees[f_rusheeId]["cutParameter"] && showCutList == 'unsorted') {} else {
+	          /*if (showCutList != 'all' && showCutList != unsortedRushees[f_rusheeId]["cutParameter"]) {
+	            if (!unsortedRushees[f_rusheeId]["cutParameter"] && showCutList == 'unsorted') {
+	             } else {
 	              continue;
 	            }
-	          }
+	          }*/
 	          sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
 	        }
+
 	        var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
 	        switch (ordering) {
 	          case 'first_A_Z':
@@ -41829,7 +41832,7 @@
 	                ) },
 	              _react2['default'].createElement(
 	                _reactBootstrap.Button,
-	                { bsSize: 'small', onClick: this.delayAndScroll.bind(this), className: 'chat-bar-button', bsStyle: 'primary' },
+	                { bsSize: 'small', onClick: this.delayAndScroll.bind(this), className: 'chat-bar-button', bsStyle: 'success' },
 	                'Live Chat'
 	              )
 	            )
@@ -42103,33 +42106,19 @@
 	        _react2['default'].createElement(
 	          _reactBootstrap.Alert,
 	          { bsStyle: 'warning' },
-	          'Sunday 1/17: ',
+	          'Pay Connor Garet ',
 	          _react2['default'].createElement(
 	            'strong',
 	            null,
-	            '2:00pm'
+	            '$60 in cash'
 	          ),
-	          ' in ',
+	          ' by ',
 	          _react2['default'].createElement(
 	            'strong',
 	            null,
-	            'White Lecture Hall'
+	            'Tuesday 1/19'
 	          ),
-	          ': Presentation, Sports, Service ',
-	          _react2['default'].createElement('br', null),
-	          'Sunday 1/17: ',
-	          _react2['default'].createElement(
-	            'strong',
-	            null,
-	            '5:00pm'
-	          ),
-	          ' in ',
-	          _react2['default'].createElement(
-	            'strong',
-	            null,
-	            'Soc Psych 130'
-	          ),
-	          ': Round 2 Cut Meeting'
+	          ' for semi-formal.'
 	        ),
 	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateStateRushees }),
 	        _react2['default'].createElement(
@@ -42376,45 +42365,19 @@
 	      localStorage.setItem('rusheeOrdering', newOrder);
 	      this.props.updateFunction();
 	    }
-	  }, {
-	    key: 'handleCutSwitch',
-	    value: function handleCutSwitch(newOrder) {
+
+	    /*handleCutSwitch(newOrder) {
 	      localStorage.setItem('showCutList', newOrder);
 	      this.props.updateFunction();
-	    }
+	    }*/
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
-	      var showCutList = localStorage.getItem('showCutList') || 'all';
+	      //var showCutList = localStorage.getItem('showCutList') || 'all';
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'align-center' },
-	        _react2['default'].createElement(
-	          _reactBootstrap.ButtonToolbar,
-	          null,
-	          _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { onClick: this.handleCutSwitch.bind(this, 'all'), bsStyle: showCutList == "all" ? "primary" : "default" },
-	            'All'
-	          ),
-	          _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { onClick: this.handleCutSwitch.bind(this, 'round3yes'), bsStyle: showCutList == "round3yes" ? "primary" : "default" },
-	            'YES'
-	          ),
-	          _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { onClick: this.handleCutSwitch.bind(this, 'round3maybe'), bsStyle: showCutList == "round3maybe" ? "primary" : "default" },
-	            'MAYBE'
-	          ),
-	          _react2['default'].createElement(
-	            _reactBootstrap.Button,
-	            { onClick: this.handleCutSwitch.bind(this, 'round3no'), bsStyle: showCutList == "round3no" ? "primary" : "default" },
-	            'NO'
-	          )
-	        ),
-	        _react2['default'].createElement('br', null),
 	        _react2['default'].createElement(
 	          _reactBootstrap.ButtonToolbar,
 	          null,
@@ -42466,6 +42429,13 @@
 
 	exports['default'] = Sortbar;
 	module.exports = exports['default'];
+	/*<ButtonToolbar>
+	 <Button onClick={this.handleCutSwitch.bind(this,'all')} bsStyle={showCutList == "all" ? "primary" :"default"}>All</Button>
+	 <Button onClick={this.handleCutSwitch.bind(this,'round3yes')} bsStyle={showCutList == "round3yes" ? "primary" :"default"}>YES</Button>
+	 <Button onClick={this.handleCutSwitch.bind(this,'round3maybe')} bsStyle={showCutList == "round3maybe" ? "primary" :"default"}>MAYBE</Button>
+	 <Button onClick={this.handleCutSwitch.bind(this,'round3no')} bsStyle={showCutList == "round3no" ? "primary" :"default"}>NO</Button>
+	</ButtonToolbar>
+	<br />*/
 
 /***/ },
 /* 459 */
@@ -42660,7 +42630,7 @@
 	    value: function deleteClicked(value) {
 	      // 1. Build dictionary
 	      var dictionary = {
-	        "active": "round1CutAfter"
+	        "active": "round2Cut"
 	      };
 	      firebaseActions.addOrUpdateRushee(value, dictionary, this.props.loggedInUserId);
 	    }
