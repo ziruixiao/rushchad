@@ -35,9 +35,6 @@ class HomeView extends React.Component{
     });
     return (
       <div>
-        <Alert bsStyle="warning">
-          Pay Connor Garet <strong>$60 in cash</strong> by <strong>Tuesday 1/19</strong> for semi-formal.
-        </Alert>
         <Sortbar updateFunction={this.props.updateStateRushees}/>
 
         <div>

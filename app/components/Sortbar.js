@@ -14,24 +14,24 @@ class Sortbar extends React.Component{
     localStorage.setItem('rusheeOrdering', newOrder);
     this.props.updateFunction();
   }
-  /*handleCutSwitch(newOrder) {
-    localStorage.setItem('showCutList', newOrder);
+  handleCutSwitch(newOrder) {
+    localStorage.setItem('showCutList2', newOrder);
     this.props.updateFunction();
-  }*/
+  }
   render(){
     var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
-    //var showCutList = localStorage.getItem('showCutList') || 'all';
+    var showCutList = localStorage.getItem('showCutList2') || 'all';
     return (
 
       <div className="align-center">
-        {/*<ButtonToolbar>
+        <ButtonToolbar>
           <Button onClick={this.handleCutSwitch.bind(this,'all')} bsStyle={showCutList == "all" ? "primary" :"default"}>All</Button>
           <Button onClick={this.handleCutSwitch.bind(this,'round3yes')} bsStyle={showCutList == "round3yes" ? "primary" :"default"}>YES</Button>
           <Button onClick={this.handleCutSwitch.bind(this,'round3maybe')} bsStyle={showCutList == "round3maybe" ? "primary" :"default"}>MAYBE</Button>
           <Button onClick={this.handleCutSwitch.bind(this,'round3no')} bsStyle={showCutList == "round3no" ? "primary" :"default"}>NO</Button>
 
         </ButtonToolbar>
-        <br />*/ }
+        <br />
         <ButtonToolbar>
           <Button onClick={this.handleOrderSwitch.bind(this,'first_A_Z')} bsStyle={ordering == "first_A_Z" ? "primary" :"default"}>First (A-Z)</Button>
           <Button onClick={this.handleOrderSwitch.bind(this,'first_Z_A')} bsStyle={ordering == "first_Z_A" ? "primary" :"default"}>First (Z-A)</Button>

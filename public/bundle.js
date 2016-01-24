@@ -23057,16 +23057,15 @@
 	      rusheesRef.once('value', (function (dataSnapshot) {
 	        var unsortedRushees = dataSnapshot.val();
 	        var sortedRushees = [];
-	        /*
-	        var showCutList = localStorage.getItem('showCutList') || 'all';
-	        */
+
+	        var showCutList = localStorage.getItem('showCutList2') || 'all';
+
 	        for (var f_rusheeId in unsortedRushees) {
-	          /*if (showCutList != 'all' && showCutList != unsortedRushees[f_rusheeId]["cutParameter"]) {
-	            if (!unsortedRushees[f_rusheeId]["cutParameter"] && showCutList == 'unsorted') {
-	             } else {
+	          if (showCutList != 'all' && showCutList != unsortedRushees[f_rusheeId]["cutParameter2"]) {
+	            if (!unsortedRushees[f_rusheeId]["cutParameter2"] && showCutList == 'unsorted') {} else {
 	              continue;
 	            }
-	          }*/
+	          }
 	          sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
 	        }
 
@@ -42103,23 +42102,6 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(
-	          _reactBootstrap.Alert,
-	          { bsStyle: 'warning' },
-	          'Pay Connor Garet ',
-	          _react2['default'].createElement(
-	            'strong',
-	            null,
-	            '$60 in cash'
-	          ),
-	          ' by ',
-	          _react2['default'].createElement(
-	            'strong',
-	            null,
-	            'Tuesday 1/19'
-	          ),
-	          ' for semi-formal.'
-	        ),
 	        _react2['default'].createElement(_Sortbar2['default'], { updateFunction: this.props.updateStateRushees }),
 	        _react2['default'].createElement(
 	          'div',
@@ -42365,19 +42347,45 @@
 	      localStorage.setItem('rusheeOrdering', newOrder);
 	      this.props.updateFunction();
 	    }
-
-	    /*handleCutSwitch(newOrder) {
-	      localStorage.setItem('showCutList', newOrder);
+	  }, {
+	    key: 'handleCutSwitch',
+	    value: function handleCutSwitch(newOrder) {
+	      localStorage.setItem('showCutList2', newOrder);
 	      this.props.updateFunction();
-	    }*/
+	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var ordering = localStorage.getItem('rusheeOrdering') || 'lastUpdated_Z_A';
-	      //var showCutList = localStorage.getItem('showCutList') || 'all';
+	      var showCutList = localStorage.getItem('showCutList2') || 'all';
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'align-center' },
+	        _react2['default'].createElement(
+	          _reactBootstrap.ButtonToolbar,
+	          null,
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleCutSwitch.bind(this, 'all'), bsStyle: showCutList == "all" ? "primary" : "default" },
+	            'All'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleCutSwitch.bind(this, 'round3yes'), bsStyle: showCutList == "round3yes" ? "primary" : "default" },
+	            'YES'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleCutSwitch.bind(this, 'round3maybe'), bsStyle: showCutList == "round3maybe" ? "primary" : "default" },
+	            'MAYBE'
+	          ),
+	          _react2['default'].createElement(
+	            _reactBootstrap.Button,
+	            { onClick: this.handleCutSwitch.bind(this, 'round3no'), bsStyle: showCutList == "round3no" ? "primary" : "default" },
+	            'NO'
+	          )
+	        ),
+	        _react2['default'].createElement('br', null),
 	        _react2['default'].createElement(
 	          _reactBootstrap.ButtonToolbar,
 	          null,
@@ -42429,13 +42437,6 @@
 
 	exports['default'] = Sortbar;
 	module.exports = exports['default'];
-	/*<ButtonToolbar>
-	 <Button onClick={this.handleCutSwitch.bind(this,'all')} bsStyle={showCutList == "all" ? "primary" :"default"}>All</Button>
-	 <Button onClick={this.handleCutSwitch.bind(this,'round3yes')} bsStyle={showCutList == "round3yes" ? "primary" :"default"}>YES</Button>
-	 <Button onClick={this.handleCutSwitch.bind(this,'round3maybe')} bsStyle={showCutList == "round3maybe" ? "primary" :"default"}>MAYBE</Button>
-	 <Button onClick={this.handleCutSwitch.bind(this,'round3no')} bsStyle={showCutList == "round3no" ? "primary" :"default"}>NO</Button>
-	</ButtonToolbar>
-	<br />*/
 
 /***/ },
 /* 459 */
@@ -42833,7 +42834,7 @@
 	    key: 'makeDecision',
 	    value: function makeDecision(choice) {
 	      var dictionary = {
-	        "cutParameter": choice
+	        "cutParameter2": choice
 	      };
 	      firebaseActions.addOrUpdateRushee(this.router.getCurrentParams().rusheeId, dictionary, this.props.loggedInUserId);
 	    }

@@ -25,7 +25,7 @@ import * as firebaseActions from './firebaseActions';
 class DetailView extends React.Component{
   makeDecision(choice) {
     var dictionary = {
-      "cutParameter": choice
+      "cutParameter2": choice
     };
     firebaseActions.addOrUpdateRushee(this.router.getCurrentParams().rusheeId, dictionary, this.props.loggedInUserId);
   }

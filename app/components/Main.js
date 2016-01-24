@@ -76,17 +76,17 @@ class Main extends React.Component{
     rusheesRef.once('value', function(dataSnapshot) {
       var unsortedRushees = dataSnapshot.val();
       var sortedRushees = [];
-      /*
-      var showCutList = localStorage.getItem('showCutList') || 'all';
-      */
+
+      var showCutList = localStorage.getItem('showCutList2') || 'all';
+
       for (var f_rusheeId in unsortedRushees) {
-        /*if (showCutList != 'all' && showCutList != unsortedRushees[f_rusheeId]["cutParameter"]) {
-          if (!unsortedRushees[f_rusheeId]["cutParameter"] && showCutList == 'unsorted') {
+        if (showCutList != 'all' && showCutList != unsortedRushees[f_rusheeId]["cutParameter2"]) {
+          if (!unsortedRushees[f_rusheeId]["cutParameter2"] && showCutList == 'unsorted') {
 
           } else {
             continue;
           }
-        }*/
+        }
         sortedRushees.push([f_rusheeId, unsortedRushees[f_rusheeId]]);
       }
 
